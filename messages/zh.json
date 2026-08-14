@@ -1,0 +1,171 @@
+{
+  "HomePage": {
+    "title": "欢迎来到伟大的茶叶之路",
+    "subtitle": "探索伊尔库茨克的精品茶传统",
+    "participantsTitle": "茶图参与者"
+  },
+  "PlacesPage": {
+    "title": "伊尔库茨克茶馆",
+    "subtitle": "伟大茶叶之路上的精品茶馆目录。",
+    "searchLabel": "搜索",
+    "searchPlaceholder": "茶馆名称…",
+    "filtersLabel": "筛选",
+    "filterAll": "全部",
+    "filterPremium": "精品",
+    "filterAuthor": "特色茶",
+    "empty": "未找到结果。请更换搜索或筛选条件。"
+  },
+  "Map": {
+    "details": "详情",
+    "moreAbout": "了解更多",
+    "noDescription": "简介即将上线",
+    "close": "关闭",
+    "backToMap": "返回地图",
+    "buildRoute": "规划路线",
+    "premiumDescriptor": "精品茶馆",
+    "teaHouseDescriptor": "茶馆",
+    "distanceAway": "距您 500 米",
+    "swipeUpHint": "上滑查看详情",
+    "loadingDetails": "正在加载详情…",
+    "filtersLabel": "地图筛选",
+    "viewAsList": "列表",
+    "youAreHere": "您在这里",
+    "locateMe": "我的位置",
+    "locating": "定位中…",
+    "locationDenied": "请在浏览器设置中允许定位",
+    "locationUnavailable": "无法确定您的位置",
+    "mapLoadErrorTitle": "地图暂时不可用",
+    "mapLoadErrorDescription": "无法加载 Yandex 地图。请检查 API 密钥或打开场所列表。",
+    "mapMissingKey": "未设置 NEXT_PUBLIC_YANDEX_MAPS_API_KEY",
+    "openPlacesList": "打开场所列表"
+  },
+  "PlaceDetail": {
+    "back": "返回",
+    "backToList": "返回列表",
+    "buildRoute": "规划路线",
+    "teaMenuTitle": "茶单",
+    "teaMenuEmpty": "茶单尚未添加。",
+    "reviewsTitle": "游客评价",
+    "reviewsEmpty": "暂无评价——来写第一条吧。",
+    "addressLabel": "地址",
+    "phoneLabel": "电话",
+    "websiteLabel": "网站",
+    "reviewFormTitle": "发表评价",
+    "reviewName": "您的姓名",
+    "reviewRating": "评分",
+    "reviewText": "评价内容",
+    "reviewSubmit": "提交",
+    "reviewSubmitting": "提交中…",
+    "reviewSuccess": "谢谢！评价已添加。",
+    "errors": {
+      "missing_place": "未找到该场所。",
+      "invalid_name": "请填写姓名（至少 2 个字符）。",
+      "invalid_text": "请写得更详细一些。",
+      "invalid_rating": "请选择 1 到 5 的评分。",
+      "server": "无法保存评价，请稍后再试。"
+    }
+  },
+  "PlaceCard": {
+    "teaMapCta": "茶单",
+    "viewTeaMenu": "查看茶单",
+    "buildRoute": "规划路线",
+    "bookTable": "预订座位",
+    "openWebsite": "打开网站",
+    "distanceShortMeters": "{meters} 米",
+    "distanceShortKilometers": "{km} 公里",
+    "distanceMeters": "📍 距您 {meters} 米",
+    "distanceKilometers": "📍 距您 {km} 公里",
+    "openIn2gis": "在 2GIS 中打开"
+  },
+  "HistoryPage": {
+    "eyebrow": "历史",
+    "title": "茶叶之路上的伊尔库茨克",
+    "lead": "从十七世纪的商队到分装茶厂，再到贝加尔湖畔的茶席——这座城市一直是俄罗斯茶叶的东部门户。",
+    "s1Title": "茶进入西伯利亚",
+    "s1p1": "自十七世纪起，茶随着来自中国的商路进入东西伯利亚的生活。茶箱穿越草原与山口抵达贝加尔地区——起初是稀罕礼物，后来成为商人与城市日常的一部分。",
+    "s1p2": "伊尔库茨克成为东方货物与俄罗斯行政、市场交汇的枢纽。茶在这里不仅被售卖：人们品鉴、谈论，用茶炊冲泡，并写入西伯利亚待客之礼。",
+    "s2Title": "海关与商贾之家",
+    "s2p1": "伊尔库茨克海关决定了茶叶贸易的节奏：办理经恰克图运往托木斯克、莫斯科及欧俄港口的货物。查验质量与通关速度，既影响商贾财富，也影响端上桌的茶味。",
+    "s2p2": "与城市茶史相关的家族中，有波诺马廖夫、哈米诺夫与巴斯宁。他们的宅邸、货栈与慈善事业，留下了那个时代的痕迹——茶同时是商品、身份与日常文化。",
+    "quote": "茶叶之路让伊尔库茨克不只是转运站，更是东方与西伯利亚学会共饮一杯茶的城市。",
+    "quoteAttr": "——出自伟大茶叶之路的历史",
+    "s3Title": "1932 年茶厂与「大象茶」",
+    "s3p1": "到了二十世纪，传统进入工业阶段。1932 年，伊尔库茨克开设分装茶厂：大批茶叶在此分拣、包装，准备销往全国。",
+    "s3p2": "这段历史与著名的「大象茶」品牌相连——苏联时代辨识度极高的包装背后，是伊尔库茨克车间、茶叶的香气与严谨的秤重。茶厂成为商队记忆与新时代大众饮茶之间的桥梁。",
+    "s4Title": "贝加尔之水与西伯利亚茶礼",
+    "s4p1": "贝加尔湖与安加拉河的水在本地传统中格外重要——清澈、柔和，适合久泡。在西伯利亚家庭的茶炊仪式里，茶与果酱、烘焙和漫长交谈相伴。",
+    "s4p2": "今天，这种文化活在伊尔库茨克的茶室：在选叶、静心冲泡与对水的尊重之中。《茶图》邀请你重新走一遍这条路——从历史到一杯茶。",
+    "ctaTitle": "想尝尝历史中的茶吗？",
+    "ctaText": "打开场所目录，找到能让你品味伊尔库茨克精品茶传统的茶馆。",
+    "ctaButton": "查看茶馆"
+  },
+  "HistoryBlock": {
+    "eyebrow": "历史",
+    "title": "茶叶之路上的伊尔库茨克",
+    "subtitle": "来自中国的商队在此遇见西伯利亚海关，茶也融入了本地文化。",
+    "p1": "伊尔库茨克地处伟大茶叶之路的关键一段：茶叶箱从恰克图运来，在此办理海关手续，再发往托木斯克、莫斯科以及欧俄港口。海关决定了城市的节奏——查验的质量与通关的速度，既影响商贾财富，也影响西伯利亚餐桌上的茶味。",
+    "p2": "到了二十世纪，茶的传统进入工业阶段。1932 年，伊尔库茨克开设了分装茶厂，大批茶叶在此分拣、称重并准备销往全国。茶叶的香气、秤砣的声响，以及带有伊尔库茨克标记的整齐包装，成为从商队时代延续而来的新篇章。",
+    "p3": "如今，《伊尔库茨克茶图》将这些记忆串联起来：从海关关口与厂房，到当代茶室的静谧空间——人们依然珍惜净水、慢泡，以及一杯茶旁的交谈。"
+  },
+  "Header": {
+    "brand": "伊尔库茨克茶图",
+    "language": "语言"
+  },
+  "Navigation": {
+    "ariaLabel": "主导航",
+    "map": "地图",
+    "places": "场所",
+    "favorites": "收藏",
+    "history": "历史",
+    "admin": "管理"
+  },
+  "Favorites": {
+    "add": "加入收藏",
+    "remove": "取消收藏"
+  },
+  "FavoritesPage": {
+    "title": "收藏",
+    "subtitle": "保存在本设备上的场所——无需注册。",
+    "loading": "正在加载收藏…",
+    "emptyTitle": "这里还是空的",
+    "emptyDescription": "收藏喜欢的茶馆，方便下次快速找到。",
+    "browsePlaces": "浏览场所"
+  },
+  "AdminPage": {
+    "title": "管理员登录",
+    "subtitle": "管理茶图场所。身份验证将在下一步接入。",
+    "email": "邮箱",
+    "password": "密码",
+    "submit": "登录"
+  },
+  "ShareButton": {
+    "title": "伊尔库茨克茶图",
+    "text": "发现这座城市最好的茶传统！",
+    "ariaLabel": "分享",
+    "copied": "链接已复制"
+  },
+  "LanguageSwitcher": {
+    "ariaLabel": "选择语言"
+  },
+  "LanguageSelect": {
+    "eyebrow": "伊尔库茨克茶图",
+    "title": "选择语言",
+    "subtitle": "我们将用地图、场所与历史，以适合您的语言呈现。"
+  },
+  "Welcome": {
+    "eyebrow": "欢迎",
+    "greeting": "亲爱的客人！",
+    "lead": "欢迎来到《伊尔库茨克茶图》！",
+    "p1": "您知道吗？伟大茶路曾途经伊尔库茨克？这里还有乌拉尔以东唯一的茶叶分装厂，创办于 1932 年。",
+    "p2": "我们珍视茶的传统，并乐于与您分享。",
+    "p3": "在电子地图上，您会发现用本地草药调制招牌茶、举办茶会，并让品茶令人难忘的场所。",
+    "p4": "您还可以了解与茶史交织的伊尔库茨克趣闻。",
+    "p5": "本项目得到伊尔库茨克市长的支持——若您也愿意支持，我们将十分高兴！",
+    "p6": "请与朋友分享、留下评价，我们会努力做得更好！",
+    "cta": "进入地图"
+  },
+  "NotFound": {
+    "message": "页面未找到",
+    "home": "返回首页"
+  }
+}

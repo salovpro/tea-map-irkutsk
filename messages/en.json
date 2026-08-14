@@ -1,0 +1,171 @@
+{
+  "HomePage": {
+    "title": "Welcome to the Great Tea Road",
+    "subtitle": "Discover the premium tea traditions of Irkutsk",
+    "participantsTitle": "Tea Map participants"
+  },
+  "PlacesPage": {
+    "title": "Tea houses of Irkutsk",
+    "subtitle": "A catalog of premium tea houses along the Great Tea Road.",
+    "searchLabel": "Search",
+    "searchPlaceholder": "Venue name…",
+    "filtersLabel": "Filters",
+    "filterAll": "All",
+    "filterPremium": "Premium",
+    "filterAuthor": "Signature teas",
+    "empty": "Nothing found. Try another query or filter."
+  },
+  "Map": {
+    "details": "Details",
+    "moreAbout": "More about this place",
+    "noDescription": "Description coming soon",
+    "close": "Close",
+    "backToMap": "Back to map",
+    "buildRoute": "Get directions",
+    "premiumDescriptor": "Premium tea house",
+    "teaHouseDescriptor": "Tea house",
+    "distanceAway": "500 m away",
+    "swipeUpHint": "Swipe up for details",
+    "loadingDetails": "Loading details…",
+    "filtersLabel": "Map filters",
+    "viewAsList": "List",
+    "youAreHere": "You are here",
+    "locateMe": "My location",
+    "locating": "Locating…",
+    "locationDenied": "Allow location access in your browser settings",
+    "locationUnavailable": "Could not determine your location",
+    "mapLoadErrorTitle": "Map temporarily unavailable",
+    "mapLoadErrorDescription": "Could not load Yandex Maps. Check the API key or open the venues list.",
+    "mapMissingKey": "NEXT_PUBLIC_YANDEX_MAPS_API_KEY is not set",
+    "openPlacesList": "Open venues list"
+  },
+  "PlaceDetail": {
+    "back": "Back",
+    "backToList": "Back to list",
+    "buildRoute": "Get directions",
+    "teaMenuTitle": "Tea menu",
+    "teaMenuEmpty": "The menu has not been added yet.",
+    "reviewsTitle": "Visitor reviews",
+    "reviewsEmpty": "No reviews yet — be the first.",
+    "addressLabel": "Address",
+    "phoneLabel": "Phone",
+    "websiteLabel": "Website",
+    "reviewFormTitle": "Leave a review",
+    "reviewName": "Your name",
+    "reviewRating": "Rating",
+    "reviewText": "Your review",
+    "reviewSubmit": "Submit",
+    "reviewSubmitting": "Sending…",
+    "reviewSuccess": "Thank you! Your review was added.",
+    "errors": {
+      "missing_place": "Venue not found.",
+      "invalid_name": "Enter a name (at least 2 characters).",
+      "invalid_text": "Please write a longer review.",
+      "invalid_rating": "Choose a rating from 1 to 5.",
+      "server": "Could not save the review. Try again later."
+    }
+  },
+  "PlaceCard": {
+    "teaMapCta": "Tea map",
+    "viewTeaMenu": "Explore the tea menu",
+    "buildRoute": "Get directions",
+    "bookTable": "Book a table",
+    "openWebsite": "Open website",
+    "distanceShortMeters": "{meters} m",
+    "distanceShortKilometers": "{km} km",
+    "distanceMeters": "📍 {meters} m away",
+    "distanceKilometers": "📍 {km} km away",
+    "openIn2gis": "Open in 2GIS"
+  },
+  "HistoryPage": {
+    "eyebrow": "History",
+    "title": "Irkutsk on the Great Tea Road",
+    "lead": "From seventeenth-century caravans to the tea-packing factory and tea by Baikal — the city remained Russia’s eastern gateway for tea.",
+    "s1Title": "Tea arrives in Siberia",
+    "s1p1": "From the seventeenth century, tea entered life in Eastern Siberia along the trade routes from China. Across steppes and mountain passes, chests of leaf reached the Baikal region — first as a rare gift, then as part of merchant and urban daily life.",
+    "s1p2": "Irkutsk became the node where Eastern goods met Russian administration and markets. Tea was not only sold here: it was tasted, discussed, brewed in samovars, and woven into Siberian hospitality.",
+    "s2Title": "Customs and merchant houses",
+    "s2p1": "Irkutsk customs set the pace of the tea trade: clearing cargoes that moved through Kyakhta onward to Tomsk, Moscow, and the ports of European Russia. The quality of inspection and the speed of transit shaped both merchant fortunes and the tea that reached the table.",
+    "s2p2": "Among families tied to the city’s tea history are the Ponomarevs, Khaminovs, and Basnins. Their houses, warehouses, and philanthropy left traces of an era when tea was commodity, status, and everyday culture at once.",
+    "quote": "The tea road made Irkutsk more than a waypoint — a city where East and Siberia learned to drink from one cup.",
+    "quoteAttr": "— from the history of the Great Tea Road",
+    "s3Title": "The 1932 factory and “Tea with an Elephant”",
+    "s3p1": "In the twentieth century the tradition took industrial form. In 1932 an Irkutsk tea-packing factory opened: large shipments were sorted, packed, and prepared for sale across the country.",
+    "s3p2": "That story is linked to the famous “Tea with an Elephant” brand — the recognizable packaging of the Soviet era, backed by Irkutsk workshops, the scent of leaf, and careful scales. The factory bridged caravan memory and the mass tea culture of a new century.",
+    "s4Title": "Baikal water and Siberian tea ritual",
+    "s4p1": "Baikal and Angara water play a special role in local tradition — clean, soft, suited to a long steep. In the samovar ritual of a Siberian home, tea met jam, baking, and unhurried conversation.",
+    "s4p2": "Today that culture lives in Irkutsk tea houses: in the choice of leaf, in the quiet of brewing, and in respect for water. The Tea Map invites you to walk the path again — from history to the cup.",
+    "ctaTitle": "Want to taste historical tea?",
+    "ctaText": "Open the venue catalog and find a tea house where Irkutsk’s premium traditions can be tasted.",
+    "ctaButton": "Browse venues"
+  },
+  "HistoryBlock": {
+    "eyebrow": "History",
+    "title": "Irkutsk on the Great Tea Road",
+    "subtitle": "A city where caravans from China met Siberian customs, and tea became part of local culture.",
+    "p1": "Irkutsk stood on a key stretch of the Great Tea Road: chests of tea arrived from Kyakhta, customs papers were issued here, and cargo moved on to Tomsk, Moscow, and the ports of European Russia. Customs set the city's rhythm — the quality of inspection and the speed of transit shaped both merchant fortunes and the taste of tea on Siberian tables.",
+    "p2": "In the twentieth century the tea tradition took on an industrial form. In 1932 an Irkutsk tea-packing factory opened — a place where large shipments were sorted, weighed, and prepared for sale across the country. The scent of leaves, the clatter of scales, and neat packs stamped in Irkutsk became a new chapter of the same story that began with the caravans.",
+    "p3": "Today the Tea Map of Irkutsk joins these layers of memory: from customs gates and factory floors to the quiet rooms of modern tea houses, where clear water, a long steep, and conversation over a cup still matter."
+  },
+  "Header": {
+    "brand": "Tea Map of Irkutsk",
+    "language": "Language"
+  },
+  "Navigation": {
+    "ariaLabel": "Main navigation",
+    "map": "Map",
+    "places": "Places",
+    "favorites": "Favorites",
+    "history": "History",
+    "admin": "Admin"
+  },
+  "Favorites": {
+    "add": "Add to favorites",
+    "remove": "Remove from favorites"
+  },
+  "FavoritesPage": {
+    "title": "Favorites",
+    "subtitle": "Venues saved on this device — no account needed.",
+    "loading": "Loading favorites…",
+    "emptyTitle": "Nothing here yet",
+    "emptyDescription": "Save tea places you like so you can find them quickly.",
+    "browsePlaces": "Browse places"
+  },
+  "AdminPage": {
+    "title": "Admin sign in",
+    "subtitle": "Manage Tea Map venues. Authentication will be connected in the next step.",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign in"
+  },
+  "ShareButton": {
+    "title": "Tea Map of Irkutsk",
+    "text": "Discover the finest tea traditions of the city!",
+    "ariaLabel": "Share",
+    "copied": "Link copied"
+  },
+  "LanguageSwitcher": {
+    "ariaLabel": "Choose language"
+  },
+  "LanguageSelect": {
+    "eyebrow": "Tea Map of Irkutsk",
+    "title": "Choose your language",
+    "subtitle": "We will show the map, venues, and history in the language that suits you."
+  },
+  "Welcome": {
+    "eyebrow": "Welcome",
+    "greeting": "Dear guest!",
+    "lead": "Welcome to the Tea Map of Irkutsk!",
+    "p1": "Did you know that the Great Tea Road once passed through Irkutsk? And that the only tea-packing factory beyond the Urals opened here in 1932?",
+    "p2": "We carefully preserve tea traditions and are ready to share them with you.",
+    "p3": "On our digital map you will find places that brew signature teas with local herbs, host tea ceremonies, and make every cup unforgettable.",
+    "p4": "You can also discover fascinating facts about Irkutsk’s history woven together with the story of tea.",
+    "p5": "Our project is supported by the Mayor of Irkutsk — and we would be glad if you support it too!",
+    "p6": "Share with friends, leave reviews — we will keep getting better for you!",
+    "cta": "Go to the map"
+  },
+  "NotFound": {
+    "message": "Page not found",
+    "home": "Home"
+  }
+}

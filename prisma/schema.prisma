@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  // url берётся из DATABASE_URL в prisma.config.ts (Prisma ORM 7)
+}
+
+enum Locale {
+  ru
+  en
+  zh
+}
+
+model Place {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  lat       Float
+  lng       Float
+  phone     String?
+  website   String?
+  logoUrl   String?
+  isPremium Boolean  @default(false) @map("is_premium")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  translations PlaceTranslation[]
+  reviews      Review[]
+
+  @@map("places")
+}
+
+model PlaceTranslation {
+  id          String @id @default(cuid())
+  placeId     String @map("place_id")
+  locale      Locale
+  name        String
+  description String @db.Text
+  /// Чайное меню: JSON-массив позиций { title, category, price, volume }
+  teaMenu     Json   @map("tea_menu")
+
+  place Place @relation(fields: [placeId], references: [id], onDelete: Cascade)
+
+  @@unique([placeId, locale])
+  @@map("place_translations")
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  placeId    String   @map("place_id")
+  authorName String   @map("author_name")
+  /// Оценка от 1 до 5
+  rating     Int
+  text       String   @db.Text
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  place Place @relation(fields: [placeId], references: [id], onDelete: Cascade)
+
+  @@index([placeId])
+  @@map("reviews")
+}
