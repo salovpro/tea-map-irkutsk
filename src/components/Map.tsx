@@ -162,19 +162,23 @@ function escapeHtml(value: string) {
     .replace(/'/g, "&#39;");
 }
 
+type PlacemarkIconLayout = NonNullable<
+  NonNullable<ComponentProps<typeof Placemark>["options"]>["iconLayout"]
+>;
+
 type LayoutFactory = {
   createClass: (
     template: string,
     overrides?: Record<string, unknown>,
-  ) => unknown;
+  ) => PlacemarkIconLayout;
 };
 
 type PinLayouts = {
-  cluster: unknown;
-  basicTea: unknown;
-  basicFavorite: unknown;
-  labeledTea: unknown;
-  labeledFavorite: unknown;
+  cluster: PlacemarkIconLayout;
+  basicTea: PlacemarkIconLayout;
+  basicFavorite: PlacemarkIconLayout;
+  labeledTea: PlacemarkIconLayout;
+  labeledFavorite: PlacemarkIconLayout;
 };
 
 function pinDotHtml(iconSvg: string) {
