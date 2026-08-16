@@ -1,8 +1,7 @@
 "use client";
 
-import { PlacePreviewSheet } from "@/components/PlacePreviewSheet";
 import { PlacesList } from "@/components/PlacesList";
-import type { CatalogPlace, PlaceSheetSeed } from "@/lib/places";
+import type { CatalogPlace } from "@/lib/places";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 
@@ -12,28 +11,10 @@ type PlacesCatalogProps = {
   places: CatalogPlace[];
 };
 
-function toSheetSeed(place: CatalogPlace): PlaceSheetSeed {
-  return {
-    id: place.id,
-    name: place.name,
-    description: place.description,
-    address: place.address,
-    phone: place.phone,
-    website: place.website,
-    logoUrl: place.logoUrl,
-    isPremium: place.isPremium,
-    coordinates: place.coordinates,
-    ratingAvg: place.ratingAvg,
-  };
-}
-
 export function PlacesCatalog({ places }: PlacesCatalogProps) {
   const t = useTranslations("PlacesPage");
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<FilterKey>("all");
-  const [selectedPlace, setSelectedPlace] = useState<PlaceSheetSeed | null>(
-    null,
-  );
 
   const filteredPlaces = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -102,20 +83,12 @@ export function PlacesCatalog({ places }: PlacesCatalogProps) {
       </div>
 
       {filteredPlaces.length > 0 ? (
-        <PlacesList
-          places={filteredPlaces}
-          onPlaceOpen={(place) => setSelectedPlace(toSheetSeed(place))}
-        />
+        <PlacesList places={filteredPlaces} />
       ) : (
         <p className="py-8 text-center text-sm leading-relaxed text-slate-500">
           {t("empty")}
         </p>
       )}
-
-      <PlacePreviewSheet
-        place={selectedPlace}
-        onClose={() => setSelectedPlace(null)}
-      />
     </div>
   );
 }

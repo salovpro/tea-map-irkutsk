@@ -14,7 +14,7 @@ type FavoriteButtonProps = {
 
 export function FavoriteButton({
   placeId,
-  className = "",
+  className,
   stopPropagation = false,
 }: FavoriteButtonProps) {
   const t = useTranslations("Favorites");
@@ -36,7 +36,10 @@ export function FavoriteButton({
       aria-pressed={active}
       aria-label={active ? t("remove") : t("add")}
       title={active ? t("remove") : t("add")}
-      className={`inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors hover:bg-slate-100 ${className}`}
+      className={
+        className ??
+        "inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors hover:bg-slate-100"
+      }
     >
       <Heart
         className={`h-5 w-5 ${

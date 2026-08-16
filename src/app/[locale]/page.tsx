@@ -1,4 +1,4 @@
-import { Map } from "@/components/Map";
+import { MapLoader } from "@/components/MapLoader";
 import { getMapPlaces } from "@/lib/places";
 import { setRequestLocale } from "next-intl/server";
 
@@ -14,7 +14,7 @@ export default async function HomePage({ params }: Props) {
 
   return (
     <main className="relative h-0 min-h-0 flex-1 overflow-hidden">
-      <Map places={places} />
+      <MapLoader places={places} />
     </main>
   );
 }

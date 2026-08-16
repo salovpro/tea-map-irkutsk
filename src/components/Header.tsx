@@ -1,6 +1,6 @@
 "use client";
 
-import { Link } from "@/i18n/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ShareButton } from "@/components/ShareButton";
 import { useTranslations } from "next-intl";
@@ -42,6 +42,11 @@ function BrandMark() {
 
 export function Header() {
   const t = useTranslations("Header");
+  const pathname = usePathname();
+
+  if (pathname === "/") {
+    return null;
+  }
 
   return (
     <header className="fixed top-0 right-0 left-0 z-50 border-b border-slate-100 bg-white/80 backdrop-blur-md">

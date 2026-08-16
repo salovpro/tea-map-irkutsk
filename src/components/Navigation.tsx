@@ -23,19 +23,23 @@ export function Navigation() {
   return (
     <nav
       aria-label={t("ariaLabel")}
-      className="fixed right-0 bottom-0 left-0 z-50 border-t border-slate-100 bg-white"
+      className="fixed right-0 bottom-0 left-0 z-50 bg-[#ffffff] pb-[env(safe-area-inset-bottom,0px)]"
+      style={{
+        height:
+          "calc(var(--app-nav-height) + env(safe-area-inset-bottom, 0px))",
+      }}
     >
-      <ul className="mx-auto flex max-w-3xl items-stretch justify-around px-1 py-2 sm:px-4 sm:py-3">
+      <ul className="mx-auto flex h-[var(--app-nav-height)] max-w-3xl items-center justify-around px-1 sm:px-4">
         {NAV_ITEMS.map(({ href, key, icon: Icon }) => {
           const active = isActivePath(pathname, href);
           const filledHeart = key === "favorites" && active;
 
           return (
-            <li key={href} className="flex-1">
+            <li key={href} className="flex h-full flex-1">
               <Link
                 href={href}
                 aria-current={active ? "page" : undefined}
-                className={`flex flex-col items-center gap-1 rounded-xl px-1.5 py-2 text-[10px] font-medium tracking-wide transition-colors sm:px-2 sm:text-xs ${
+                className={`flex h-full w-full flex-col items-center justify-center gap-1 rounded-xl px-1.5 text-[10px] font-medium tracking-wide transition-colors sm:px-2 sm:text-xs ${
                   active
                     ? "text-amber-900"
                     : "text-slate-400 hover:text-slate-700"

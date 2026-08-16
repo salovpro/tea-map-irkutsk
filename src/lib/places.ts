@@ -107,13 +107,20 @@ function averageRating(reviews: { rating: number }[]): number | null {
   return Math.round((sum / reviews.length) * 10) / 10;
 }
 
-function extractAddress(description: string): string {
+/**
+ * Pull the venue address from a localized description.
+ * Addresses often start with abbreviations like "г. Иркутск" — never treat
+ * those periods as the end of the address value.
+ */
+export function extractAddress(description: string): string {
   const match =
-    description.match(/Адрес:\s*([^.]+)/i) ??
-    description.match(/Address:\s*([^.]+)/i) ??
-    description.match(/地址[：:]\s*([^\n.]+)/);
+    description.match(/Адрес:\s*([\s\S]*)$/i) ??
+    description.match(/Address:\s*([\s\S]*)$/i) ??
+    description.match(/地址[：:]\s*([\s\S]*)$/);
 
-  return match?.[1]?.trim() ?? "";
+  if (!match?.[1]) return "";
+
+  return match[1].replace(/\.\s*$/, "").trim();
 }
 
 function normalizeTeaMenu(value: unknown): { name: string; note?: string }[] {
@@ -354,5 +361,53 @@ export async function getPlaceBySlug(slug: string, localeCode: string) {
   } catch (error) {
     console.error("Failed to load place:", error);
     return null;
+  }
+}
+
+export type RelatedPlaceCard = {
+  id: string;
+  name: string;
+  address: string;
+  logoUrl: string | null;
+  isPremium: boolean;
+};
+
+export async function getRelatedPlaces(
+  excludeId: string,
+  localeCode: string,
+  limit = 4,
+): Promise<RelatedPlaceCard[]> {
+  const locale = toLocale(localeCode);
+
+  try {
+    const places = await prisma.place.findMany({
+      where: { id: { not: excludeId } },
+      include: {
+        translations: {
+          where: translationFilter(locale),
+        },
+      },
+      orderBy: [{ isPremium: "desc" }, { createdAt: "asc" }],
+      take: limit,
+    });
+
+    return places.map((place) => {
+      const translation = pickTranslation(
+        place.translations as TranslationRow[],
+        locale,
+      );
+      const description = translation?.description ?? "";
+
+      return {
+        id: place.id,
+        name: translation?.name || "Без названия",
+        address: extractAddress(description),
+        logoUrl: place.logoUrl,
+        isPremium: place.isPremium,
+      };
+    });
+  } catch (error) {
+    console.error("Failed to load related places:", error);
+    return [];
   }
 }

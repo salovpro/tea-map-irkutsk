@@ -5,6 +5,7 @@ type TeaMenuItem = {
   category: string;
   price: number;
   volume: string;
+  description?: string;
 };
 
 type SeedTranslation = {
@@ -36,10 +37,16 @@ type VenueInput = {
   lng: number;
   phone?: string;
   website?: string;
+  logoUrl?: string | null;
   isPremium?: boolean;
   name: { ru: string; en: string; zh: string };
   address: { ru: string; en: string; zh: string };
   blurb?: { ru: string; en: string; zh: string };
+  teaMenu?: {
+    ru: TeaMenuItem[];
+    en: TeaMenuItem[];
+    zh: TeaMenuItem[];
+  };
 };
 
 function description(
@@ -61,37 +68,298 @@ function venue(input: VenueInput): SeedPlace {
     zh: "伊尔库茨克茶图收录的场所。",
   };
 
+  const emptyMenu: TeaMenuItem[] = [];
+
   return {
     slug: input.slug,
     lat: input.lat,
     lng: input.lng,
     phone: input.phone ?? "",
     website: input.website ?? "",
-    logoUrl: null,
+    logoUrl: input.logoUrl ?? null,
     isPremium: input.isPremium ?? false,
     translations: [
       {
         locale: Locale.ru,
         name: input.name.ru,
         description: description("ru", input.address.ru, blurb.ru),
-        teaMenu: [],
+        teaMenu: input.teaMenu?.ru ?? emptyMenu,
       },
       {
         locale: Locale.en,
         name: input.name.en,
         description: description("en", input.address.en, blurb.en),
-        teaMenu: [],
+        teaMenu: input.teaMenu?.en ?? emptyMenu,
       },
       {
         locale: Locale.zh,
         name: input.name.zh,
         description: description("zh", input.address.zh, blurb.zh),
-        teaMenu: [],
+        teaMenu: input.teaMenu?.zh ?? emptyMenu,
       },
     ],
     reviews: [],
   };
 }
+
+/** Tea menu for Собрание Спешилова (no alcohol teas). */
+const sobranieSpeshilovaTeaMenu = {
+  ru: [
+    {
+      title: "Авторский чай-заварка",
+      category: "Специальное предложение",
+      price: 1100,
+      volume: "400 мл · на 3 персоны",
+      description: "Чайная церемония из самовара с 131-летней историей",
+    },
+    {
+      title: "Сибирский",
+      category: "Авторский чай",
+      price: 500,
+      volume: "600 мл",
+      description: "Чёрный чай ассам, брусника, мята, саган дали, тимьян, мёд",
+    },
+    {
+      title: "Синий бриллиант",
+      category: "Авторский чай",
+      price: 500,
+      volume: "600 мл",
+      description: "Лемонграсс, чай макабео, лимон, маракуйя, мёд, анчан",
+    },
+    {
+      title: "Имбирь — лимон",
+      category: "Авторский чай",
+      price: 500,
+      volume: "600 мл",
+      description: "Сенча, мёд, имбирь, лимон, эвкалипт",
+    },
+    {
+      title: "Хвойный со смородиной",
+      category: "Авторский чай",
+      price: 500,
+      volume: "600 мл",
+      description: "Бергамот, хвоя, чёрная смородина, мёд",
+    },
+    {
+      title: "Чёрный с бергамотом",
+      category: "Коллекция чая",
+      price: 350,
+      volume: "600 мл",
+    },
+    {
+      title: "Чёрный с лепестками роз",
+      category: "Коллекция чая",
+      price: 350,
+      volume: "600 мл",
+    },
+    {
+      title: "Жасминовый",
+      category: "Коллекция чая",
+      price: 350,
+      volume: "600 мл",
+    },
+    {
+      title: "Улун",
+      category: "Коллекция чая",
+      price: 350,
+      volume: "600 мл",
+    },
+    {
+      title: "Сенча с грецким орехом",
+      category: "Коллекция чая",
+      price: 350,
+      volume: "600 мл",
+    },
+    {
+      title: "Ромашковый",
+      category: "Коллекция чая",
+      price: 350,
+      volume: "600 мл",
+    },
+    {
+      title: "Иван-чай",
+      category: "Коллекция чая",
+      price: 350,
+      volume: "600 мл",
+    },
+    {
+      title: "Гречишный",
+      category: "Коллекция чая",
+      price: 350,
+      volume: "600 мл",
+    },
+  ] satisfies TeaMenuItem[],
+  en: [
+    {
+      title: "Author’s tea brew",
+      category: "Special offer",
+      price: 1100,
+      volume: "400 ml · for 3 people",
+      description: "Samovar tea ceremony with a 131-year history",
+    },
+    {
+      title: "Siberian",
+      category: "Author’s tea",
+      price: 500,
+      volume: "600 ml",
+      description: "Assam black tea, cranberry, mint, sagan dali, thyme, honey",
+    },
+    {
+      title: "Blue diamond",
+      category: "Author’s tea",
+      price: 500,
+      volume: "600 ml",
+      description: "Lemongrass, macabeo tea, lemon, passion fruit, honey, butterfly pea",
+    },
+    {
+      title: "Ginger — lemon",
+      category: "Author’s tea",
+      price: 500,
+      volume: "600 ml",
+      description: "Sencha, honey, ginger, lemon, eucalyptus",
+    },
+    {
+      title: "Pine needles with currant",
+      category: "Author’s tea",
+      price: 500,
+      volume: "600 ml",
+      description: "Bergamot, pine needles, blackcurrant, honey",
+    },
+    {
+      title: "Earl Grey",
+      category: "Tea collection",
+      price: 350,
+      volume: "600 ml",
+    },
+    {
+      title: "Black with rose petals",
+      category: "Tea collection",
+      price: 350,
+      volume: "600 ml",
+    },
+    {
+      title: "Jasmine",
+      category: "Tea collection",
+      price: 350,
+      volume: "600 ml",
+    },
+    {
+      title: "Oolong",
+      category: "Tea collection",
+      price: 350,
+      volume: "600 ml",
+    },
+    {
+      title: "Sencha with walnut",
+      category: "Tea collection",
+      price: 350,
+      volume: "600 ml",
+    },
+    {
+      title: "Chamomile",
+      category: "Tea collection",
+      price: 350,
+      volume: "600 ml",
+    },
+    {
+      title: "Ivan-tea",
+      category: "Tea collection",
+      price: 350,
+      volume: "600 ml",
+    },
+    {
+      title: "Buckwheat",
+      category: "Tea collection",
+      price: 350,
+      volume: "600 ml",
+    },
+  ] satisfies TeaMenuItem[],
+  zh: [
+    {
+      title: "主理人茶冲泡",
+      category: "特别推荐",
+      price: 1100,
+      volume: "400 毫升 · 三人份",
+      description: "拥有 131 年历史的茶炊茶礼",
+    },
+    {
+      title: "西伯利亚",
+      category: "主理人茶",
+      price: 500,
+      volume: "600 毫升",
+      description: "阿萨姆红茶、越橘、薄荷、萨甘达利、百里香、蜂蜜",
+    },
+    {
+      title: "蓝钻石",
+      category: "主理人茶",
+      price: 500,
+      volume: "600 毫升",
+      description: "柠檬草、马卡贝奥茶、柠檬、百香果、蜂蜜、蝶豆花",
+    },
+    {
+      title: "姜柠",
+      category: "主理人茶",
+      price: 500,
+      volume: "600 毫升",
+      description: "煎茶、蜂蜜、姜、柠檬、桉树",
+    },
+    {
+      title: "松针黑加仑",
+      category: "主理人茶",
+      price: 500,
+      volume: "600 毫升",
+      description: "佛手柑、松针、黑加仑、蜂蜜",
+    },
+    {
+      title: "佛手柑红茶",
+      category: "茶品系列",
+      price: 350,
+      volume: "600 毫升",
+    },
+    {
+      title: "玫瑰红茶",
+      category: "茶品系列",
+      price: 350,
+      volume: "600 毫升",
+    },
+    {
+      title: "茉莉",
+      category: "茶品系列",
+      price: 350,
+      volume: "600 毫升",
+    },
+    {
+      title: "乌龙",
+      category: "茶品系列",
+      price: 350,
+      volume: "600 毫升",
+    },
+    {
+      title: "核桃煎茶",
+      category: "茶品系列",
+      price: 350,
+      volume: "600 毫升",
+    },
+    {
+      title: "洋甘菊",
+      category: "茶品系列",
+      price: 350,
+      volume: "600 毫升",
+    },
+    {
+      title: "柳兰茶",
+      category: "茶品系列",
+      price: 350,
+      volume: "600 毫升",
+    },
+    {
+      title: "荞麦茶",
+      category: "茶品系列",
+      price: 350,
+      volume: "600 毫升",
+    },
+  ] satisfies TeaMenuItem[],
+};
 
 /** Registered partner venues for the Tea Map of Irkutsk. */
 export const registeredVenues: SeedPlace[] = [
@@ -101,6 +369,7 @@ export const registeredVenues: SeedPlace[] = [
     lng: 104.292455,
     phone: "+7 (3952) 43-60-17",
     website: "https://sobraniespeshilov.com/restaurant/",
+    logoUrl: "/logos/sobranie-speshilova.png",
     name: {
       ru: "Собрание Спешилова",
       en: "Sobranie Speshilova",
@@ -111,6 +380,12 @@ export const registeredVenues: SeedPlace[] = [
       en: "Irkutsk, Sedova St., 42/1",
       zh: "伊尔库茨克，谢多夫街 42/1",
     },
+    blurb: {
+      ru: "Чайная церемония из самовара с 131-летней историей.",
+      en: "A samovar tea ceremony with a 131-year history.",
+      zh: "拥有 131 年历史的茶炊茶礼。",
+    },
+    teaMenu: sobranieSpeshilovaTeaMenu,
   }),
   venue({
     slug: "zavarka",

@@ -14,6 +14,7 @@ type Props = {
 export function AppShell({ children }: Props) {
   const pathname = usePathname();
   const onboarding = isOnboardingPath(pathname);
+  const isMapHome = pathname === "/";
 
   if (onboarding) {
     return (
@@ -26,7 +27,13 @@ export function AppShell({ children }: Props) {
   return (
     <FavoritesProvider>
       <Header />
-      <div className="flex min-h-full flex-1 flex-col pt-14 pb-20 sm:pt-16 sm:pb-24">
+      <div
+        className={
+          isMapHome
+            ? "flex min-h-full flex-1 flex-col pb-[calc(var(--app-nav-height)+env(safe-area-inset-bottom,0px))]"
+            : "flex min-h-full flex-1 flex-col pt-14 pb-[calc(var(--app-nav-height)+env(safe-area-inset-bottom,0px))] sm:pt-16"
+        }
+      >
         {children}
       </div>
       <Navigation />

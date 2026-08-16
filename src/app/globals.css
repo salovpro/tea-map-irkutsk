@@ -4,6 +4,14 @@
   --background: #f8fafc;
   --foreground: #0f172a;
   --accent: #78350f;
+  /* Bottom tab bar height (content only; safe-area added separately). */
+  --app-nav-height: 4rem;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --app-nav-height: 5rem;
+  }
 }
 
 @theme inline {
@@ -18,9 +26,8 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-roboto), ui-sans-serif, system-ui, sans-serif;
-  /* Hide scrollbar, keep scroll */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* Legacy Edge / IE */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 h1,
@@ -39,7 +46,33 @@ html {
 html::-webkit-scrollbar,
 body::-webkit-scrollbar,
 *::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Edge (Chromium) */
+  display: none;
   width: 0;
   height: 0;
+}
+
+.tea-leaflet-map.leaflet-container {
+  height: 100%;
+  width: 100%;
+  background: #eef1f4;
+  font: inherit;
+}
+
+.tea-map-pin-icon,
+.tea-map-user-icon,
+.tea-map-cluster-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+.leaflet-control-attribution {
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #94a3b8 !important;
+  font-size: 10px !important;
+}
+
+.leaflet-control-attribution a {
+  color: #94a3b8 !important;
+  text-decoration: none;
 }

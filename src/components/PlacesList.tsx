@@ -3,10 +3,9 @@ import type { CatalogPlace } from "@/lib/places";
 
 type PlacesListProps = {
   places: CatalogPlace[];
-  onPlaceOpen?: (place: CatalogPlace) => void;
 };
 
-export function PlacesList({ places, onPlaceOpen }: PlacesListProps) {
+export function PlacesList({ places }: PlacesListProps) {
   if (places.length === 0) {
     return null;
   }
@@ -18,11 +17,11 @@ export function PlacesList({ places, onPlaceOpen }: PlacesListProps) {
           key={place.id}
           id={place.id}
           name={place.name}
+          address={place.address}
           phone={place.phone}
           website={place.website}
           coordinates={place.coordinates}
           ratingAvg={place.ratingAvg}
-          onOpen={() => onPlaceOpen?.(place)}
         />
       ))}
     </div>

@@ -1,60 +1,70 @@
 "use client";
 
-import { FavoriteButton } from "@/components/FavoriteButton";
+import {
+  PlaceActions,
+  PlaceCardHeaderActions,
+  placeHeaderIconClass,
+} from "@/components/PlaceActions";
 import { useUserLocation } from "@/hooks/useUserLocation";
+import { useRouter } from "@/i18n/navigation";
 import { formatDistance, haversineMeters } from "@/lib/geo";
-import { Globe, Navigation2, Phone, Star } from "lucide-react";
+import { X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMemo, type KeyboardEvent, type MouseEvent } from "react";
 
 export type PlaceCardProps = {
   id: string;
   name: string;
+  address?: string;
   phone: string;
   website?: string | null;
   coordinates: [number, number];
+  /** @deprecated Ratings temporarily hidden in UI. */
   ratingAvg?: number | null;
   /** Optional override; otherwise taken from shared geolocation hook. */
   userCoordinates?: [number, number] | null;
   /** denser shadow for floating surfaces */
   elevated?: boolean;
-  /** Strip card chrome when nested in the map bottom sheet. */
+  /** Strip card chrome when nested in the map preview sheet. */
   embedded?: boolean;
   titleId?: string;
-  onOpen?: () => void;
+  /** Close control for map preview sheet header. */
+  onClose?: () => void;
+  closeLabel?: string;
 };
 
-function buildRouteUrl(coordinates: [number, number]) {
-  const [lat, lng] = coordinates;
-  return `https://yandex.ru/maps/?rtext=~${lat},${lng}&rtt=auto`;
+/** City travel estimate (~25 km/h). */
+function estimateTravelMinutes(meters: number) {
+  return Math.max(1, Math.round(meters / 420));
 }
 
-function toTelHref(phone: string) {
-  const normalized = phone.replace(/[^\d+]/g, "");
-  return normalized ? `tel:${normalized}` : null;
+function hasValidCoordinates(
+  coords: [number, number] | null | undefined,
+): coords is [number, number] {
+  return (
+    Array.isArray(coords) &&
+    coords.length === 2 &&
+    Number.isFinite(coords[0]) &&
+    Number.isFinite(coords[1])
+  );
 }
-
-function formatRating(value: number) {
-  return Number.isInteger(value) ? String(value) : value.toFixed(1);
-}
-
-const iconBtnClass =
-  "inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 transition-colors hover:border-amber-900/30 hover:text-amber-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-950";
 
 export function PlaceCard({
   id,
   name,
+  address = "",
   phone,
   website,
   coordinates,
-  ratingAvg = null,
   userCoordinates: userCoordinatesProp,
   elevated = false,
   embedded = false,
   titleId,
-  onOpen,
+  onClose,
+  closeLabel,
 }: PlaceCardProps) {
   const t = useTranslations("PlaceCard");
+  const router = useRouter();
   const liveUserCoordinates = useUserLocation();
   const userCoordinates =
     userCoordinatesProp === undefined
@@ -62,33 +72,33 @@ export function PlaceCard({
       : userCoordinatesProp;
 
   const displayName = name?.trim() || "Без названия";
-  const telHref = phone ? toTelHref(phone) : null;
-  const siteHref = website?.trim() ? website.trim() : null;
-  const yandexRouteUrl = buildRouteUrl(coordinates);
+  const placeAddress = address.trim();
 
-  const distanceLabel = useMemo(() => {
-    if (!userCoordinates) return null;
+  const travelMeta = useMemo(() => {
+    if (!hasValidCoordinates(userCoordinates)) return null;
 
     const meters = haversineMeters(userCoordinates, coordinates);
-    if (!Number.isFinite(meters)) return null;
+    if (!Number.isFinite(meters) || meters < 0) return null;
+
+    const travelTimeLabel = t("travelTimeMinutes", {
+      minutes: estimateTravelMinutes(meters),
+    });
 
     const formatted = formatDistance(meters);
-    if (formatted.unit === "m") {
-      return t("distanceShortMeters", { meters: formatted.value });
-    }
+    const distanceHint =
+      formatted.unit === "m"
+        ? t("distanceShortMeters", { meters: formatted.value })
+        : t("distanceShortKilometers", {
+            km: Number.isInteger(formatted.value)
+              ? String(formatted.value)
+              : formatted.value.toFixed(1).replace(/\.0$/, ""),
+          });
 
-    const kmLabel = Number.isInteger(formatted.value)
-      ? String(formatted.value)
-      : formatted.value.toFixed(1).replace(/\.0$/, "");
-
-    return t("distanceShortKilometers", { km: kmLabel });
+    return { travelTimeLabel, distanceHint };
   }, [coordinates, t, userCoordinates]);
 
-  const hasMeta =
-    (ratingAvg != null && ratingAvg > 0) || Boolean(distanceLabel);
-
   function openPlace() {
-    onOpen?.();
+    router.push(`/places/${id}`);
   }
 
   function onCardKeyDown(event: KeyboardEvent<HTMLElement>) {
@@ -98,9 +108,10 @@ export function PlaceCard({
     }
   }
 
-  function stopCardNavigation(event: MouseEvent) {
+  function handleClose(event: MouseEvent) {
     event.preventDefault();
     event.stopPropagation();
+    onClose?.();
   }
 
   return (
@@ -117,91 +128,54 @@ export function PlaceCard({
             }`
       }
     >
-      <div className={`absolute z-10 ${embedded ? "top-0 right-0" : "top-3 right-3"}`}>
-        <FavoriteButton placeId={id} stopPropagation />
-      </div>
+      <header className="flex items-start justify-between gap-3">
+        <div className="min-w-0 flex flex-1 flex-col gap-1.5">
+          <h3
+            id={titleId}
+            className="font-serif text-xl font-semibold leading-snug tracking-tight text-slate-900 sm:text-[1.35rem]"
+          >
+            {displayName}
+          </h3>
 
-      <header className="flex min-w-0 flex-col gap-2 pr-10">
-        <h3
-          id={titleId}
-          className="font-serif text-xl font-semibold leading-snug tracking-tight text-slate-900 sm:text-[1.35rem]"
-        >
-          {displayName}
-        </h3>
+          {placeAddress ? (
+            <p className="text-sm leading-snug text-slate-500">{placeAddress}</p>
+          ) : null}
 
-        {hasMeta ? (
-          <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-sm text-slate-500">
-            {ratingAvg != null && ratingAvg > 0 ? (
-              <span className="inline-flex items-center gap-1 font-medium text-slate-600">
-                <Star
-                  className="h-3.5 w-3.5 fill-amber-500 text-amber-500"
-                  aria-hidden
-                />
-                <span>{formatRating(ratingAvg)}</span>
-              </span>
-            ) : null}
+          {travelMeta ? (
+            <p className="text-sm text-slate-600">
+              <span>{travelMeta.travelTimeLabel}</span>
+              {travelMeta.distanceHint ? (
+                <span className="text-slate-400">
+                  {" "}
+                  · {travelMeta.distanceHint}
+                </span>
+              ) : null}
+            </p>
+          ) : null}
+        </div>
 
-            {ratingAvg != null && ratingAvg > 0 && distanceLabel ? (
-              <span aria-hidden className="text-slate-300">
-                ·
-              </span>
-            ) : null}
-
-            {distanceLabel ? <span>{distanceLabel}</span> : null}
-          </div>
-        ) : null}
+        <div className="flex shrink-0 items-center gap-0.5">
+          <PlaceCardHeaderActions placeId={id} name={displayName} />
+          {onClose ? (
+            <button
+              type="button"
+              onClick={handleClose}
+              aria-label={closeLabel ?? "Close"}
+              className={placeHeaderIconClass}
+            >
+              <X className="h-[1.125rem] w-[1.125rem]" strokeWidth={2} aria-hidden />
+            </button>
+          ) : null}
+        </div>
       </header>
 
-      <div className="flex items-center gap-2.5">
-        <button
-          type="button"
-          onClick={(event) => {
-            stopCardNavigation(event);
-            openPlace();
-          }}
-          className="inline-flex h-12 min-w-0 flex-1 items-center justify-center rounded-xl bg-amber-950 px-4 text-sm font-medium tracking-wide text-slate-50 transition-colors hover:bg-amber-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-950"
-        >
-          {t("teaMapCta")}
-        </button>
-
-        <a
-          href={yandexRouteUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={stopCardNavigation}
-          aria-label={t("buildRoute")}
-          title={t("buildRoute")}
-          className={iconBtnClass}
-        >
-          <Navigation2 className="h-5 w-5" strokeWidth={2} aria-hidden />
-        </a>
-
-        {telHref ? (
-          <a
-            href={telHref}
-            onClick={stopCardNavigation}
-            aria-label={t("bookTable")}
-            title={t("bookTable")}
-            className={iconBtnClass}
-          >
-            <Phone className="h-5 w-5" strokeWidth={2} aria-hidden />
-          </a>
-        ) : null}
-
-        {siteHref ? (
-          <a
-            href={siteHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={stopCardNavigation}
-            aria-label={t("openWebsite")}
-            title={t("openWebsite")}
-            className={iconBtnClass}
-          >
-            <Globe className="h-5 w-5" strokeWidth={2} aria-hidden />
-          </a>
-        ) : null}
-      </div>
+      <PlaceActions
+        placeId={id}
+        name={displayName}
+        phone={phone}
+        website={website}
+        coordinates={coordinates}
+      />
     </article>
   );
 }

@@ -48,6 +48,9 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# local admin image uploads (fallback when Supabase Storage is unset)
+/public/uploads/
+
 # vercel
 .vercel
 

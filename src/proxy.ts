@@ -6,10 +6,13 @@ import {
   LANG_SELECTED_COOKIE,
   ONBOARDING_DONE_COOKIE,
 } from "./lib/onboarding";
+import {
+  ADMIN_BASE_PATH,
+  ADMIN_SESSION_COOKIE,
+  isValidAdminSessionToken,
+} from "./lib/admin-auth";
 
 const handleI18nRouting = createMiddleware(routing);
-
-const ADMIN_SESSION_COOKIE = "admin_session";
 
 /** Strip optional locale prefix (`/en`, `/zh`; default `ru` has no prefix). */
 function stripLocalePrefix(pathname: string): string {
@@ -22,15 +25,19 @@ function stripLocalePrefix(pathname: string): string {
   return pathname;
 }
 
+function isSecretAdminPath(pathname: string): boolean {
+  return (
+    pathname === ADMIN_BASE_PATH || pathname.startsWith(`${ADMIN_BASE_PATH}/`)
+  );
+}
+
+function isSecretAdminLoginPath(pathname: string): boolean {
+  return pathname === ADMIN_BASE_PATH || pathname === `${ADMIN_BASE_PATH}/`;
+}
+
 function isAdminteaPath(pathname: string): boolean {
   const path = stripLocalePrefix(pathname);
   return path === "/admintea" || path.startsWith("/admintea/");
-}
-
-/** Login screen itself stays public; nested admintea routes require a session. */
-function isAdminteaLoginPath(pathname: string): boolean {
-  const path = stripLocalePrefix(pathname);
-  return path === "/admintea" || path === "/admintea/";
 }
 
 function localePrefixFor(pathname: string): string {
@@ -69,14 +76,23 @@ export default function proxy(request: NextRequest) {
   const path = stripLocalePrefix(pathname);
   const localeHint = request.cookies.get("NEXT_LOCALE")?.value;
 
-  if (isAdminteaPath(pathname) && !isAdminteaLoginPath(pathname)) {
-    const session = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
-    if (!session) {
-      const loginUrl = request.nextUrl.clone();
-      loginUrl.pathname = localizedPath(pathname, "/admintea", localeHint);
-      loginUrl.search = "";
-      return NextResponse.redirect(loginUrl);
+  // Hidden admin panel — bypass i18n + onboarding; gate nested routes by cookie.
+  if (isSecretAdminPath(pathname)) {
+    if (!isSecretAdminLoginPath(pathname)) {
+      const session = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
+      if (!isValidAdminSessionToken(session)) {
+        const loginUrl = request.nextUrl.clone();
+        loginUrl.pathname = ADMIN_BASE_PATH;
+        loginUrl.search = "";
+        return NextResponse.redirect(loginUrl);
+      }
     }
+    return NextResponse.next();
+  }
+
+  // Legacy stub route — skip onboarding only.
+  if (isAdminteaPath(pathname)) {
+    return handleI18nRouting(request);
   }
 
   const onboardingDone =
@@ -85,29 +101,26 @@ export default function proxy(request: NextRequest) {
     request.cookies.get(LANG_SELECTED_COOKIE)?.value === "1";
   const onboardingRoute = isOnboardingPath(path);
 
-  // Skip onboarding gate for admintea (deep links / bookmarks).
-  if (!isAdminteaPath(pathname)) {
-    if (onboardingDone && onboardingRoute) {
-      const home = request.nextUrl.clone();
-      home.pathname = localizedPath(pathname, "/", localeHint);
-      home.search = "";
-      return NextResponse.redirect(home);
+  if (onboardingDone && onboardingRoute) {
+    const home = request.nextUrl.clone();
+    home.pathname = localizedPath(pathname, "/", localeHint);
+    home.search = "";
+    return NextResponse.redirect(home);
+  }
+
+  if (!onboardingDone) {
+    if (!langSelected && path !== "/language-select") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/language-select";
+      url.search = "";
+      return NextResponse.redirect(url);
     }
 
-    if (!onboardingDone) {
-      if (!langSelected && path !== "/language-select") {
-        const url = request.nextUrl.clone();
-        url.pathname = "/language-select";
-        url.search = "";
-        return NextResponse.redirect(url);
-      }
-
-      if (langSelected && path !== "/welcome" && path !== "/language-select") {
-        const url = request.nextUrl.clone();
-        url.pathname = localizedPath(pathname, "/welcome", localeHint);
-        url.search = "";
-        return NextResponse.redirect(url);
-      }
+    if (langSelected && path !== "/welcome" && path !== "/language-select") {
+      const url = request.nextUrl.clone();
+      url.pathname = localizedPath(pathname, "/welcome", localeHint);
+      url.search = "";
+      return NextResponse.redirect(url);
     }
   }
 
