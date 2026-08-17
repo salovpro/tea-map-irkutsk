@@ -6,6 +6,8 @@ import {
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
 type Props = {
   params: Promise<{ locale: string; id: string }>;
 };

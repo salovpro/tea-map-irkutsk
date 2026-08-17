@@ -2,6 +2,8 @@ import { FavoritesClient } from "@/components/FavoritesClient";
 import { getCatalogPlaces } from "@/lib/places";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
+export const dynamic = "force-dynamic";
+
 type Props = {
   params: Promise<{ locale: string }>;
 };

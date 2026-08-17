@@ -2,6 +2,8 @@ import { MapLoader } from "@/components/MapLoader";
 import { getMapPlaces } from "@/lib/places";
 import { setRequestLocale } from "next-intl/server";
 
+export const dynamic = "force-dynamic";
+
 type Props = {
   params: Promise<{ locale: string }>;
 };
