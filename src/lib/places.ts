@@ -222,6 +222,24 @@ function parseSheetTeaMenu(value: unknown): PlaceSheetTeaItem[] {
   });
 }
 
+function classifyPlacesLoadError(error: unknown): "missing_database_url" | "database_unavailable" {
+  const message = error instanceof Error ? error.message : String(error);
+  if (message.includes("DATABASE_URL is not set")) {
+    return "missing_database_url";
+  }
+  return "database_unavailable";
+}
+
+export class PlacesLoadError extends Error {
+  readonly code: "missing_database_url" | "database_unavailable";
+
+  constructor(code: "missing_database_url" | "database_unavailable") {
+    super(code);
+    this.name = "PlacesLoadError";
+    this.code = code;
+  }
+}
+
 /** Slugs / filters removed — map shows all registered venues. */
 export async function getMapPlaces(localeCode: string): Promise<MapPlace[]> {
   const locale = toLocale(localeCode);
@@ -266,8 +284,10 @@ export async function getMapPlaces(localeCode: string): Promise<MapPlace[]> {
       };
     });
   } catch (error) {
-    console.error("Failed to load map places:", error);
-    return [];
+    const code = classifyPlacesLoadError(error);
+    const name = error instanceof Error ? error.name : "UnknownError";
+    console.error(`[getMapPlaces] ${code} (${name})`);
+    throw new PlacesLoadError(code);
   }
 }
 
