@@ -1,5 +1,6 @@
 "use client";
 
+import { PartnersBlock } from "@/components/PartnersBlock";
 import { completeOnboarding } from "@/lib/onboarding";
 import { useRouter } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
@@ -41,6 +42,8 @@ export function WelcomeClient() {
               <p key={text.slice(0, 24)}>{text}</p>
             ))}
           </div>
+
+          <PartnersBlock />
         </div>
 
         <div className="sticky bottom-0 -mx-6 mt-10 border-t border-slate-200/80 bg-gradient-to-t from-[#f3f0ea] via-[#f3f0ea] to-transparent px-6 pt-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:-mx-8 sm:px-8">

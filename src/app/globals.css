@@ -65,6 +65,13 @@ body::-webkit-scrollbar,
   border: none !important;
 }
 
+.tea-map-pin-icon,
+.tea-map-cluster-icon {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  z-index: 10;
+}
+
 .leaflet-control-attribution {
   background: transparent !important;
   box-shadow: none !important;
@@ -75,4 +82,15 @@ body::-webkit-scrollbar,
 .leaflet-control-attribution a {
   color: #94a3b8 !important;
   text-decoration: none;
+}
+
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }

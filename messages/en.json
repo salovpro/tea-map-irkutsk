@@ -80,7 +80,9 @@
     "distanceShortKilometers": "{km} km",
     "distanceMeters": "📍 {meters} m away",
     "distanceKilometers": "📍 {km} km away",
-    "openIn2gis": "Open in 2GIS"
+    "openIn2gis": "Open in 2GIS",
+    "menuStats": "{count, plural, one {# item} other {# items}} • Average check ~{check} ₽",
+    "menuStatsCountOnly": "{count, plural, one {# item} other {# items}}"
   },
   "HistoryPage": {
     "eyebrow": "History",
@@ -122,6 +124,7 @@
     "places": "Places",
     "favorites": "Favorites",
     "history": "History",
+    "about": "About",
     "admin": "Admin"
   },
   "Favorites": {
@@ -168,6 +171,16 @@
     "p5": "Our project is supported by the Mayor of Irkutsk — and we would be glad if you support it too!",
     "p6": "Share with friends, leave reviews — we will keep getting better for you!",
     "cta": "Go to the map"
+  },
+  "AboutPage": {
+    "title": "About the project"
+  },
+  "Partners": {
+    "supportedBy": "Project created with the support of:",
+    "officialSponsor": "Official sponsor: Rosselkhozbank",
+    "irkutskAlt": "Coat of arms of Irkutsk",
+    "tppvsAlt": "Chamber of Commerce and Industry of Eastern Siberia",
+    "rshbAlt": "Rosselkhozbank"
   },
   "NotFound": {
     "message": "Page not found",

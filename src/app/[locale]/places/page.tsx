@@ -14,7 +14,7 @@ export default async function PlacesPage({ params }: Props) {
   const places = await getCatalogPlaces(locale);
 
   return (
-    <main className="mx-auto w-full max-w-lg px-4 pt-20 pb-24">
+    <main className="mx-auto w-full max-w-lg px-4 pt-4 pb-[calc(var(--app-nav-height)+env(safe-area-inset-bottom,0px)+1.5rem)]">
       <div className="flex flex-col gap-8">
         <header className="flex flex-col gap-3">
           <h1 className="font-serif text-3xl font-semibold tracking-tight text-slate-900">

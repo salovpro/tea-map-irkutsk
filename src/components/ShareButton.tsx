@@ -6,9 +6,13 @@ import { useCallback, useEffect, useState } from "react";
 
 type ShareButtonProps = {
   variant?: "fab" | "icon";
+  atmospheric?: boolean;
 };
 
-export function ShareButton({ variant = "icon" }: ShareButtonProps) {
+export function ShareButton({
+  variant = "icon",
+  atmospheric = false,
+}: ShareButtonProps) {
   const t = useTranslations("ShareButton");
   const [toastVisible, setToastVisible] = useState(false);
 
@@ -60,7 +64,9 @@ export function ShareButton({ variant = "icon" }: ShareButtonProps) {
   const buttonClass =
     variant === "fab"
       ? "fixed bottom-24 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-amber-950 text-slate-50 shadow-md transition-colors hover:bg-amber-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-950"
-      : "flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 transition-colors hover:border-amber-900/20 hover:text-amber-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-950";
+      : atmospheric
+        ? "flex h-10 w-10 items-center justify-center rounded-full border border-slate-700 bg-slate-800/80 text-slate-200 transition-colors duration-500 ease-in-out hover:border-amber-200/30 hover:text-amber-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-200"
+        : "flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 transition-colors duration-500 ease-in-out hover:border-amber-900/20 hover:text-amber-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-950";
 
   return (
     <>

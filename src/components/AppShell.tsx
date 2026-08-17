@@ -3,6 +3,7 @@
 import { FavoritesProvider } from "@/hooks/useFavorites";
 import { Header } from "@/components/Header";
 import { Navigation } from "@/components/Navigation";
+import { UIProvider } from "@/context/UIContext";
 import { isOnboardingPath } from "@/lib/onboarding";
 import { usePathname } from "@/i18n/navigation";
 import type { ReactNode } from "react";
@@ -18,25 +19,29 @@ export function AppShell({ children }: Props) {
 
   if (onboarding) {
     return (
-      <FavoritesProvider>
-        <div className="flex min-h-full flex-1 flex-col">{children}</div>
-      </FavoritesProvider>
+      <UIProvider>
+        <FavoritesProvider>
+          <div className="flex min-h-full flex-1 flex-col">{children}</div>
+        </FavoritesProvider>
+      </UIProvider>
     );
   }
 
   return (
-    <FavoritesProvider>
-      <Header />
-      <div
-        className={
-          isMapHome
-            ? "flex min-h-full flex-1 flex-col pb-[calc(var(--app-nav-height)+env(safe-area-inset-bottom,0px))]"
-            : "flex min-h-full flex-1 flex-col pt-14 pb-[calc(var(--app-nav-height)+env(safe-area-inset-bottom,0px))] sm:pt-16"
-        }
-      >
-        {children}
-      </div>
-      <Navigation />
-    </FavoritesProvider>
+    <UIProvider>
+      <FavoritesProvider>
+        <Header />
+        <div
+          className={
+            isMapHome
+              ? "flex min-h-full flex-1 flex-col pb-[calc(var(--app-nav-height)+env(safe-area-inset-bottom,0px))]"
+              : "flex min-h-full flex-1 flex-col pt-14 pb-[calc(var(--app-nav-height)+env(safe-area-inset-bottom,0px)+1rem)] sm:pt-16"
+          }
+        >
+          {children}
+        </div>
+        <Navigation />
+      </FavoritesProvider>
+    </UIProvider>
   );
 }

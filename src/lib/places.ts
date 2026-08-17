@@ -1,6 +1,11 @@
 import { Locale } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 
+export type TeaMenuStats = {
+  teaItemsCount: number;
+  averageCheck: number | null;
+};
+
 export type MapPlace = {
   id: string;
   slug: string;
@@ -13,6 +18,8 @@ export type MapPlace = {
   isPremium: boolean;
   logoUrl: string | null;
   ratingAvg: number | null;
+  teaItemsCount: number;
+  averageCheck: number | null;
 };
 
 export type CatalogPlace = {
@@ -29,6 +36,8 @@ export type CatalogPlace = {
   teaMenu: { name: string; note?: string }[];
   description: string;
   ratingAvg: number | null;
+  teaItemsCount: number;
+  averageCheck: number | null;
 };
 
 /** Minimal place payload to open the preview sheet before details load. */
@@ -43,6 +52,8 @@ export type PlaceSheetSeed = {
   isPremium: boolean;
   coordinates: [number, number];
   ratingAvg: number | null;
+  teaItemsCount: number;
+  averageCheck: number | null;
 };
 
 export type PlaceSheetTeaItem = {
@@ -151,6 +162,39 @@ function normalizeTeaMenu(value: unknown): { name: string; note?: string }[] {
   });
 }
 
+/** Count menu items and average price from the translation JSON menu. */
+export function summarizeTeaMenu(value: unknown): TeaMenuStats {
+  if (!Array.isArray(value)) {
+    return { teaItemsCount: 0, averageCheck: null };
+  }
+
+  const prices: number[] = [];
+  let teaItemsCount = 0;
+
+  for (const item of value) {
+    if (typeof item !== "object" || item === null) continue;
+    const row = item as Record<string, unknown>;
+    const title = String(row.title ?? row.name ?? "").trim();
+    if (!title) continue;
+
+    teaItemsCount += 1;
+    const price = typeof row.price === "number" ? row.price : Number(row.price);
+    if (Number.isFinite(price) && price > 0) {
+      prices.push(price);
+    }
+  }
+
+  if (teaItemsCount === 0 || prices.length === 0) {
+    return { teaItemsCount, averageCheck: null };
+  }
+
+  const sum = prices.reduce((total, price) => total + price, 0);
+  return {
+    teaItemsCount,
+    averageCheck: Math.round(sum / teaItemsCount),
+  };
+}
+
 function parseSheetTeaMenu(value: unknown): PlaceSheetTeaItem[] {
   if (!Array.isArray(value)) return [];
 
@@ -201,6 +245,9 @@ export async function getMapPlaces(localeCode: string): Promise<MapPlace[]> {
         locale,
       );
       const description = translation?.description ?? "";
+      const { teaItemsCount, averageCheck } = summarizeTeaMenu(
+        translation?.teaMenu,
+      );
 
       return {
         id: place.id,
@@ -214,6 +261,8 @@ export async function getMapPlaces(localeCode: string): Promise<MapPlace[]> {
         isPremium: place.isPremium,
         logoUrl: place.logoUrl,
         ratingAvg: averageRating(place.reviews),
+        teaItemsCount,
+        averageCheck,
       };
     });
   } catch (error) {
@@ -247,6 +296,9 @@ export async function getCatalogPlaces(
       );
       const description = translation?.description ?? "";
       const teaMenu = normalizeTeaMenu(translation?.teaMenu);
+      const { teaItemsCount, averageCheck } = summarizeTeaMenu(
+        translation?.teaMenu,
+      );
 
       return {
         id: place.id,
@@ -262,6 +314,8 @@ export async function getCatalogPlaces(
         teaMenu,
         description,
         ratingAvg: averageRating(place.reviews),
+        teaItemsCount,
+        averageCheck,
       };
     });
   } catch (error) {
@@ -280,6 +334,8 @@ export async function getPlaceSheetDetail(
   if (!place || !translation) return null;
 
   const description = translation.description ?? "";
+  const teaMenu = parseSheetTeaMenu(translation.teaMenu);
+  const { teaItemsCount, averageCheck } = summarizeTeaMenu(translation.teaMenu);
 
   return {
     id: place.id,
@@ -292,7 +348,9 @@ export async function getPlaceSheetDetail(
     isPremium: place.isPremium,
     coordinates: [place.lat, place.lng],
     ratingAvg: averageRating(place.reviews),
-    teaMenu: parseSheetTeaMenu(translation.teaMenu),
+    teaItemsCount,
+    averageCheck,
+    teaMenu,
     reviews: place.reviews.map((review) => ({
       id: review.id,
       authorName: review.authorName,

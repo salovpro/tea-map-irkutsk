@@ -22,6 +22,8 @@ export function PlacesList({ places }: PlacesListProps) {
           website={place.website}
           coordinates={place.coordinates}
           ratingAvg={place.ratingAvg}
+          teaItemsCount={place.teaItemsCount}
+          averageCheck={place.averageCheck}
         />
       ))}
     </div>

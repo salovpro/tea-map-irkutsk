@@ -145,14 +145,14 @@ function createPinIcon({
 
   const html = withLabel
     ? `
-      <div style="display:flex;align-items:center;gap:8px;transform:translate(-20px,-20px) scale(${scale});transform-origin:20px 20px;pointer-events:none;">
-        <div style="width:40px;height:40px;border-radius:999px;background:${dotColor};display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 10px rgba(15,23,42,0.18);border:2px solid rgba(255,255,255,0.92);">${iconSvg}</div>
-        <div style="max-width:180px;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.96);color:#0f172a;font-size:12px;font-weight:600;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 10px rgba(15,23,42,0.12);border:1px solid rgba(226,232,240,0.95);">${safeLabel}</div>
+      <div style="display:flex;align-items:center;gap:8px;transform:translate(-20px,-20px) scale(${scale});transform-origin:20px 20px;cursor:pointer;pointer-events:auto;position:relative;z-index:10;">
+        <div style="width:40px;height:40px;border-radius:999px;background:${dotColor};display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 10px rgba(15,23,42,0.18);border:2px solid rgba(255,255,255,0.92);pointer-events:none;">${iconSvg}</div>
+        <div style="max-width:180px;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.96);color:#0f172a;font-size:12px;font-weight:600;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 10px rgba(15,23,42,0.12);border:1px solid rgba(226,232,240,0.95);pointer-events:none;">${safeLabel}</div>
       </div>
     `
     : `
-      <div style="width:40px;height:40px;transform:translate(-20px,-20px) scale(${scale});transform-origin:20px 20px;pointer-events:none;">
-        <div style="width:40px;height:40px;border-radius:999px;background:${dotColor};display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(15,23,42,0.18);border:2px solid rgba(255,255,255,0.92);">${iconSvg}</div>
+      <div style="width:40px;height:40px;transform:translate(-20px,-20px) scale(${scale});transform-origin:20px 20px;cursor:pointer;pointer-events:auto;position:relative;z-index:10;">
+        <div style="width:40px;height:40px;border-radius:999px;background:${dotColor};display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(15,23,42,0.18);border:2px solid rgba(255,255,255,0.92);pointer-events:none;">${iconSvg}</div>
       </div>
     `;
 
@@ -186,7 +186,7 @@ function createClusterIcon(cluster: { getChildCount: () => number }) {
   return L.divIcon({
     className: "tea-map-cluster-icon",
     html: `
-      <div style="width:44px;height:44px;border-radius:999px;background:${NAV_BROWN};color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;box-shadow:0 3px 12px rgba(15,23,42,0.22);border:2px solid rgba(255,255,255,0.92);transform:translate(-22px,-22px);">${count}</div>
+      <div style="width:44px;height:44px;border-radius:999px;background:${NAV_BROWN};color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;box-shadow:0 3px 12px rgba(15,23,42,0.22);border:2px solid rgba(255,255,255,0.92);transform:translate(-22px,-22px);cursor:pointer;pointer-events:auto;position:relative;z-index:10;">${count}</div>
     `,
     iconSize: [44, 44],
     iconAnchor: [22, 22],
@@ -212,6 +212,8 @@ function toSheetSeed(place: MapPlace): PlaceSheetSeed {
     isPremium: place.isPremium,
     coordinates: place.coordinates,
     ratingAvg: place.ratingAvg,
+    teaItemsCount: place.teaItemsCount,
+    averageCheck: place.averageCheck,
   };
 }
 
@@ -285,7 +287,8 @@ function PlaceMarkers({
     <MarkerClusterGroup
       chunkedLoading
       showCoverageOnHover={false}
-      spiderfyOnMaxZoom
+      spiderfyOnMaxZoom={false}
+      zoomToBoundsOnClick
       disableClusteringAtZoom={CLUSTER_MAX_ZOOM + 1}
       maxClusterRadius={CLUSTER_RADIUS}
       iconCreateFunction={createClusterIcon}

@@ -55,7 +55,7 @@ export function PlacePreviewSheet({ place, onClose }: Props) {
             radius/shadow so the card and menu read as one continuous slab.
             Upward-only shadow casts onto the map, not onto the menu.
           */}
-          <div className="pointer-events-auto rounded-t-2xl rounded-b-none bg-[#ffffff] px-4 pt-4 pb-3 shadow-[0_-12px_32px_rgba(15,23,42,0.14)] sm:px-5 sm:pt-5 sm:pb-4">
+          <div className="pointer-events-auto rounded-t-2xl rounded-b-none bg-[#ffffff] px-4 pt-4 pb-6 shadow-[0_-12px_32px_rgba(15,23,42,0.14)] sm:px-5 sm:pt-5 sm:pb-8">
             <PlaceCard
               id={place.id}
               name={place.name}
@@ -64,6 +64,8 @@ export function PlacePreviewSheet({ place, onClose }: Props) {
               website={place.website}
               coordinates={place.coordinates}
               embedded
+              teaItemsCount={place.teaItemsCount}
+              averageCheck={place.averageCheck}
               titleId="place-preview-sheet-title"
               onClose={onClose}
               closeLabel={tMap("close")}

@@ -80,7 +80,9 @@
     "distanceShortKilometers": "{km} 公里",
     "distanceMeters": "📍 距您 {meters} 米",
     "distanceKilometers": "📍 距您 {km} 公里",
-    "openIn2gis": "在 2GIS 中打开"
+    "openIn2gis": "在 2GIS 中打开",
+    "menuStats": "{count} 道茶 • 人均约 {check} ₽",
+    "menuStatsCountOnly": "{count} 道茶"
   },
   "HistoryPage": {
     "eyebrow": "历史",
@@ -122,6 +124,7 @@
     "places": "场所",
     "favorites": "收藏",
     "history": "历史",
+    "about": "关于",
     "admin": "管理"
   },
   "Favorites": {
@@ -168,6 +171,16 @@
     "p5": "本项目得到伊尔库茨克市长的支持——若您也愿意支持，我们将十分高兴！",
     "p6": "请与朋友分享、留下评价，我们会努力做得更好！",
     "cta": "进入地图"
+  },
+  "AboutPage": {
+    "title": "关于项目"
+  },
+  "Partners": {
+    "supportedBy": "项目得到以下支持：",
+    "officialSponsor": "官方赞助商：俄罗斯农业银行",
+    "irkutskAlt": "伊尔库茨克市徽",
+    "tppvsAlt": "东西伯利亚工商会",
+    "rshbAlt": "俄罗斯农业银行"
   },
   "NotFound": {
     "message": "页面未找到",

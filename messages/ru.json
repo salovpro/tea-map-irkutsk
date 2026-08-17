@@ -80,7 +80,9 @@
     "distanceShortKilometers": "{km} км",
     "distanceMeters": "📍 {meters} м от вас",
     "distanceKilometers": "📍 через {km} км",
-    "openIn2gis": "Открыть в 2GIS"
+    "openIn2gis": "Открыть в 2GIS",
+    "menuStats": "{count, plural, one {# позиция} few {# позиции} many {# позиций} other {# позиций}} • Средний чек ~{check} ₽",
+    "menuStatsCountOnly": "{count, plural, one {# позиция} few {# позиции} many {# позиций} other {# позиций}}"
   },
   "HistoryPage": {
     "eyebrow": "История",
@@ -122,6 +124,7 @@
     "places": "Заведения",
     "favorites": "Избранное",
     "history": "История",
+    "about": "О проекте",
     "admin": "Админ"
   },
   "Favorites": {
@@ -168,6 +171,16 @@
     "p5": "Наш проект поддерживает мэр Иркутска, и мы будем рады, если его поддержите и вы!",
     "p6": "Делитесь с друзьями, оставляйте отзывы, мы постараемся стать лучше для вас!",
     "cta": "Перейти к карте"
+  },
+  "AboutPage": {
+    "title": "О проекте"
+  },
+  "Partners": {
+    "supportedBy": "Проект создан при поддержке:",
+    "officialSponsor": "Официальный спонсор: Россельхозбанк",
+    "irkutskAlt": "Герб Иркутска",
+    "tppvsAlt": "Торгово-промышленная палата Восточной Сибири",
+    "rshbAlt": "Россельхозбанк"
   },
   "NotFound": {
     "message": "Страница не найдена",

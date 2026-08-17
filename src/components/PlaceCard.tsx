@@ -23,6 +23,8 @@ export type PlaceCardProps = {
   ratingAvg?: number | null;
   /** Optional override; otherwise taken from shared geolocation hook. */
   userCoordinates?: [number, number] | null;
+  teaItemsCount?: number;
+  averageCheck?: number | null;
   /** denser shadow for floating surfaces */
   elevated?: boolean;
   /** Strip card chrome when nested in the map preview sheet. */
@@ -62,6 +64,8 @@ export function PlaceCard({
   titleId,
   onClose,
   closeLabel,
+  teaItemsCount = 0,
+  averageCheck = null,
 }: PlaceCardProps) {
   const t = useTranslations("PlaceCard");
   const router = useRouter();
@@ -139,6 +143,14 @@ export function PlaceCard({
 
           {placeAddress ? (
             <p className="text-sm leading-snug text-slate-500">{placeAddress}</p>
+          ) : null}
+
+          {teaItemsCount > 0 ? (
+            <p className="text-sm text-gray-500">
+              {averageCheck != null
+                ? t("menuStats", { count: teaItemsCount, check: averageCheck })
+                : t("menuStatsCountOnly", { count: teaItemsCount })}
+            </p>
           ) : null}
 
           {travelMeta ? (

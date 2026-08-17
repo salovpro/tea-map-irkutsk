@@ -12,7 +12,7 @@ export default async function HistoryPage({ params }: Props) {
 
   return (
     <main className="w-full bg-stone-50">
-      <article className="mx-auto max-w-2xl px-4 pt-20 pb-24 sm:px-6">
+      <article className="mx-auto max-w-2xl px-4 pt-4 pb-24 sm:px-6">
         <header className="flex flex-col gap-6 pb-12 text-center sm:gap-8 sm:pb-16">
           <p className="text-xs font-medium uppercase tracking-[0.22em] text-amber-900/70">
             {t("eyebrow")}
