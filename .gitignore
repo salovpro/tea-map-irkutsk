@@ -48,8 +48,17 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
-# local admin image uploads (fallback when Supabase Storage is unset)
+# local admin image uploads (legacy public fallback)
 /public/uploads/
+
+# Amvera / local persistent venue images
+.local-storage/
+
+# database migration backups (do not use a global *.sql)
+/supabase-public.dump
+/supabase-public.sql
+/dump-list.txt
+/backups/
 
 # vercel
 .vercel

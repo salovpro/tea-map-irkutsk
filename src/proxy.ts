@@ -76,6 +76,10 @@ export default function proxy(request: NextRequest) {
   const path = stripLocalePrefix(pathname);
   const localeHint = request.cookies.get("NEXT_LOCALE")?.value;
 
+  if (path === "/media" || path.startsWith("/media/")) {
+    return NextResponse.next();
+  }
+
   // Hidden admin panel — bypass i18n + onboarding; gate nested routes by cookie.
   if (isSecretAdminPath(pathname)) {
     if (!isSecretAdminLoginPath(pathname)) {
@@ -128,5 +132,5 @@ export default function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!api|trpc|_next|_vercel|.*\\..*).*)"],
+  matcher: ["/((?!api|trpc|_next|_vercel|media|.*\\..*).*)"],
 };

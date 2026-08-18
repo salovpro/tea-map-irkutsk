@@ -10,7 +10,8 @@
     "start": "next start",
     "lint": "eslint",
     "seed": "prisma db seed",
-    "db:seed": "prisma db seed"
+    "db:seed": "prisma db seed",
+    "migrate:venue-images": "tsx scripts/migrate-venue-images.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

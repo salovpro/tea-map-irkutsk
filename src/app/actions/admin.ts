@@ -7,7 +7,10 @@ import {
   verifyAdminAccessCode,
 } from "@/lib/admin-auth";
 import { requireAdminSession } from "@/lib/admin-session";
-import { uploadVenueImage } from "@/lib/admin-storage";
+import {
+  deleteManagedVenueImage,
+  uploadVenueImage,
+} from "@/lib/venue-storage";
 import { prisma } from "@/lib/prisma";
 import { Locale } from "@/generated/prisma/client";
 import { cookies } from "next/headers";
@@ -198,6 +201,10 @@ export async function updateVenue(
 
     const description = buildDescription(address);
 
+    if (upload.url && place.logoUrl && place.logoUrl !== upload.url) {
+      await deleteManagedVenueImage(place.logoUrl);
+    }
+
     await prisma.place.update({
       where: { id },
       data: {
@@ -244,7 +251,12 @@ export async function deleteVenue(formData: FormData) {
   await requireAdminSession();
   const id = String(formData.get("id") ?? "").trim();
   if (!id) return;
+  const place = await prisma.place.findUnique({
+    where: { id },
+    select: { logoUrl: true },
+  });
   await prisma.place.delete({ where: { id } });
+  await deleteManagedVenueImage(place?.logoUrl);
   revalidateAdmin();
   redirect(`${ADMIN_BASE_PATH}/venues`);
 }
