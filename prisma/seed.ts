@@ -1,6 +1,6 @@
 import "dotenv/config";
+import { createPgPool } from "../src/lib/pg-pool";
 import { PrismaPg } from "@prisma/adapter-pg";
-import { Pool } from "pg";
 import { PrismaClient, Locale } from "../src/generated/prisma/client";
 import { registeredVenues, type SeedPlace } from "./data/venues";
 
@@ -10,10 +10,7 @@ if (!connectionString) {
   throw new Error("DATABASE_URL is not set");
 }
 
-const pool = new Pool({
-  connectionString,
-  ssl: { rejectUnauthorized: false },
-});
+const pool = createPgPool(connectionString);
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
