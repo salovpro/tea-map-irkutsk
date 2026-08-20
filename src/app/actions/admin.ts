@@ -56,12 +56,50 @@ function buildDescription(address: string, blurb?: string) {
   return `${base} Адрес: ${address.trim()}.`;
 }
 
+function revalidatePublicCatalog() {
+  revalidatePath("/");
+  revalidatePath("/places");
+  revalidatePath("/en");
+  revalidatePath("/en/places");
+  revalidatePath("/zh");
+  revalidatePath("/zh/places");
+}
+
 function revalidateAdmin(paths: string[] = []) {
   revalidatePath(ADMIN_BASE_PATH);
   revalidatePath(`${ADMIN_BASE_PATH}/venues`);
   for (const path of paths) revalidatePath(path);
-  revalidatePath("/");
-  revalidatePath("/places");
+  revalidatePublicCatalog();
+}
+
+type VenueSortItem = {
+  id: string;
+  sortOrder: number;
+};
+
+function parseVenueSortItems(input: unknown): VenueSortItem[] | null {
+  if (!Array.isArray(input) || input.length === 0) return null;
+
+  const items: VenueSortItem[] = [];
+  const seen = new Set<string>();
+
+  for (const row of input) {
+    if (typeof row !== "object" || row === null) return null;
+    const record = row as Record<string, unknown>;
+    const id = typeof record.id === "string" ? record.id.trim() : "";
+    const sortOrder = record.sortOrder;
+
+    if (!id) return null;
+    if (typeof sortOrder !== "number" || !Number.isInteger(sortOrder)) {
+      return null;
+    }
+    if (seen.has(id)) return null;
+
+    seen.add(id);
+    items.push({ id, sortOrder });
+  }
+
+  return items;
 }
 
 export async function adminLogin(
@@ -117,6 +155,10 @@ export async function createVenue(
 
     const description = buildDescription(address);
 
+    const maxSort = await prisma.place.aggregate({
+      _max: { sortOrder: true },
+    });
+
     await prisma.place.create({
       data: {
         slug,
@@ -125,6 +167,7 @@ export async function createVenue(
         phone: phone || null,
         website: website || null,
         logoUrl: upload.url,
+        sortOrder: (maxSort._max.sortOrder ?? 0) + 10,
         translations: {
           create: [
             {
@@ -259,6 +302,48 @@ export async function deleteVenue(formData: FormData) {
   await deleteManagedVenueImage(place?.logoUrl);
   revalidateAdmin();
   redirect(`${ADMIN_BASE_PATH}/venues`);
+}
+
+export async function saveVenueSortOrder(
+  items: VenueSortItem[],
+): Promise<AdminActionState> {
+  try {
+    await requireAdminSession();
+
+    const parsed = parseVenueSortItems(items);
+    if (!parsed) {
+      return { ok: false, error: "Некорректные данные порядка" };
+    }
+
+    const existing = await prisma.place.findMany({
+      where: { id: { in: parsed.map((item) => item.id) } },
+      select: { id: true },
+    });
+
+    if (existing.length !== parsed.length) {
+      return { ok: false, error: "Найдены неизвестные заведения" };
+    }
+
+    await prisma.$transaction(
+      parsed.map((item) =>
+        prisma.place.update({
+          where: { id: item.id },
+          data: { sortOrder: item.sortOrder },
+        }),
+      ),
+    );
+
+    revalidateAdmin();
+    return { ok: true };
+  } catch (error) {
+    if (error instanceof Error && error.message === "UNAUTHORIZED") {
+      return { ok: false, error: "Нет доступа" };
+    }
+    return {
+      ok: false,
+      error: error instanceof Error ? error.message : "Не удалось сохранить порядок",
+    };
+  }
 }
 
 export async function saveTeaMenu(

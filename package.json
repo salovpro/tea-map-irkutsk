@@ -11,12 +11,16 @@
     "lint": "eslint",
     "seed": "prisma db seed",
     "db:seed": "prisma db seed",
-    "migrate:venue-images": "tsx scripts/migrate-venue-images.ts"
+    "migrate:venue-images": "tsx scripts/migrate-venue-images.ts",
+    "init:place-sort-order": "tsx scripts/init-place-sort-order.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
     "@ducanh2912/next-pwa": "^10.2.9",
     "@prisma/adapter-pg": "^7.9.1",
     "@prisma/client": "^7.9.1",

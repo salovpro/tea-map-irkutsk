@@ -254,7 +254,7 @@ export async function getMapPlaces(localeCode: string): Promise<MapPlace[]> {
           select: { rating: true },
         },
       },
-      orderBy: [{ isPremium: "desc" }, { createdAt: "asc" }],
+      orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }, { slug: "asc" }],
     });
 
     return places.map((place) => {
@@ -306,7 +306,7 @@ export async function getCatalogPlaces(
           select: { rating: true },
         },
       },
-      orderBy: [{ isPremium: "desc" }, { createdAt: "asc" }],
+      orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }, { slug: "asc" }],
     });
 
     return places.map((place) => {
@@ -465,7 +465,7 @@ export async function getRelatedPlaces(
           where: translationFilter(locale),
         },
       },
-      orderBy: [{ isPremium: "desc" }, { createdAt: "asc" }],
+      orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }, { slug: "asc" }],
       take: limit,
     });
 
