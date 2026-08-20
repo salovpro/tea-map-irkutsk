@@ -1,4 +1,5 @@
 import { Locale } from "@/generated/prisma/client";
+import { sortPlacesByCatalogOrder } from "@/lib/catalog-order";
 import { prisma } from "@/lib/prisma";
 
 export type TeaMenuStats = {
@@ -309,7 +310,7 @@ export async function getCatalogPlaces(
       orderBy: [{ isPremium: "desc" }, { createdAt: "asc" }],
     });
 
-    return places.map((place) => {
+    const mapped = places.map((place) => {
       const translation = pickTranslation(
         place.translations as TranslationRow[],
         locale,
@@ -338,6 +339,8 @@ export async function getCatalogPlaces(
         averageCheck,
       };
     });
+
+    return sortPlacesByCatalogOrder(mapped);
   } catch (error) {
     console.error("Failed to load catalog places:", error);
     return [];
@@ -466,24 +469,25 @@ export async function getRelatedPlaces(
         },
       },
       orderBy: [{ isPremium: "desc" }, { createdAt: "asc" }],
-      take: limit,
     });
 
-    return places.map((place) => {
-      const translation = pickTranslation(
-        place.translations as TranslationRow[],
-        locale,
-      );
-      const description = translation?.description ?? "";
+    return sortPlacesByCatalogOrder(places)
+      .slice(0, limit)
+      .map((place) => {
+        const translation = pickTranslation(
+          place.translations as TranslationRow[],
+          locale,
+        );
+        const description = translation?.description ?? "";
 
-      return {
-        id: place.id,
-        name: translation?.name || "Без названия",
-        address: extractAddress(description),
-        logoUrl: place.logoUrl,
-        isPremium: place.isPremium,
-      };
-    });
+        return {
+          id: place.id,
+          name: translation?.name || "Без названия",
+          address: extractAddress(description),
+          logoUrl: place.logoUrl,
+          isPremium: place.isPremium,
+        };
+      });
   } catch (error) {
     console.error("Failed to load related places:", error);
     return [];
