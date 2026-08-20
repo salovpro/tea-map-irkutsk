@@ -4,7 +4,8 @@ import L from "leaflet";
 import { useLocale, useTranslations } from "next-intl";
 import { Globe, LocateFixed, Minus, Plus } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { useMap } from "react-leaflet";
+import { createPortal } from "react-dom";
+import { useMap, useMapEvents } from "react-leaflet";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 
@@ -15,7 +16,7 @@ const LOCALE_LABELS: Record<string, string> = {
 };
 
 const controlButtonClass =
-  "pointer-events-auto inline-flex h-12 w-12 items-center justify-center rounded-full bg-white/90 text-amber-950 shadow-lg backdrop-blur-md ring-1 ring-slate-200/70 transition-transform hover:bg-white active:scale-95 disabled:opacity-60";
+  "pointer-events-auto inline-flex h-12 w-12 items-center justify-center rounded-full bg-white/90 text-amber-950 shadow-lg backdrop-blur-md ring-1 ring-slate-200/70 transition-transform hover:bg-white active:scale-95 disabled:pointer-events-none disabled:opacity-40 disabled:active:scale-100";
 
 type MapControlsProps = {
   locating: boolean;
@@ -35,8 +36,19 @@ export function MapControls({
   const router = useRouter();
   const pathname = usePathname();
   const [langOpen, setLangOpen] = useState(false);
+  const [zoom, setZoom] = useState(() => map.getZoom());
   const langMenuRef = useRef<HTMLDivElement>(null);
   const bottomControlsRef = useRef<HTMLDivElement>(null);
+
+  const minZoom = map.getMinZoom();
+  const maxZoom = map.getMaxZoom();
+  const atMinZoom = zoom <= minZoom;
+  const atMaxZoom = zoom >= maxZoom;
+
+  useMapEvents({
+    zoom: () => setZoom(map.getZoom()),
+    zoomend: () => setZoom(map.getZoom()),
+  });
 
   useEffect(() => {
     const nodes = [langMenuRef.current, bottomControlsRef.current];
@@ -75,9 +87,23 @@ export function MapControls({
     router.replace(pathname, { locale: nextLocale });
   }
 
-  return (
+  function zoomIn() {
+    const nextZoom = Math.min(map.getZoom() + 1, map.getMaxZoom());
+    if (nextZoom <= map.getZoom()) return;
+    map.setZoom(nextZoom);
+  }
+
+  function zoomOut() {
+    const nextZoom = Math.max(map.getZoom() - 1, map.getMinZoom());
+    if (nextZoom >= map.getZoom()) return;
+    map.setZoom(nextZoom);
+  }
+
+  if (typeof document === "undefined") return null;
+
+  return createPortal(
     <>
-      <div className="pointer-events-none absolute top-6 right-4 z-[1000]">
+      <div className="tea-map-top-controls pointer-events-none">
         <div ref={langMenuRef} className="relative pointer-events-auto">
           <button
             type="button"
@@ -122,11 +148,7 @@ export function MapControls({
 
       <div
         ref={bottomControlsRef}
-        className="pointer-events-none absolute right-4 z-[1000] flex flex-col items-end gap-3"
-        style={{
-          bottom:
-            "calc(var(--app-nav-height) + env(safe-area-inset-bottom, 0px) + 1rem)",
-        }}
+        className="tea-map-bottom-controls pointer-events-none flex flex-col items-end gap-3"
       >
         {locationErrorText ? (
           <p className="max-w-[14rem] rounded-2xl bg-white/95 px-3 py-2 text-right text-[11px] leading-snug text-slate-600 shadow-sm ring-1 ring-slate-200/90">
@@ -155,22 +177,27 @@ export function MapControls({
         <div className="flex flex-col gap-3">
           <button
             type="button"
-            onClick={() => map.zoomIn()}
+            onClick={zoomIn}
+            disabled={atMaxZoom}
             aria-label="Zoom in"
+            aria-disabled={atMaxZoom}
             className={controlButtonClass}
           >
             <Plus className="h-5 w-5" strokeWidth={2.2} aria-hidden />
           </button>
           <button
             type="button"
-            onClick={() => map.zoomOut()}
+            onClick={zoomOut}
+            disabled={atMinZoom}
             aria-label="Zoom out"
+            aria-disabled={atMinZoom}
             className={controlButtonClass}
           >
             <Minus className="h-5 w-5" strokeWidth={2.2} aria-hidden />
           </button>
         </div>
       </div>
-    </>
+    </>,
+    document.body,
   );
 }

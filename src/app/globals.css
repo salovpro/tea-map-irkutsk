@@ -6,6 +6,9 @@
   --accent: #78350f;
   /* Bottom tab bar height (content only; safe-area added separately). */
   --app-nav-height: 4rem;
+  --bottom-nav-height: var(--app-nav-height);
+  --map-controls-gap: 1rem;
+  --place-sheet-height: 0px;
 }
 
 @media (min-width: 640px) {
@@ -56,6 +59,24 @@ body::-webkit-scrollbar,
   width: 100%;
   background: #eef1f4;
   font: inherit;
+}
+
+.tea-map-top-controls {
+  position: fixed;
+  top: 1.5rem;
+  right: 1rem;
+  z-index: 45;
+}
+
+.tea-map-bottom-controls {
+  position: fixed;
+  right: 1rem;
+  z-index: 45;
+  bottom: calc(
+    var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px) +
+      var(--place-sheet-height, 0px) + var(--map-controls-gap)
+  );
+  transition: bottom 200ms ease;
 }
 
 .tea-map-pin-icon,

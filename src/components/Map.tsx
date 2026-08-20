@@ -24,6 +24,11 @@ import { MapControls } from "@/components/MapControls";
 import { PlacePreviewSheet } from "@/components/PlacePreviewSheet";
 import { useFavorites } from "@/hooks/useFavorites";
 import { Link } from "@/i18n/navigation";
+import {
+  bindLogoImageFallback,
+  createUserLocationIcon,
+  getPinIcon,
+} from "@/lib/map-pin-icon";
 import type { MapPlace, PlaceSheetSeed } from "@/lib/places";
 
 import "leaflet/dist/leaflet.css";
@@ -33,13 +38,14 @@ const IRKUTSK_CENTER: [number, number] = [52.286974, 104.305018];
 const IRKUTSK_ZOOM = 13;
 const USER_FOCUS_ZOOM = 15;
 const LABEL_MIN_ZOOM = 15;
-const MAP_MAX_ZOOM = 19;
+/** CARTO Positron (`light_all`) documents OSM zooms 0–20; leaflet-providers uses maxZoom 20. */
+const MAP_MAX_ZOOM = 20;
+const MAP_MIN_ZOOM = 10;
 const PIN_FOCUS_Y_RATIO = 0.28;
 const CLUSTER_MAX_ZOOM = 15;
 const CLUSTER_RADIUS = 64;
 
 const NAV_BROWN = "#78350f";
-const NAV_BROWN_DARK = "#451a03";
 
 const SPIDERFY_PRECISION = 4;
 const SPIDERFY_BASE_RADIUS_DEG = 0.0002;
@@ -49,20 +55,10 @@ const CARTO_URL =
 const CARTO_ATTRIBUTION =
   '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>';
 
-const TEA_CUP_SVG = `
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 40 40" fill="none" aria-hidden="true">
-    <path d="M13.5 17.2h10.2c.55 0 1 .45 1 1v5.1c0 2.85-2.35 5.15-5.2 5.15h-1.8c-2.85 0-5.2-2.3-5.2-5.15v-5.1c0-.55.45-1 1-1Z" fill="#ffffff"/>
-    <path d="M24.7 19.2h1.55c1.25 0 2.25 1 2.25 2.25v.85c0 1.25-1 2.25-2.25 2.25H24.7" stroke="#ffffff" stroke-width="1.7" stroke-linecap="round" fill="none"/>
-    <path d="M13.2 17.2h10.8" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" opacity="0.85"/>
-    <path d="M16.2 12.2c0-1.1-.4-1.95-.95-2.5M19.5 11.8c0-1.4-.55-2.5-1.35-3.15M22.8 12.2c0-1.1.35-2 .9-2.55" stroke="#ffffff" stroke-width="1.35" stroke-linecap="round"/>
-  </svg>
-`;
-
-const HEART_SVG = `
-  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 40 40" fill="none" aria-hidden="true">
-    <path d="M20 28.2c-.35 0-.7-.12-.97-.36C14.7 23.9 12 21.45 12 18.35 12 16.1 13.75 14.4 16 14.4c1.2 0 2.3.55 3 1.42.7-.87 1.8-1.42 3-1.42 2.25 0 4 1.7 4 3.95 0 3.1-2.7 5.55-7.03 9.49-.27.24-.62.36-.97.36Z" fill="#ffffff"/>
-  </svg>
-`;
+type MapCameraView = {
+  center: [number, number];
+  zoom: number;
+};
 
 function coordGroupKey(lat: number, lng: number) {
   return `${lat.toFixed(SPIDERFY_PRECISION)},${lng.toFixed(SPIDERFY_PRECISION)}`;
@@ -109,76 +105,6 @@ function buildDisplayCoordinates(
   }
 
   return display;
-}
-
-function escapeHtml(value: string) {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
-
-function createPinIcon({
-  label,
-  favorite,
-  selected,
-  showLabel,
-}: {
-  label: string;
-  favorite: boolean;
-  selected: boolean;
-  showLabel: boolean;
-}) {
-  const iconSvg = favorite ? HEART_SVG : TEA_CUP_SVG;
-  const dotColor = favorite
-    ? selected
-      ? "#b91c1c"
-      : "#ef4444"
-    : selected
-      ? NAV_BROWN_DARK
-      : NAV_BROWN;
-  const scale = selected ? 1.12 : 1;
-  const withLabel = showLabel || selected;
-  const safeLabel = escapeHtml(label);
-
-  const html = withLabel
-    ? `
-      <div style="display:flex;align-items:center;gap:8px;transform:translate(-20px,-20px) scale(${scale});transform-origin:20px 20px;cursor:pointer;pointer-events:auto;position:relative;z-index:10;">
-        <div style="width:40px;height:40px;border-radius:999px;background:${dotColor};display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 10px rgba(15,23,42,0.18);border:2px solid rgba(255,255,255,0.92);pointer-events:none;">${iconSvg}</div>
-        <div style="max-width:180px;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.96);color:#0f172a;font-size:12px;font-weight:600;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 10px rgba(15,23,42,0.12);border:1px solid rgba(226,232,240,0.95);pointer-events:none;">${safeLabel}</div>
-      </div>
-    `
-    : `
-      <div style="width:40px;height:40px;transform:translate(-20px,-20px) scale(${scale});transform-origin:20px 20px;cursor:pointer;pointer-events:auto;position:relative;z-index:10;">
-        <div style="width:40px;height:40px;border-radius:999px;background:${dotColor};display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(15,23,42,0.18);border:2px solid rgba(255,255,255,0.92);pointer-events:none;">${iconSvg}</div>
-      </div>
-    `;
-
-  return L.divIcon({
-    className: "tea-map-pin-icon",
-    html,
-    iconSize: withLabel ? [220, 44] : [40, 40],
-    iconAnchor: [20, 20],
-  });
-}
-
-function createUserLocationIcon() {
-  return L.divIcon({
-    className: "tea-map-user-icon",
-    html: `
-      <div style="width:48px;height:48px;transform:translate(-24px,-24px);pointer-events:none;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-          <circle cx="24" cy="24" r="18" fill="#2563eb" fill-opacity="0.18"/>
-          <circle cx="24" cy="24" r="9" fill="#ffffff"/>
-          <circle cx="24" cy="24" r="6.5" fill="#2563eb"/>
-        </svg>
-      </div>
-    `,
-    iconSize: [48, 48],
-    iconAnchor: [24, 24],
-  });
 }
 
 function createClusterIcon(cluster: { getChildCount: () => number }) {
@@ -238,6 +164,14 @@ function readGeolocationError(
   return "unavailable";
 }
 
+function readCameraView(map: L.Map): MapCameraView {
+  const center = map.getCenter();
+  return {
+    center: [center.lat, center.lng],
+    zoom: map.getZoom(),
+  };
+}
+
 function MapRefBridge({ mapRef }: { mapRef: MutableRefObject<L.Map | null> }) {
   const map = useMap();
   useEffect(() => {
@@ -268,6 +202,60 @@ function MapInteractionLayer({
   return null;
 }
 
+function PlaceMarker({
+  place,
+  position,
+  favorite,
+  selected,
+  showLabels,
+  onSelectPlace,
+}: {
+  place: MapPlace;
+  position: [number, number];
+  favorite: boolean;
+  selected: boolean;
+  showLabels: boolean;
+  onSelectPlace: (place: MapPlace) => void;
+}) {
+  const displayName = place.name?.trim() || "Без названия";
+  const icon = useMemo(
+    () =>
+      getPinIcon({
+        label: displayName,
+        logoUrl: place.logoUrl,
+        favorite,
+        selected,
+        showLabel: showLabels,
+      }),
+    [displayName, favorite, place.logoUrl, selected, showLabels],
+  );
+
+  return (
+    <Marker
+      position={position}
+      zIndexOffset={selected ? 1000 : favorite ? 500 : 1}
+      icon={icon}
+      eventHandlers={{
+        click: (event) => {
+          L.DomEvent.stopPropagation(event);
+          onSelectPlace(place);
+        },
+        add: (event) => {
+          const marker = event.target;
+          if (!(marker instanceof L.Marker)) return;
+          bindLogoImageFallback(marker, {
+            label: displayName,
+            logoUrl: place.logoUrl,
+            favorite,
+            selected,
+            showLabel: showLabels,
+          });
+        },
+      }}
+    />
+  );
+}
+
 function PlaceMarkers({
   places,
   displayCoordinates,
@@ -294,29 +282,20 @@ function PlaceMarkers({
       iconCreateFunction={createClusterIcon}
     >
       {places.map((place) => {
-        const displayName = place.name?.trim() || "Без названия";
         const selected = selectedPlace?.id === place.id;
         const favorite = favoriteIds.has(place.id);
         const position =
           displayCoordinates.get(place.id) ?? place.coordinates;
 
         return (
-          <Marker
-            key={`${place.id}-${showLabels ? "l" : "b"}-${favorite ? "f" : "t"}-${selected ? "s" : "n"}`}
+          <PlaceMarker
+            key={`${place.id}-${showLabels ? "l" : "b"}-${favorite ? "f" : "t"}-${selected ? "s" : "n"}-${place.logoUrl ?? ""}`}
+            place={place}
             position={position}
-            zIndexOffset={selected ? 1000 : favorite ? 500 : 1}
-            icon={createPinIcon({
-              label: displayName,
-              favorite,
-              selected,
-              showLabel: showLabels,
-            })}
-            eventHandlers={{
-              click: (event) => {
-                L.DomEvent.stopPropagation(event);
-                onSelectPlace(place);
-              },
-            }}
+            favorite={favorite}
+            selected={selected}
+            showLabels={showLabels}
+            onSelectPlace={onSelectPlace}
           />
         );
       })}
@@ -327,12 +306,17 @@ function PlaceMarkers({
 function PlacesMap({ places }: MapProps) {
   const t = useTranslations("Map");
   const mapRef = useRef<L.Map | null>(null);
+  const previousViewRef = useRef<MapCameraView | null>(null);
   const [selectedPlace, setSelectedPlace] = useState<MapPlace | null>(null);
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
   const [locating, setLocating] = useState(false);
   const [locationError, setLocationError] = useState<
     "denied" | "unavailable" | null
-  >(null);
+  >(() =>
+    typeof navigator === "undefined" || !navigator.geolocation
+      ? "unavailable"
+      : null,
+  );
   const [zoom, setZoom] = useState(IRKUTSK_ZOOM);
 
   const displayCoordinates = useMemo(
@@ -348,18 +332,30 @@ function PlacesMap({ places }: MapProps) {
     setZoom(nextZoom);
   }, []);
 
+  const closeSelectedPlace = useCallback(() => {
+    const map = mapRef.current;
+    const previousView = previousViewRef.current;
+    previousViewRef.current = null;
+    setSelectedPlace(null);
+    if (map && previousView) {
+      map.flyTo(previousView.center, previousView.zoom, {
+        duration: 0.45,
+        easeLinearity: 0.25,
+      });
+    }
+  }, []);
+
   useEffect(() => {
     if (!selectedPlace) return;
     function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") setSelectedPlace(null);
+      if (event.key === "Escape") closeSelectedPlace();
     }
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, [selectedPlace]);
+  }, [selectedPlace, closeSelectedPlace]);
 
   useEffect(() => {
     if (!navigator.geolocation) {
-      setLocationError("unavailable");
       return;
     }
     const watchId = navigator.geolocation.watchPosition(
@@ -379,8 +375,11 @@ function PlacesMap({ places }: MapProps) {
   }, []);
 
   function selectPlace(place: MapPlace) {
-    setSelectedPlace(place);
     const map = mapRef.current;
+    if (map && !previousViewRef.current) {
+      previousViewRef.current = readCameraView(map);
+    }
+    setSelectedPlace(place);
     if (map) {
       panMapToPlace(
         map,
@@ -425,52 +424,66 @@ function PlacesMap({ places }: MapProps) {
         : null;
 
   return (
-    <div className="fixed inset-0 z-0 h-screen w-full overflow-hidden bg-slate-100 pb-[calc(var(--app-nav-height)+env(safe-area-inset-bottom,0px))]">
-      <MapContainer
-        center={IRKUTSK_CENTER}
-        zoom={IRKUTSK_ZOOM}
-        maxZoom={MAP_MAX_ZOOM}
-        minZoom={10}
-        zoomControl={false}
-        attributionControl={false}
-        className="tea-leaflet-map h-full w-full"
-        style={{ height: "100%", width: "100%" }}
+    <div className="fixed inset-0 z-0 w-full overflow-hidden bg-slate-100">
+      <div
+        className="absolute inset-x-0 top-0"
+        style={{
+          bottom:
+            "calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px))",
+        }}
       >
-        <AttributionControl prefix={false} position="bottomright" />
-        <TileLayer url={CARTO_URL} attribution={CARTO_ATTRIBUTION} />
-        <MapRefBridge mapRef={mapRef} />
-        <MapInteractionLayer
-          onClearSelection={() => setSelectedPlace(null)}
-          onZoomChange={handleZoomChange}
-        />
-        <PlaceMarkers
-          places={places}
-          displayCoordinates={displayCoordinates}
-          favoriteIds={favoriteIdSet}
-          selectedPlace={selectedPlace}
-          showLabels={showLabels}
-          onSelectPlace={selectPlace}
-        />
-        {userLocation ? (
-          <Marker
-            position={userLocation.coordinates}
-            icon={userIcon}
-            zIndexOffset={2000}
-            interactive={false}
-            title={t("youAreHere")}
+        <MapContainer
+          center={IRKUTSK_CENTER}
+          zoom={IRKUTSK_ZOOM}
+          maxZoom={MAP_MAX_ZOOM}
+          minZoom={MAP_MIN_ZOOM}
+          zoomControl={false}
+          attributionControl={false}
+          className="tea-leaflet-map h-full w-full"
+          style={{ height: "100%", width: "100%" }}
+        >
+          <AttributionControl prefix={false} position="bottomright" />
+          <TileLayer
+            url={CARTO_URL}
+            attribution={CARTO_ATTRIBUTION}
+            maxZoom={MAP_MAX_ZOOM}
+            maxNativeZoom={MAP_MAX_ZOOM}
+            minZoom={MAP_MIN_ZOOM}
           />
-        ) : null}
-        <MapControls
-          locating={locating}
-          locationErrorText={locationErrorText}
-          onLocate={locateUser}
-        />
-      </MapContainer>
+          <MapRefBridge mapRef={mapRef} />
+          <MapInteractionLayer
+            onClearSelection={closeSelectedPlace}
+            onZoomChange={handleZoomChange}
+          />
+          <PlaceMarkers
+            places={places}
+            displayCoordinates={displayCoordinates}
+            favoriteIds={favoriteIdSet}
+            selectedPlace={selectedPlace}
+            showLabels={showLabels}
+            onSelectPlace={selectPlace}
+          />
+          {userLocation ? (
+            <Marker
+              position={userLocation.coordinates}
+              icon={userIcon}
+              zIndexOffset={2000}
+              interactive={false}
+              title={t("youAreHere")}
+            />
+          ) : null}
+          <MapControls
+            locating={locating}
+            locationErrorText={locationErrorText}
+            onLocate={locateUser}
+          />
+        </MapContainer>
+      </div>
 
       <div
         role="group"
         aria-label={t("filtersLabel")}
-        className="pointer-events-none absolute top-6 left-4 z-[1000]"
+        className="pointer-events-none absolute top-6 left-4 z-[45]"
       >
         <Link
           href="/places"
@@ -483,7 +496,7 @@ function PlacesMap({ places }: MapProps) {
 
       <PlacePreviewSheet
         place={selectedPlace ? toSheetSeed(selectedPlace) : null}
-        onClose={() => setSelectedPlace(null)}
+        onClose={closeSelectedPlace}
       />
     </div>
   );
