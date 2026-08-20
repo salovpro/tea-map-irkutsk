@@ -12,7 +12,8 @@
     "seed": "prisma db seed",
     "db:seed": "prisma db seed",
     "migrate:venue-images": "tsx scripts/migrate-venue-images.ts",
-    "init:place-sort-order": "tsx scripts/init-place-sort-order.ts"
+    "init:place-sort-order": "tsx scripts/init-place-sort-order.ts",
+    "update:coordinates": "tsx scripts/update-place-coordinates.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
