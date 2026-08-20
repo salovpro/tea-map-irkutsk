@@ -54,6 +54,7 @@ export function WelcomeClient() {
           <div className="flex gap-3">
             <input
               id={consentId}
+              name="privacy-consent"
               type="checkbox"
               checked={accepted}
               onChange={(event) => setAccepted(event.target.checked)}

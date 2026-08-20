@@ -1,12 +1,12 @@
 {
   "HomePage": {
     "title": "Welcome to the Great Tea Road",
-    "subtitle": "Discover the premium tea traditions of Irkutsk",
+    "subtitle": "Discover the premium tea traditions of Irkutsk Oblast",
     "participantsTitle": "Tea Map participants"
   },
   "PlacesPage": {
-    "title": "Tea houses of Irkutsk",
-    "subtitle": "A catalog of premium tea houses along the Great Tea Road.",
+    "title": "Tea houses of Irkutsk Oblast",
+    "subtitle": "A catalog of tea spaces along the Great Tea Road",
     "searchLabel": "Search",
     "searchPlaceholder": "Venue name…",
     "filtersLabel": "Filters",
@@ -103,7 +103,7 @@
     "s4p1": "Baikal and Angara water play a special role in local tradition — clean, soft, suited to a long steep. In the samovar ritual of a Siberian home, tea met jam, baking, and unhurried conversation.",
     "s4p2": "Today that culture lives in Irkutsk tea houses: in the choice of leaf, in the quiet of brewing, and in respect for water. The Tea Map invites you to walk the path again — from history to the cup.",
     "ctaTitle": "Want to taste historical tea?",
-    "ctaText": "Open the venue catalog and find a tea house where Irkutsk’s premium traditions can be tasted.",
+    "ctaText": "Open the venue catalog and find a tea house where premium traditions can be tasted",
     "ctaButton": "Browse venues"
   },
   "HistoryBlock": {
@@ -112,10 +112,10 @@
     "subtitle": "A city where caravans from China met Siberian customs, and tea became part of local culture.",
     "p1": "Irkutsk stood on a key stretch of the Great Tea Road: chests of tea arrived from Kyakhta, customs papers were issued here, and cargo moved on to Tomsk, Moscow, and the ports of European Russia. Customs set the city's rhythm — the quality of inspection and the speed of transit shaped both merchant fortunes and the taste of tea on Siberian tables.",
     "p2": "In the twentieth century the tea tradition took on an industrial form. In 1932 an Irkutsk tea-packing factory opened — a place where large shipments were sorted, weighed, and prepared for sale across the country. The scent of leaves, the clatter of scales, and neat packs stamped in Irkutsk became a new chapter of the same story that began with the caravans.",
-    "p3": "Today the Tea Map of Irkutsk joins these layers of memory: from customs gates and factory floors to the quiet rooms of modern tea houses, where clear water, a long steep, and conversation over a cup still matter."
+    "p3": "Today the Tea Map of Irkutsk Oblast joins these layers of memory: from customs gates and factory floors to the quiet rooms of modern tea houses, where clear water, a long steep, and conversation over a cup still matter."
   },
   "Header": {
-    "brand": "Tea Map of Irkutsk",
+    "brand": "Tea Map of Irkutsk Oblast",
     "language": "Language"
   },
   "Navigation": {
@@ -147,8 +147,8 @@
     "submit": "Sign in"
   },
   "ShareButton": {
-    "title": "Tea Map of Irkutsk",
-    "text": "Discover the finest tea traditions of the city!",
+    "title": "Tea Map of Irkutsk Oblast",
+    "text": "Discover the finest tea traditions of Irkutsk Oblast!",
     "ariaLabel": "Share",
     "copied": "Link copied"
   },
@@ -156,14 +156,14 @@
     "ariaLabel": "Choose language"
   },
   "LanguageSelect": {
-    "eyebrow": "Tea Map of Irkutsk",
+    "eyebrow": "Tea Map of Irkutsk Oblast",
     "title": "Choose your language",
     "subtitle": "We will show the map, venues, and history in the language that suits you."
   },
   "Welcome": {
     "eyebrow": "Welcome",
     "greeting": "Dear guest!",
-    "lead": "Welcome to the Tea Map of Irkutsk!",
+    "lead": "Welcome to the Tea Map of Irkutsk Oblast!",
     "p1": "Did you know that the Great Tea Road once passed through Irkutsk? And that the only tea-packing factory beyond the Urals opened here in 1932?",
     "p2": "We carefully preserve tea traditions and are ready to share them with you.",
     "p3": "On our digital map you will find places that brew signature teas with local herbs, host tea ceremonies, and make every cup unforgettable.",
@@ -178,11 +178,18 @@
     "back": "Back"
   },
   "AboutPage": {
-    "title": "About the project"
+    "title": "About the project",
+    "p1": "Чайная карта создана по инициативе организаторов VII Байкальского международного форума партнеров, который проходит в Иркутске 25-27 августа 2026 года и посвящен развитию сотрудничества по маршруту Великого чайного пути.",
+    "p2": "На протяжении почти четырех веков маршрут доставки чая из провинций Китая через Монголию в Россию связывал нашу экономику. А вместе с ней – образование и культуру. Отдавая дань уважения истории наших предков, мы создали Чайную карту.",
+    "p3": "Все заведения, представленные в карте, развивают чайную культуру, имеют отдельную чайную карту, включают в нее авторские рецепты, в том числе с использованием сибирских дикоросов.",
+    "p4": "Каждое заведение пройдет проверку качества чайной продукции: состав, рецептуру, условия поставки, хранения и приготовления и проверят эксперты в сфере пищевой безопасности, независимые специалисты ресторанного бизнеса.",
+    "contactsLead": "По вопросам взаимодействия:",
+    "phoneLabel": "📞 Телефон:",
+    "phoneValue": "8(3952)33-51-00",
+    "emailLabel": "✉️ Адрес эл. почты:",
+    "emailValue": "dcp@tppvs.ru"
   },
   "Partners": {
-    "supportedBy": "Project created with the support of:",
-    "officialSponsor": "Official sponsor: Rosselkhozbank",
     "irkutskAlt": "Coat of arms of Irkutsk",
     "tppvsAlt": "Chamber of Commerce and Industry of Eastern Siberia",
     "rshbAlt": "Rosselkhozbank"

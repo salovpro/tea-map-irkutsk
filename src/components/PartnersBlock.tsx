@@ -8,35 +8,27 @@ export function PartnersBlock() {
   const rshbSrc = locale === "ru" ? "/logos/rshb-ru.png" : "/logos/rshb-en.png";
 
   return (
-    <section className="mt-2 flex flex-col gap-8 border-t border-slate-200/80 pt-8">
-      <div className="flex flex-col items-center gap-4">
-        <p className="text-center text-sm font-medium leading-relaxed text-slate-600">
-          {t("supportedBy")}
-        </p>
-        <div className="flex items-center justify-center gap-6 sm:gap-8">
-          <img
-            src="/logos/irkutsk-arms.png"
-            alt={t("irkutskAlt")}
-            className="h-16 w-auto object-contain sm:h-20"
-          />
-          <img
-            src="/logos/tppvs.png"
-            alt={t("tppvsAlt")}
-            className="h-16 w-auto object-contain sm:h-20"
-          />
-        </div>
-      </div>
-
-      <div className="flex flex-col items-center gap-4">
-        <p className="text-center text-sm font-medium leading-relaxed text-slate-600">
-          {t("officialSponsor")}
-        </p>
+    <div className="mt-2 border-t border-slate-200/80 pt-8">
+      <div className="flex items-center justify-center gap-5 sm:gap-8">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/logos/irkutsk-arms.png"
+          alt={t("irkutskAlt")}
+          className="h-14 w-auto max-w-[28%] object-contain sm:h-16"
+        />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/logos/tppvs.png"
+          alt={t("tppvsAlt")}
+          className="h-14 w-auto max-w-[28%] object-contain sm:h-16"
+        />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={rshbSrc}
           alt={t("rshbAlt")}
-          className="h-10 w-auto object-contain sm:h-12"
+          className="h-10 w-auto max-w-[28%] object-contain sm:h-12"
         />
       </div>
-    </section>
+    </div>
   );
 }
