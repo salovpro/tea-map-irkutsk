@@ -47,9 +47,6 @@ const CLUSTER_RADIUS = 64;
 
 const NAV_BROWN = "#78350f";
 
-const SPIDERFY_PRECISION = 4;
-const SPIDERFY_BASE_RADIUS_DEG = 0.0002;
-
 const CARTO_URL =
   "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
 const CARTO_ATTRIBUTION =
@@ -59,53 +56,6 @@ type MapCameraView = {
   center: [number, number];
   zoom: number;
 };
-
-function coordGroupKey(lat: number, lng: number) {
-  return `${lat.toFixed(SPIDERFY_PRECISION)},${lng.toFixed(SPIDERFY_PRECISION)}`;
-}
-
-function buildDisplayCoordinates(
-  places: MapPlace[],
-): globalThis.Map<string, [number, number]> {
-  const groups = new globalThis.Map<string, MapPlace[]>();
-
-  for (const place of places) {
-    const [lat, lng] = place.coordinates;
-    const key = coordGroupKey(lat, lng);
-    const bucket = groups.get(key);
-    if (bucket) bucket.push(place);
-    else groups.set(key, [place]);
-  }
-
-  const display = new globalThis.Map<string, [number, number]>();
-
-  for (const group of groups.values()) {
-    if (group.length === 1) {
-      display.set(group[0].id, group[0].coordinates);
-      continue;
-    }
-
-    const centerLat =
-      group.reduce((sum, place) => sum + place.coordinates[0], 0) /
-      group.length;
-    const centerLng =
-      group.reduce((sum, place) => sum + place.coordinates[1], 0) /
-      group.length;
-    const cosLat = Math.max(Math.cos((centerLat * Math.PI) / 180), 0.2);
-    const radius =
-      SPIDERFY_BASE_RADIUS_DEG * Math.sqrt(Math.max(group.length, 2));
-
-    group.forEach((place, index) => {
-      const angle = (2 * Math.PI * index) / group.length - Math.PI / 2;
-      display.set(place.id, [
-        centerLat + radius * Math.sin(angle),
-        centerLng + (radius * Math.cos(angle)) / cosLat,
-      ]);
-    });
-  }
-
-  return display;
-}
 
 function createClusterIcon(cluster: { getChildCount: () => number }) {
   const count = cluster.getChildCount();
@@ -204,14 +154,12 @@ function MapInteractionLayer({
 
 function PlaceMarker({
   place,
-  position,
   favorite,
   selected,
   showLabels,
   onSelectPlace,
 }: {
   place: MapPlace;
-  position: [number, number];
   favorite: boolean;
   selected: boolean;
   showLabels: boolean;
@@ -232,7 +180,7 @@ function PlaceMarker({
 
   return (
     <Marker
-      position={position}
+      position={place.coordinates}
       zIndexOffset={selected ? 1000 : favorite ? 500 : 1}
       icon={icon}
       eventHandlers={{
@@ -258,14 +206,12 @@ function PlaceMarker({
 
 function PlaceMarkers({
   places,
-  displayCoordinates,
   favoriteIds,
   selectedPlace,
   showLabels,
   onSelectPlace,
 }: {
   places: MapPlace[];
-  displayCoordinates: globalThis.Map<string, [number, number]>;
   favoriteIds: ReadonlySet<string>;
   selectedPlace: MapPlace | null;
   showLabels: boolean;
@@ -284,14 +230,11 @@ function PlaceMarkers({
       {places.map((place) => {
         const selected = selectedPlace?.id === place.id;
         const favorite = favoriteIds.has(place.id);
-        const position =
-          displayCoordinates.get(place.id) ?? place.coordinates;
 
         return (
           <PlaceMarker
             key={`${place.id}-${showLabels ? "l" : "b"}-${favorite ? "f" : "t"}-${selected ? "s" : "n"}-${place.logoUrl ?? ""}`}
             place={place}
-            position={position}
             favorite={favorite}
             selected={selected}
             showLabels={showLabels}
@@ -319,10 +262,6 @@ function PlacesMap({ places }: MapProps) {
   );
   const [zoom, setZoom] = useState(IRKUTSK_ZOOM);
 
-  const displayCoordinates = useMemo(
-    () => buildDisplayCoordinates(places),
-    [places],
-  );
   const { favoriteIds } = useFavorites();
   const favoriteIdSet = useMemo(() => new Set(favoriteIds), [favoriteIds]);
   const showLabels = zoom >= LABEL_MIN_ZOOM;
@@ -381,10 +320,7 @@ function PlacesMap({ places }: MapProps) {
     }
     setSelectedPlace(place);
     if (map) {
-      panMapToPlace(
-        map,
-        displayCoordinates.get(place.id) ?? place.coordinates,
-      );
+      panMapToPlace(map, place.coordinates);
     }
   }
 
@@ -457,7 +393,6 @@ function PlacesMap({ places }: MapProps) {
           />
           <PlaceMarkers
             places={places}
-            displayCoordinates={displayCoordinates}
             favoriteIds={favoriteIdSet}
             selectedPlace={selectedPlace}
             showLabels={showLabels}
