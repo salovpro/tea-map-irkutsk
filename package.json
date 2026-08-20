@@ -11,7 +11,13 @@
     "lint": "eslint",
     "seed": "prisma db seed",
     "db:seed": "prisma db seed",
+<<<<<<< HEAD
     "migrate:venue-images": "tsx scripts/migrate-venue-images.ts"
+=======
+    "migrate:venue-images": "tsx scripts/migrate-venue-images.ts",
+    "init:place-sort-order": "tsx scripts/init-place-sort-order.ts",
+    "update:coordinates": "tsx scripts/update-place-coordinates.ts"
+>>>>>>> f634fbe (Add a dry-runnable script to update venue lat/lng by slug.)
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
