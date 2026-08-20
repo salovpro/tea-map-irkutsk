@@ -170,7 +170,12 @@
     "p4": "You can also discover fascinating facts about Irkutsk’s history woven together with the story of tea.",
     "p5": "Our project is supported by the Mayor of Irkutsk — and we would be glad if you support it too!",
     "p6": "Share with friends, leave reviews — we will keep getting better for you!",
-    "cta": "Go to the map"
+    "cta": "Go to the map",
+    "privacyConsent": "I have read the <policy>Политика в отношении обработки персональных данных</policy>."
+  },
+  "PrivacyPage": {
+    "title": "Политика в отношении обработки персональных данных",
+    "back": "Back"
   },
   "AboutPage": {
     "title": "About the project"

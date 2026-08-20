@@ -6,8 +6,18 @@ export const ONBOARDING_MAX_AGE = 60 * 60 * 24 * 365 * 2; // 2 years
 
 export const ONBOARDING_PATHS = ["/language-select", "/welcome"] as const;
 
+/** Readable without completing onboarding; must not redirect-loop with /welcome. */
+export const PUBLIC_LEGAL_PATHS = ["/privacy"] as const;
+
 export function isOnboardingPath(pathWithoutLocale: string): boolean {
   return ONBOARDING_PATHS.some(
+    (path) =>
+      pathWithoutLocale === path || pathWithoutLocale.startsWith(`${path}/`),
+  );
+}
+
+export function isPublicLegalPath(pathWithoutLocale: string): boolean {
+  return PUBLIC_LEGAL_PATHS.some(
     (path) =>
       pathWithoutLocale === path || pathWithoutLocale.startsWith(`${path}/`),
   );

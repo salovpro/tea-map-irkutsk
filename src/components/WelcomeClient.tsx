@@ -2,14 +2,18 @@
 
 import { PartnersBlock } from "@/components/PartnersBlock";
 import { completeOnboarding } from "@/lib/onboarding";
-import { useRouter } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
+import { useId, useState } from "react";
 
 export function WelcomeClient() {
   const t = useTranslations("Welcome");
   const router = useRouter();
+  const consentId = useId();
+  const [accepted, setAccepted] = useState(false);
 
   function goToMap() {
+    if (!accepted) return;
     completeOnboarding();
     router.replace("/");
   }
@@ -46,11 +50,37 @@ export function WelcomeClient() {
           <PartnersBlock />
         </div>
 
-        <div className="sticky bottom-0 -mx-6 mt-10 border-t border-slate-200/80 bg-gradient-to-t from-[#f3f0ea] via-[#f3f0ea] to-transparent px-6 pt-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:-mx-8 sm:px-8">
+        <div className="sticky bottom-0 -mx-6 mt-10 flex flex-col gap-4 border-t border-slate-200/80 bg-gradient-to-t from-[#f3f0ea] via-[#f3f0ea] to-transparent px-6 pt-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:-mx-8 sm:px-8">
+          <div className="flex gap-3">
+            <input
+              id={consentId}
+              type="checkbox"
+              checked={accepted}
+              onChange={(event) => setAccepted(event.target.checked)}
+              required
+              aria-required="true"
+              className="mt-1 h-4 w-4 shrink-0 accent-amber-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-950"
+            />
+            <label htmlFor={consentId} className="text-sm leading-relaxed text-slate-600">
+              {t.rich("privacyConsent", {
+                policy: (chunks) => (
+                  <Link
+                    href="/privacy"
+                    className="font-medium text-amber-950 underline underline-offset-2 hover:text-amber-900"
+                    onClick={(event) => event.stopPropagation()}
+                  >
+                    {chunks}
+                  </Link>
+                ),
+              })}
+            </label>
+          </div>
           <button
             type="button"
             onClick={goToMap}
-            className="inline-flex w-full items-center justify-center rounded-2xl bg-amber-950 px-6 py-4 text-base font-medium tracking-wide text-slate-50 transition-colors hover:bg-amber-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-950"
+            disabled={!accepted}
+            aria-disabled={!accepted}
+            className="inline-flex w-full items-center justify-center rounded-2xl bg-amber-950 px-6 py-4 text-base font-medium tracking-wide text-slate-50 transition-colors hover:bg-amber-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-950 disabled:cursor-not-allowed disabled:bg-amber-950/40 disabled:hover:bg-amber-950/40"
           >
             {t("cta")}
           </button>

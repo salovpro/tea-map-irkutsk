@@ -4,7 +4,7 @@ import { FavoritesProvider } from "@/hooks/useFavorites";
 import { Header } from "@/components/Header";
 import { Navigation } from "@/components/Navigation";
 import { UIProvider } from "@/context/UIContext";
-import { isOnboardingPath } from "@/lib/onboarding";
+import { isOnboardingPath, isPublicLegalPath } from "@/lib/onboarding";
 import { usePathname } from "@/i18n/navigation";
 import type { ReactNode } from "react";
 
@@ -15,9 +15,10 @@ type Props = {
 export function AppShell({ children }: Props) {
   const pathname = usePathname();
   const onboarding = isOnboardingPath(pathname);
+  const legal = isPublicLegalPath(pathname);
   const isMapHome = pathname === "/";
 
-  if (onboarding) {
+  if (onboarding || legal) {
     return (
       <UIProvider>
         <FavoritesProvider>

@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { routing } from "./i18n/routing";
 import {
   isOnboardingPath,
+  isPublicLegalPath,
   LANG_SELECTED_COOKIE,
   ONBOARDING_DONE_COOKIE,
 } from "./lib/onboarding";
@@ -113,6 +114,10 @@ export default function proxy(request: NextRequest) {
   }
 
   if (!onboardingDone) {
+    if (isPublicLegalPath(path)) {
+      return handleI18nRouting(request);
+    }
+
     if (!langSelected && path !== "/language-select") {
       const url = request.nextUrl.clone();
       url.pathname = "/language-select";
