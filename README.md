@@ -41,17 +41,28 @@ docker compose up -d
 
 ## Запуск проекта
 
+Одной командой (Git, curl и sudo/apt или Docker уже нужны):
+
+```bash
+bash scripts/dev-setup.sh
+npm run dev
+```
+
+Скрипт ставит Node.js при необходимости, поднимает PostgreSQL, копирует `.env`, ставит npm-пакеты (включая Next.js) и заполняет базу.
+
+Вручную те же шаги:
+
 ```bash
 git clone https://gitlab.com/mafiairk/irkmaptea.git
 cd irkmaptea
 
-cp .env.example .env
-# при необходимости поправьте DATABASE_URL
+nvm install && nvm use   # если используете nvm
+docker compose up -d     # Postgres на порту 5432
 
-nvm use          # если используете nvm
-npm install      # Next, React, Prisma Client и остальные пакеты
-npm run setup    # prisma db push + seed
-npm run dev      # http://localhost:3000
+cp .env.example .env
+npm install              # Next.js 16, React 19, Prisma и остальное
+npm run setup            # схема БД + тестовые заведения
+npm run dev              # http://localhost:3000
 ```
 
 `npm install` сам выполнит `prisma generate` (`postinstall`). Next.js в этом репозитории в dev запускается с Webpack (`next dev --webpack`), потому что PWA-плагин завязан на webpack. Turbopack: `npm run dev:turbo`.
@@ -74,14 +85,15 @@ npm run dev      # http://localhost:3000
 ## Полезные команды
 
 ```bash
-npm run dev          # dev-сервер
-npm run build        # production-сборка
-npm run start        # запуск собранного приложения
-npm run lint         # ESLint
-npm run setup        # схема БД + тестовые данные
-npm run db:push      # применить prisma/schema.prisma к базе
-npm run db:seed      # заполнить заведениями
-npm run db:studio    # GUI Prisma Studio
+bash scripts/dev-setup.sh   # Node, Postgres, npm, схема, seed
+npm run dev                 # dev-сервер
+npm run build               # production-сборка
+npm run start               # запуск собранного приложения
+npm run lint                # ESLint
+npm run setup               # схема БД + тестовые данные
+npm run db:push             # применить prisma/schema.prisma к базе
+npm run db:seed             # заполнить заведениями
+npm run db:studio           # GUI Prisma Studio
 ```
 
 Миграций в репозитории пока нет: локальная схема синхронизируется через `prisma db push`.
