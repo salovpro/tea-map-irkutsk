@@ -9,9 +9,15 @@
     "postinstall": "prisma generate",
     "start": "next start",
     "lint": "eslint",
+    "setup": "prisma db push && prisma db seed",
     "seed": "prisma db seed",
+    "db:push": "prisma db push",
     "db:seed": "prisma db seed",
+    "db:studio": "prisma studio",
     "migrate:venue-images": "tsx scripts/migrate-venue-images.ts"
+  },
+  "engines": {
+    "node": ">=20.9.0"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

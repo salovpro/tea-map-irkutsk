@@ -10,10 +10,14 @@ import { defineConfig } from "prisma/config";
  * Runtime queries use `process.env.DATABASE_URL` in `src/lib/prisma.ts`.
  * CLI commands that actually talk to Postgres (`migrate`, `db push`, `db seed`)
  * still pick up the real URL when it is present.
+ *
+ * The fallback matches docker-compose.yml / .env.example so local `prisma generate`
+ * and first-time CLI usage work without Amvera secrets. `sslmode=disable` is
+ * required for a local Postgres that does not speak TLS.
  */
 const datasourceUrl =
   process.env.DATABASE_URL ??
-  "postgresql://postgres:postgres@127.0.0.1:5432/postgres";
+  "postgresql://postgres:postgres@127.0.0.1:5432/irkmaptea?sslmode=disable";
 
 export default defineConfig({
   schema: "prisma/schema.prisma",
