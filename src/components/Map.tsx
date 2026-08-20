@@ -44,6 +44,8 @@ const MAP_MIN_ZOOM = 10;
 const PIN_FOCUS_Y_RATIO = 0.28;
 const CLUSTER_MAX_ZOOM = 15;
 const CLUSTER_RADIUS = 64;
+/** Logo pin diameter in CSS pixels; tea-cup fallback is 40. */
+const PIN_DIAMETER_PX = 44;
 
 const NAV_BROWN = "#78350f";
 
@@ -56,6 +58,56 @@ type MapCameraView = {
   center: [number, number];
   zoom: number;
 };
+
+function exactCoordKey(lat: number, lng: number) {
+  return `${lat},${lng}`;
+}
+
+/**
+ * When several venues share the exact same lat/lng, sit their pins next to
+ * each other so the circles meet at that coordinate (n=2: left and right).
+ */
+function buildAdjacentDisplayCoordinates(
+  places: MapPlace[],
+  map: L.Map,
+  zoom: number,
+): globalThis.Map<string, [number, number]> {
+  const groups = new globalThis.Map<string, MapPlace[]>();
+
+  for (const place of places) {
+    const [lat, lng] = place.coordinates;
+    const key = exactCoordKey(lat, lng);
+    const bucket = groups.get(key);
+    if (bucket) bucket.push(place);
+    else groups.set(key, [place]);
+  }
+
+  const display = new globalThis.Map<string, [number, number]>();
+  const radiusPx = PIN_DIAMETER_PX / 2;
+
+  for (const group of groups.values()) {
+    if (group.length === 1) {
+      display.set(group[0].id, group[0].coordinates);
+      continue;
+    }
+
+    const origin = map.project(group[0].coordinates, zoom);
+    const count = group.length;
+    const startAngle = count === 2 ? Math.PI : -Math.PI / 2;
+
+    group.forEach((place, index) => {
+      const angle = startAngle + (2 * Math.PI * index) / count;
+      const point = L.point(
+        origin.x + radiusPx * Math.cos(angle),
+        origin.y + radiusPx * Math.sin(angle),
+      );
+      const latlng = map.unproject(point, zoom);
+      display.set(place.id, [latlng.lat, latlng.lng]);
+    });
+  }
+
+  return display;
+}
 
 function createClusterIcon(cluster: { getChildCount: () => number }) {
   const count = cluster.getChildCount();
@@ -154,12 +206,14 @@ function MapInteractionLayer({
 
 function PlaceMarker({
   place,
+  position,
   favorite,
   selected,
   showLabels,
   onSelectPlace,
 }: {
   place: MapPlace;
+  position: [number, number];
   favorite: boolean;
   selected: boolean;
   showLabels: boolean;
@@ -180,7 +234,7 @@ function PlaceMarker({
 
   return (
     <Marker
-      position={place.coordinates}
+      position={position}
       zIndexOffset={selected ? 1000 : favorite ? 500 : 1}
       icon={icon}
       eventHandlers={{
@@ -209,14 +263,22 @@ function PlaceMarkers({
   favoriteIds,
   selectedPlace,
   showLabels,
+  zoom,
   onSelectPlace,
 }: {
   places: MapPlace[];
   favoriteIds: ReadonlySet<string>;
   selectedPlace: MapPlace | null;
   showLabels: boolean;
+  zoom: number;
   onSelectPlace: (place: MapPlace) => void;
 }) {
+  const map = useMap();
+  const displayCoordinates = useMemo(
+    () => buildAdjacentDisplayCoordinates(places, map, zoom),
+    [map, places, zoom],
+  );
+
   return (
     <MarkerClusterGroup
       chunkedLoading
@@ -230,11 +292,14 @@ function PlaceMarkers({
       {places.map((place) => {
         const selected = selectedPlace?.id === place.id;
         const favorite = favoriteIds.has(place.id);
+        const position =
+          displayCoordinates.get(place.id) ?? place.coordinates;
 
         return (
           <PlaceMarker
             key={`${place.id}-${showLabels ? "l" : "b"}-${favorite ? "f" : "t"}-${selected ? "s" : "n"}-${place.logoUrl ?? ""}`}
             place={place}
+            position={position}
             favorite={favorite}
             selected={selected}
             showLabels={showLabels}
@@ -396,6 +461,7 @@ function PlacesMap({ places }: MapProps) {
             favoriteIds={favoriteIdSet}
             selectedPlace={selectedPlace}
             showLabels={showLabels}
+            zoom={zoom}
             onSelectPlace={selectPlace}
           />
           {userLocation ? (
