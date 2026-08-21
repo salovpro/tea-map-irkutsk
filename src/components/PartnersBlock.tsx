@@ -12,14 +12,14 @@ export function PartnersBlock() {
       <div className="flex items-center justify-center gap-5 sm:gap-8">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/logos/irkutsk-arms.png"
-          alt={t("irkutskAlt")}
+          src="/logos/tppvs.png"
+          alt={t("tppvsAlt")}
           className="h-14 w-auto max-w-[28%] object-contain sm:h-16"
         />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/logos/tppvs.png"
-          alt={t("tppvsAlt")}
+          src="/logos/irkutsk-arms.png"
+          alt={t("irkutskAlt")}
           className="h-14 w-auto max-w-[28%] object-contain sm:h-16"
         />
         {/* eslint-disable-next-line @next/next/no-img-element */}

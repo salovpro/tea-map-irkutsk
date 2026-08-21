@@ -1,5 +1,9 @@
 "use client";
 
+import {
+  queryDeviceGeoPermission,
+  storeGeoPermission,
+} from "@/lib/geo-permission";
 import { useSyncExternalStore } from "react";
 
 export type UserCoordinates = [number, number];
@@ -59,7 +63,11 @@ function stopWatch() {
 function subscribe(listener: () => void) {
   listeners.add(listener);
   subscriberCount += 1;
-  if (subscriberCount === 1) startWatch();
+  if (subscriberCount === 1) {
+    void queryDeviceGeoPermission().then((state) => {
+      if (state === "granted") startWatch();
+    });
+  }
 
   return () => {
     listeners.delete(listener);
@@ -74,6 +82,16 @@ function getSnapshot(): LocationSnapshot {
 
 function getServerSnapshot(): LocationSnapshot {
   return { coordinates: null };
+}
+
+/** Start watching after the user has granted geolocation (and remember it). */
+export function startUserLocationWatch() {
+  storeGeoPermission("granted");
+  startWatch();
+}
+
+export function markUserLocationDenied() {
+  storeGeoPermission("denied");
 }
 
 /** Shared device geolocation for list cards and other UI (one watch for all). */

@@ -23,7 +23,12 @@ import MarkerClusterGroup from "react-leaflet-cluster";
 import { MapControls } from "@/components/MapControls";
 import { PlacePreviewSheet } from "@/components/PlacePreviewSheet";
 import { useFavorites } from "@/hooks/useFavorites";
+import {
+  markUserLocationDenied,
+  startUserLocationWatch,
+} from "@/hooks/useUserLocation";
 import { Link } from "@/i18n/navigation";
+import { queryDeviceGeoPermission } from "@/lib/geo-permission";
 import {
   bindLogoImageFallback,
   createUserLocationIcon,
@@ -326,6 +331,7 @@ function PlacesMap({ places }: MapProps) {
       : null,
   );
   const [zoom, setZoom] = useState(IRKUTSK_ZOOM);
+  const [geoWatchEnabled, setGeoWatchEnabled] = useState(false);
 
   const { favoriteIds } = useFavorites();
   const favoriteIdSet = useMemo(() => new Set(favoriteIds), [favoriteIds]);
@@ -359,7 +365,17 @@ function PlacesMap({ places }: MapProps) {
   }, [selectedPlace, closeSelectedPlace]);
 
   useEffect(() => {
-    if (!navigator.geolocation) {
+    let cancelled = false;
+    void queryDeviceGeoPermission().then((state) => {
+      if (!cancelled && state === "granted") setGeoWatchEnabled(true);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!geoWatchEnabled || !navigator.geolocation) {
       return;
     }
     const watchId = navigator.geolocation.watchPosition(
@@ -376,7 +392,7 @@ function PlacesMap({ places }: MapProps) {
       { enableHighAccuracy: true, maximumAge: 15_000, timeout: 20_000 },
     );
     return () => navigator.geolocation.clearWatch(watchId);
-  }, []);
+  }, [geoWatchEnabled]);
 
   function selectPlace(place: MapPlace) {
     const map = mapRef.current;
@@ -405,12 +421,16 @@ function PlacesMap({ places }: MapProps) {
             : null,
         };
         setUserLocation(next);
+        startUserLocationWatch();
+        setGeoWatchEnabled(true);
         const map = mapRef.current;
         if (map) centerMapOnUser(map, next.coordinates);
         setLocating(false);
       },
       (error) => {
-        setLocationError(readGeolocationError(error));
+        const code = readGeolocationError(error);
+        if (code === "denied") markUserLocationDenied();
+        setLocationError(code);
         setLocating(false);
       },
       { enableHighAccuracy: true, maximumAge: 5_000, timeout: 15_000 },

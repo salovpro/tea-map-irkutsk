@@ -27,6 +27,17 @@ export const FEATURED_CATALOG_SLUGS = [
   "grot-pervomayskiy",
 ] as const;
 
+/** Hidden from the public map, catalog, and related venues. Admin keeps them. */
+export const HIDDEN_PUBLIC_SLUGS = ["zavarka", "cui-tea"] as const;
+
+export function isHiddenPublicSlug(slug: string): boolean {
+  return (HIDDEN_PUBLIC_SLUGS as readonly string[]).includes(slug);
+}
+
+export const publicPlaceWhere = {
+  slug: { notIn: [...HIDDEN_PUBLIC_SLUGS] },
+};
+
 const featuredRank = new Map<string, number>(
   FEATURED_CATALOG_SLUGS.map((slug, index) => [slug, index]),
 );

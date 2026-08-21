@@ -47,7 +47,7 @@ export function TeaMenuShowcase({
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-t-3xl bg-slate-900/80"
+        className="pointer-events-none absolute inset-0 rounded-t-3xl bg-slate-900/50"
       />
 
       <div className="relative z-10 mx-auto w-full max-w-2xl pt-14 sm:pt-16">

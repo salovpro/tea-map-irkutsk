@@ -1,5 +1,9 @@
 import { Locale } from "@/generated/prisma/client";
-import { sortPlacesByCatalogOrder } from "@/lib/catalog-order";
+import {
+  isHiddenPublicSlug,
+  publicPlaceWhere,
+  sortPlacesByCatalogOrder,
+} from "@/lib/catalog-order";
 import { prisma } from "@/lib/prisma";
 
 export type TeaMenuStats = {
@@ -241,12 +245,13 @@ export class PlacesLoadError extends Error {
   }
 }
 
-/** Slugs / filters removed — map shows all registered venues. */
+/** Public map: all registered venues except those removed from the tea map. */
 export async function getMapPlaces(localeCode: string): Promise<MapPlace[]> {
   const locale = toLocale(localeCode);
 
   try {
     const places = await prisma.place.findMany({
+      where: publicPlaceWhere,
       include: {
         translations: {
           where: translationFilter(locale),
@@ -299,6 +304,7 @@ export async function getCatalogPlaces(
 
   try {
     const places = await prisma.place.findMany({
+      where: publicPlaceWhere,
       include: {
         translations: {
           where: translationFilter(locale),
@@ -355,6 +361,7 @@ export async function getPlaceSheetDetail(
   const translation = place?.translations?.[0];
 
   if (!place || !translation) return null;
+  if (isHiddenPublicSlug(place.slug)) return null;
 
   const description = translation.description ?? "";
   const teaMenu = parseSheetTeaMenu(translation.teaMenu);
@@ -462,7 +469,7 @@ export async function getRelatedPlaces(
 
   try {
     const places = await prisma.place.findMany({
-      where: { id: { not: excludeId } },
+      where: { id: { not: excludeId }, ...publicPlaceWhere },
       include: {
         translations: {
           where: translationFilter(locale),
