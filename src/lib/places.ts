@@ -4,6 +4,7 @@ import {
   publicPlaceWhere,
   sortPlacesByCatalogOrder,
 } from "@/lib/catalog-order";
+import { syncPlaceCoordinates } from "@/lib/place-coordinates";
 import { prisma } from "@/lib/prisma";
 
 export type TeaMenuStats = {
@@ -250,6 +251,7 @@ export async function getMapPlaces(localeCode: string): Promise<MapPlace[]> {
   const locale = toLocale(localeCode);
 
   try {
+    await syncPlaceCoordinates();
     const places = await prisma.place.findMany({
       where: publicPlaceWhere,
       include: {
@@ -303,6 +305,7 @@ export async function getCatalogPlaces(
   const locale = toLocale(localeCode);
 
   try {
+    await syncPlaceCoordinates();
     const places = await prisma.place.findMany({
       where: publicPlaceWhere,
       include: {
