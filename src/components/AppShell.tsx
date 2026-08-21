@@ -4,6 +4,7 @@ import { FavoritesProvider } from "@/hooks/useFavorites";
 import { Header } from "@/components/Header";
 import { Navigation } from "@/components/Navigation";
 import { UIProvider } from "@/context/UIContext";
+import { useServiceWorkerRefresh } from "@/hooks/useServiceWorkerRefresh";
 import { isOnboardingPath, isPublicLegalPath } from "@/lib/onboarding";
 import { usePathname } from "@/i18n/navigation";
 import type { ReactNode } from "react";
@@ -13,6 +14,7 @@ type Props = {
 };
 
 export function AppShell({ children }: Props) {
+  useServiceWorkerRefresh();
   const pathname = usePathname();
   const onboarding = isOnboardingPath(pathname);
   const legal = isPublicLegalPath(pathname);
