@@ -12,7 +12,8 @@ type LocationSnapshot = {
   coordinates: UserCoordinates | null;
 };
 
-let snapshot: LocationSnapshot = { coordinates: null };
+const SERVER_SNAPSHOT: LocationSnapshot = { coordinates: null };
+let snapshot: LocationSnapshot = SERVER_SNAPSHOT;
 let watchId: number | null = null;
 let subscriberCount = 0;
 const listeners = new Set<() => void>();
@@ -32,9 +33,13 @@ function startWatch() {
 
   watchId = navigator.geolocation.watchPosition(
     (position) => {
-      snapshot = {
-        coordinates: [position.coords.latitude, position.coords.longitude],
-      };
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+      const current = snapshot.coordinates;
+      if (current && current[0] === lat && current[1] === lng) {
+        return;
+      }
+      snapshot = { coordinates: [lat, lng] };
       emit();
     },
     () => {
@@ -81,7 +86,7 @@ function getSnapshot(): LocationSnapshot {
 }
 
 function getServerSnapshot(): LocationSnapshot {
-  return { coordinates: null };
+  return SERVER_SNAPSHOT;
 }
 
 /** Start watching after the user has granted geolocation (and remember it). */
