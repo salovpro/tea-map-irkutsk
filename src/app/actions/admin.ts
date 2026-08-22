@@ -11,6 +11,7 @@ import {
   deleteManagedVenueImage,
   uploadVenueImage,
 } from "@/lib/venue-storage";
+import { composePlaceDescription } from "@/lib/place-description";
 import { prisma } from "@/lib/prisma";
 import { Locale } from "@/generated/prisma/client";
 import { cookies } from "next/headers";
@@ -51,9 +52,8 @@ function parseNumber(value: FormDataEntryValue | null, label: string) {
   return num;
 }
 
-function buildDescription(address: string, blurb?: string) {
-  const base = blurb?.trim() || "Заведение — участник Чайной карты Иркутска.";
-  return `${base} Адрес: ${address.trim()}.`;
+function readAboutField(formData: FormData, name: string) {
+  return String(formData.get(name) ?? "");
 }
 
 function revalidatePublicCatalog() {
@@ -128,7 +128,21 @@ export async function createVenue(
     const existing = await prisma.place.findUnique({ where: { slug } });
     if (existing) slug = `${slug}-${Date.now().toString(36)}`;
 
-    const description = buildDescription(address);
+    const descriptionRu = composePlaceDescription(
+      readAboutField(formData, "description_ru"),
+      address,
+      "ru",
+    );
+    const descriptionEn = composePlaceDescription(
+      readAboutField(formData, "description_en"),
+      address,
+      "en",
+    );
+    const descriptionZh = composePlaceDescription(
+      readAboutField(formData, "description_zh"),
+      address,
+      "zh",
+    );
 
     const agg = await prisma.place.aggregate({ _max: { sortOrder: true } });
     const sortOrder = (agg._max.sortOrder ?? 0) + 10;
@@ -147,19 +161,19 @@ export async function createVenue(
             {
               locale: Locale.ru,
               name,
-              description,
+              description: descriptionRu,
               teaMenu: [],
             },
             {
               locale: Locale.en,
               name,
-              description: `Address: ${address}.`,
+              description: descriptionEn,
               teaMenu: [],
             },
             {
               locale: Locale.zh,
               name,
-              description: `地址：${address}。`,
+              description: descriptionZh,
               teaMenu: [],
             },
           ],
@@ -216,7 +230,21 @@ export async function updateVenue(
     });
     if (!place) return { ok: false, error: "Заведение не найдено" };
 
-    const description = buildDescription(address);
+    const descriptionRu = composePlaceDescription(
+      readAboutField(formData, "description_ru"),
+      address,
+      "ru",
+    );
+    const descriptionEn = composePlaceDescription(
+      readAboutField(formData, "description_en"),
+      address,
+      "en",
+    );
+    const descriptionZh = composePlaceDescription(
+      readAboutField(formData, "description_zh"),
+      address,
+      "zh",
+    );
 
     if (upload.url && place.logoUrl && place.logoUrl !== upload.url) {
       await deleteManagedVenueImage(place.logoUrl);
@@ -234,10 +262,13 @@ export async function updateVenue(
     });
 
     const ru = place.translations.find((t) => t.locale === Locale.ru);
+    const en = place.translations.find((t) => t.locale === Locale.en);
+    const zh = place.translations.find((t) => t.locale === Locale.zh);
+
     if (ru) {
       await prisma.placeTranslation.update({
         where: { id: ru.id },
-        data: { name, description },
+        data: { name, description: descriptionRu },
       });
     } else {
       await prisma.placeTranslation.create({
@@ -245,13 +276,53 @@ export async function updateVenue(
           placeId: id,
           locale: Locale.ru,
           name,
-          description,
+          description: descriptionRu,
           teaMenu: [],
         },
       });
     }
 
-    revalidateAdmin([`${ADMIN_BASE_PATH}/venues/${id}`]);
+    if (en) {
+      await prisma.placeTranslation.update({
+        where: { id: en.id },
+        data: { description: descriptionEn },
+      });
+    } else {
+      await prisma.placeTranslation.create({
+        data: {
+          placeId: id,
+          locale: Locale.en,
+          name,
+          description: descriptionEn,
+          teaMenu: [],
+        },
+      });
+    }
+
+    if (zh) {
+      await prisma.placeTranslation.update({
+        where: { id: zh.id },
+        data: { description: descriptionZh },
+      });
+    } else {
+      await prisma.placeTranslation.create({
+        data: {
+          placeId: id,
+          locale: Locale.zh,
+          name,
+          description: descriptionZh,
+          teaMenu: [],
+        },
+      });
+    }
+
+    revalidateAdmin([
+      `${ADMIN_BASE_PATH}/venues/${id}`,
+      `/places/${id}`,
+      `/en/places/${id}`,
+      `/zh/places/${id}`,
+      `/ru/places/${id}`,
+    ]);
     return { ok: true };
   } catch (error) {
     if (error instanceof Error && error.message === "UNAUTHORIZED") {

@@ -1,22 +1,18 @@
 import { VenueForm } from "@/components/admin/VenueForm";
 import { AdminShell } from "@/components/admin/AdminShell";
 import { ADMIN_BASE_PATH } from "@/lib/admin-constants";
-import { hasAdminSession } from "@/lib/admin-session";
+import { extractDescriptionBody } from "@/lib/place-description";
 import { extractAddress } from "@/lib/places";
 import { prisma } from "@/lib/prisma";
 import { Locale } from "@/generated/prisma/client";
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 type Props = {
   params: Promise<{ id: string }>;
 };
 
 export default async function AdminEditVenuePage({ params }: Props) {
-  if (!(await hasAdminSession())) {
-    redirect(ADMIN_BASE_PATH);
-  }
-
   const { id } = await params;
   const place = await prisma.place.findUnique({
     where: { id },
@@ -28,6 +24,8 @@ export default async function AdminEditVenuePage({ params }: Props) {
   const ru =
     place.translations.find((t) => t.locale === Locale.ru) ??
     place.translations[0];
+  const en = place.translations.find((t) => t.locale === Locale.en);
+  const zh = place.translations.find((t) => t.locale === Locale.zh);
 
   return (
     <AdminShell authed>
@@ -54,6 +52,9 @@ export default async function AdminEditVenuePage({ params }: Props) {
             lat: String(place.lat),
             lng: String(place.lng),
             logoUrl: place.logoUrl,
+            descriptionRu: extractDescriptionBody(ru?.description ?? ""),
+            descriptionEn: extractDescriptionBody(en?.description ?? ""),
+            descriptionZh: extractDescriptionBody(zh?.description ?? ""),
           }}
         />
       </div>

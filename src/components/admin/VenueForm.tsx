@@ -18,6 +18,9 @@ export type VenueFormValues = {
   lat: string;
   lng: string;
   logoUrl?: string | null;
+  descriptionRu?: string;
+  descriptionEn?: string;
+  descriptionZh?: string;
 };
 
 const initial: AdminActionState = { ok: false };
@@ -38,6 +41,32 @@ export function VenueForm({ mode, initialValues }: Props) {
       ) : null}
 
       <Field label="Название" name="name" defaultValue={initialValues.name} required />
+
+      <fieldset className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <legend className="px-1 text-sm font-semibold text-slate-800">
+          О заведении
+        </legend>
+        <p className="text-xs leading-relaxed text-slate-500">
+          Текст для публичной карточки. Адрес хранится отдельно и при сохранении
+          не затирается. Переносы абзацев сохраняются.
+        </p>
+        <AboutField
+          label="О заведении"
+          name="description_ru"
+          defaultValue={initialValues.descriptionRu ?? ""}
+        />
+        <AboutField
+          label="О заведении (EN)"
+          name="description_en"
+          defaultValue={initialValues.descriptionEn ?? ""}
+        />
+        <AboutField
+          label="О заведении (ZH)"
+          name="description_zh"
+          defaultValue={initialValues.descriptionZh ?? ""}
+        />
+      </fieldset>
+
       <Field label="Адрес" name="address" defaultValue={initialValues.address} required />
       <Field label="Телефон" name="phone" defaultValue={initialValues.phone} />
       <Field label="Сайт" name="website" defaultValue={initialValues.website} />
@@ -115,6 +144,28 @@ function Field({
         defaultValue={defaultValue}
         required={required}
         className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none focus:border-slate-400"
+      />
+    </label>
+  );
+}
+
+function AboutField({
+  label,
+  name,
+  defaultValue,
+}: {
+  label: string;
+  name: string;
+  defaultValue: string;
+}) {
+  return (
+    <label className="flex flex-col gap-2 text-sm">
+      <span className="font-medium text-slate-800">{label}</span>
+      <textarea
+        name={name}
+        defaultValue={defaultValue}
+        rows={8}
+        className="min-h-[12rem] resize-y rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none focus:border-slate-400"
       />
     </label>
   );

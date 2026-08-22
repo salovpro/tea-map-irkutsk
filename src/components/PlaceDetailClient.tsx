@@ -4,6 +4,7 @@ import { PlaceActions, parsePhoneNumbers } from "@/components/PlaceActions";
 import { RelatedPlacesCarousel } from "@/components/RelatedPlacesCarousel";
 import { TeaMenuShowcase } from "@/components/TeaMenuShowcase";
 import { Link } from "@/i18n/navigation";
+import { extractDescriptionBody } from "@/lib/place-description";
 import type { PlaceSheetDetail, RelatedPlaceCard } from "@/lib/places";
 import { ArrowLeft, Phone } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -23,6 +24,7 @@ export function PlaceDetailClient({ place, related }: PlaceDetailClientProps) {
   const t = useTranslations("PlaceDetail");
   const tMap = useTranslations("Map");
   const tCard = useTranslations("PlaceCard");
+  const aboutText = extractDescriptionBody(place.description);
 
   const actionsRef = useRef<HTMLDivElement>(null);
   const [showFloatingButton, setShowFloatingButton] = useState(false);
@@ -124,14 +126,16 @@ export function PlaceDetailClient({ place, related }: PlaceDetailClientProps) {
             </div>
           </section>
 
-          <section className="flex flex-col gap-3">
-            <h2 className="font-serif text-xl font-semibold tracking-tight text-slate-900">
-              {t("aboutTitle")}
-            </h2>
-            <p className="text-sm leading-relaxed text-slate-600 sm:text-base">
-              {place.description || tMap("noDescription")}
-            </p>
-          </section>
+          {aboutText ? (
+            <section className="flex flex-col gap-3">
+              <h2 className="font-serif text-xl font-semibold tracking-tight text-slate-900">
+                {t("aboutTitle")}
+              </h2>
+              <p className="whitespace-pre-line text-sm leading-relaxed text-slate-600 sm:text-base">
+                {aboutText}
+              </p>
+            </section>
+          ) : null}
         </div>
       </div>
 
