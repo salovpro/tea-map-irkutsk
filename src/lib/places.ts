@@ -1,8 +1,9 @@
 import { Locale } from "@/generated/prisma/client";
 import {
+  CATALOG_ORDER_BY,
   isHiddenPublicSlug,
+  orderPlacesForCatalog,
   publicPlaceWhere,
-  sortPlacesByCatalogOrder,
 } from "@/lib/catalog-order";
 import { syncPlaceCoordinates } from "@/lib/place-coordinates";
 import { prisma } from "@/lib/prisma";
@@ -316,10 +317,12 @@ export async function getCatalogPlaces(
           select: { rating: true },
         },
       },
-      orderBy: [{ isPremium: "desc" }, { createdAt: "asc" }],
+      orderBy: CATALOG_ORDER_BY,
     });
 
-    const mapped = places.map((place) => {
+    const ordered = orderPlacesForCatalog(places);
+
+    const mapped = ordered.map((place) => {
       const translation = pickTranslation(
         place.translations as TranslationRow[],
         locale,
@@ -349,7 +352,7 @@ export async function getCatalogPlaces(
       };
     });
 
-    return sortPlacesByCatalogOrder(mapped);
+    return mapped;
   } catch (error) {
     console.error("Failed to load catalog places:", error);
     return [];
@@ -478,10 +481,10 @@ export async function getRelatedPlaces(
           where: translationFilter(locale),
         },
       },
-      orderBy: [{ isPremium: "desc" }, { createdAt: "asc" }],
+      orderBy: CATALOG_ORDER_BY,
     });
 
-    return sortPlacesByCatalogOrder(places)
+    return orderPlacesForCatalog(places)
       .slice(0, limit)
       .map((place) => {
         const translation = pickTranslation(

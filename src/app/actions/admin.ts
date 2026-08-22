@@ -56,12 +56,25 @@ function buildDescription(address: string, blurb?: string) {
   return `${base} Адрес: ${address.trim()}.`;
 }
 
+function revalidatePublicCatalog() {
+  revalidatePath("/[locale]/places", "page");
+  revalidatePath("/[locale]/favorites", "page");
+  revalidatePath("/[locale]/places/[id]", "page");
+  revalidatePath("/places");
+  revalidatePath("/en/places");
+  revalidatePath("/zh/places");
+  revalidatePath("/ru/places");
+  revalidatePath("/favorites");
+  revalidatePath("/en/favorites");
+  revalidatePath("/zh/favorites");
+}
+
 function revalidateAdmin(paths: string[] = []) {
   revalidatePath(ADMIN_BASE_PATH);
   revalidatePath(`${ADMIN_BASE_PATH}/venues`);
   for (const path of paths) revalidatePath(path);
   revalidatePath("/");
-  revalidatePath("/places");
+  revalidatePublicCatalog();
 }
 
 export async function adminLogin(
@@ -117,6 +130,9 @@ export async function createVenue(
 
     const description = buildDescription(address);
 
+    const agg = await prisma.place.aggregate({ _max: { sortOrder: true } });
+    const sortOrder = (agg._max.sortOrder ?? 0) + 10;
+
     await prisma.place.create({
       data: {
         slug,
@@ -125,6 +141,7 @@ export async function createVenue(
         phone: phone || null,
         website: website || null,
         logoUrl: upload.url,
+        sortOrder,
         translations: {
           create: [
             {
@@ -330,5 +347,66 @@ export async function saveTeaMenu(
       ok: false,
       error: error instanceof Error ? error.message : "Не удалось сохранить меню",
     };
+  }
+}
+
+type PlaceOrderItem = {
+  id: string;
+  sortOrder: number;
+};
+
+function isPlaceOrderItem(value: unknown): value is PlaceOrderItem {
+  if (typeof value !== "object" || value === null) return false;
+  const row = value as Record<string, unknown>;
+  return (
+    typeof row.id === "string" &&
+    row.id.trim().length > 0 &&
+    typeof row.sortOrder === "number" &&
+    Number.isInteger(row.sortOrder) &&
+    Number.isFinite(row.sortOrder)
+  );
+}
+
+export async function updatePlacesOrder(
+  items: PlaceOrderItem[],
+): Promise<AdminActionState> {
+  try {
+    await requireAdminSession();
+
+    if (!Array.isArray(items) || items.length === 0) {
+      return { ok: false, error: "Пустой список порядка" };
+    }
+    if (!items.every(isPlaceOrderItem)) {
+      return { ok: false, error: "Некорректные данные порядка" };
+    }
+
+    const ids = items.map((item) => item.id.trim());
+    if (new Set(ids).size !== ids.length) {
+      return { ok: false, error: "Повторяющиеся id в порядке" };
+    }
+
+    const found = await prisma.place.count({
+      where: { id: { in: ids } },
+    });
+    if (found !== ids.length) {
+      return { ok: false, error: "Часть заведений не найдена" };
+    }
+
+    await prisma.$transaction(
+      items.map((item) =>
+        prisma.place.update({
+          where: { id: item.id.trim() },
+          data: { sortOrder: item.sortOrder },
+        }),
+      ),
+    );
+
+    revalidateAdmin();
+    return { ok: true };
+  } catch (error) {
+    if (error instanceof Error && error.message === "UNAUTHORIZED") {
+      return { ok: false, error: "Нет доступа" };
+    }
+    return { ok: false, error: "Не удалось сохранить порядок" };
   }
 }

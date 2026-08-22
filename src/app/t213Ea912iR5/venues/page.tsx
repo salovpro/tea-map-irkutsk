@@ -1,7 +1,11 @@
-import { deleteVenue } from "@/app/actions/admin";
 import { AdminShell } from "@/components/admin/AdminShell";
+import { VenueSortList } from "@/components/admin/VenueSortList";
 import { ADMIN_BASE_PATH } from "@/lib/admin-constants";
 import { hasAdminSession } from "@/lib/admin-session";
+import {
+  CATALOG_ORDER_BY,
+  orderPlacesForCatalog,
+} from "@/lib/catalog-order";
 import { extractAddress } from "@/lib/places";
 import { prisma } from "@/lib/prisma";
 import { Locale } from "@/generated/prisma/client";
@@ -19,8 +23,16 @@ export default async function AdminVenuesPage() {
         where: { locale: Locale.ru },
       },
     },
-    orderBy: { createdAt: "desc" },
+    orderBy: CATALOG_ORDER_BY,
   });
+
+  const venues = orderPlacesForCatalog(places).map((place) => ({
+    id: place.id,
+    slug: place.slug,
+    name: place.translations[0]?.name?.trim() || place.slug,
+    address: extractAddress(place.translations[0]?.description ?? ""),
+    phone: place.phone ?? "",
+  }));
 
   return (
     <AdminShell authed>
@@ -36,71 +48,10 @@ export default async function AdminVenuesPage() {
         </Link>
       </div>
 
-      <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
-        <table className="min-w-full text-left text-sm">
-          <thead className="border-b border-slate-100 bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
-            <tr>
-              <th className="px-4 py-3 font-medium">Название</th>
-              <th className="px-4 py-3 font-medium">Адрес</th>
-              <th className="px-4 py-3 font-medium">Телефон</th>
-              <th className="px-4 py-3 font-medium">Действия</th>
-            </tr>
-          </thead>
-          <tbody>
-            {places.map((place) => {
-              const name =
-                place.translations[0]?.name?.trim() || place.slug;
-              const address = extractAddress(
-                place.translations[0]?.description ?? "",
-              );
-
-              return (
-                <tr key={place.id} className="border-b border-slate-100">
-                  <td className="px-4 py-3 font-medium text-slate-900">
-                    {name}
-                  </td>
-                  <td className="max-w-[14rem] truncate px-4 py-3 text-slate-600">
-                    {address || "—"}
-                  </td>
-                  <td className="px-4 py-3 text-slate-600">
-                    {place.phone || "—"}
-                  </td>
-                  <td className="px-4 py-3">
-                    <div className="flex flex-wrap gap-2">
-                      <Link
-                        href={`${ADMIN_BASE_PATH}/venues/${place.id}`}
-                        className="rounded-lg border border-slate-200 px-2.5 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50"
-                      >
-                        Изменить
-                      </Link>
-                      <Link
-                        href={`${ADMIN_BASE_PATH}/venues/${place.id}/menu`}
-                        className="rounded-lg border border-slate-200 px-2.5 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50"
-                      >
-                        Меню
-                      </Link>
-                      <form action={deleteVenue}>
-                        <input type="hidden" name="id" value={place.id} />
-                        <button
-                          type="submit"
-                          className="rounded-lg border border-red-200 px-2.5 py-1 text-xs font-medium text-red-700 hover:bg-red-50"
-                        >
-                          Удалить
-                        </button>
-                      </form>
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-        {places.length === 0 ? (
-          <p className="px-4 py-8 text-center text-sm text-slate-500">
-            Пока нет заведений
-          </p>
-        ) : null}
-      </div>
+      <VenueSortList
+        key={venues.map((venue) => venue.id).join("|")}
+        venues={venues}
+      />
     </AdminShell>
   );
 }

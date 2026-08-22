@@ -38,6 +38,27 @@ export const publicPlaceWhere = {
   slug: { notIn: [...HIDDEN_PUBLIC_SLUGS] },
 };
 
+export const CATALOG_ORDER_BY = [
+  { sortOrder: "asc" as const },
+  { createdAt: "asc" as const },
+];
+
+export function usesExplicitSortOrder(
+  places: readonly { sortOrder: number }[],
+): boolean {
+  return new Set(places.map((place) => place.sortOrder)).size > 1;
+}
+
+/** DB sortOrder when initialized; otherwise the current featured-slug order. */
+export function orderPlacesForCatalog<
+  T extends { slug: string; sortOrder: number },
+>(places: readonly T[]): T[] {
+  if (!usesExplicitSortOrder(places)) {
+    return sortPlacesByCatalogOrder(places);
+  }
+  return [...places];
+}
+
 const featuredRank = new Map<string, number>(
   FEATURED_CATALOG_SLUGS.map((slug, index) => [slug, index]),
 );
