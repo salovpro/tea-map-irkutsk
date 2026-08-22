@@ -38,25 +38,30 @@ export const publicPlaceWhere = {
   slug: { notIn: [...HIDDEN_PUBLIC_SLUGS] },
 };
 
-export const CATALOG_ORDER_BY = [
-  { sortOrder: "asc" as const },
-  { createdAt: "asc" as const },
-];
+/**
+ * Prisma `orderBy` for catalog queries.
+ * Do not put `sortOrder` here: a stale generated client (Next webpack cache)
+ * rejects it with PrismaClientValidationError. Business order is applied in
+ * `orderPlacesForCatalog` after the rows are loaded.
+ */
+export const CATALOG_ORDER_BY = [{ createdAt: "asc" as const }];
 
 export function usesExplicitSortOrder(
-  places: readonly { sortOrder: number }[],
+  places: readonly { sortOrder?: number }[],
 ): boolean {
-  return new Set(places.map((place) => place.sortOrder)).size > 1;
+  return new Set(places.map((place) => place.sortOrder ?? 0)).size > 1;
 }
 
 /** DB sortOrder when initialized; otherwise the current featured-slug order. */
 export function orderPlacesForCatalog<
-  T extends { slug: string; sortOrder: number },
+  T extends { slug: string; sortOrder?: number },
 >(places: readonly T[]): T[] {
   if (!usesExplicitSortOrder(places)) {
     return sortPlacesByCatalogOrder(places);
   }
-  return [...places];
+  return [...places].sort(
+    (a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0),
+  );
 }
 
 const featuredRank = new Map<string, number>(

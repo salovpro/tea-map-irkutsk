@@ -22,6 +22,7 @@ const withPWA = withPWAInit({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  serverExternalPackages: ["@prisma/client", "@prisma/adapter-pg", "pg"],
   // next-pwa injects a webpack plugin; empty turbopack config keeps Next.js 16 happy in dev
   turbopack: {},
   /**
