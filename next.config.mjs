@@ -79,19 +79,17 @@ export default {
     const resolved = withPlugins.webpack
       ? withPlugins.webpack(config, options)
       : config;
-    const { isServer, nextRuntime } = options;
-    // Browser and Edge have no `fs`. pg-connection-string still `require('fs')`
-    // behind a ternary, which webpack always tries to resolve.
-    if (!isServer || nextRuntime === "edge") {
-      resolved.resolve.fallback = {
-        ...(resolved.resolve.fallback ?? {}),
-        fs: false,
-        net: false,
-        tls: false,
-        dns: false,
-        "pg-native": false,
-      };
-    }
+    const { nextRuntime } = options;
+    // pg-connection-string require()s `fs` behind a ternary. Webpack still
+    // resolves it for Node, Edge, and the browser — stub it everywhere.
+    resolved.resolve.fallback = {
+      ...(resolved.resolve.fallback ?? {}),
+      fs: false,
+      net: false,
+      tls: false,
+      dns: false,
+      "pg-native": false,
+    };
     if (nextRuntime === "edge") {
       const edgeStubs = {
         pg: false,
