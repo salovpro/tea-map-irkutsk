@@ -50,7 +50,7 @@ async function runPlaceCoordinateSync() {
   console.log(`[place-coordinates] updated ${pending.length} places`);
 }
 
-/** Idempotent lat/lng write. Safe on every Amvera boot / first map load. */
+/** Idempotent lat/lng write. Safe on first map/catalog load. Do not import from instrumentation.ts — webpack would bundle `pg` for Edge and fail on `fs`. */
 export function syncPlaceCoordinates(): Promise<void> {
   if (!syncPromise) {
     syncPromise = runPlaceCoordinateSync().catch((error) => {
