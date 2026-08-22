@@ -1,14 +1,7 @@
 import { VenueForm } from "@/components/admin/VenueForm";
 import { AdminShell } from "@/components/admin/AdminShell";
-import { ADMIN_BASE_PATH } from "@/lib/admin-constants";
-import { hasAdminSession } from "@/lib/admin-session";
-import { redirect } from "next/navigation";
 
 export default async function AdminNewVenuePage() {
-  if (!(await hasAdminSession())) {
-    redirect(ADMIN_BASE_PATH);
-  }
-
   return (
     <AdminShell authed>
       <h1 className="mb-6 font-serif text-2xl font-semibold text-slate-900">

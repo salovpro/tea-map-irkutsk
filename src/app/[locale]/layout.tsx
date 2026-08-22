@@ -3,6 +3,7 @@ import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import type { Metadata, Viewport } from "next";
 import { AppShell } from "@/components/AppShell";
+import { DevPerformanceGuard } from "@/components/DevPerformanceGuard";
 import { getMessagesForLocale } from "@/i18n/messages";
 import { routing } from "@/i18n/routing";
 import { fontVariables } from "@/lib/fonts";
@@ -70,6 +71,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   return (
     <html lang={locale} className={`${fontVariables} h-full antialiased`}>
       <body className="flex min-h-full flex-col bg-slate-50 font-sans text-slate-900">
+        <DevPerformanceGuard />
         <NextIntlClientProvider locale={locale} messages={messages}>
           <AppShell>{children}</AppShell>
         </NextIntlClientProvider>

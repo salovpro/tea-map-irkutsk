@@ -1,10 +1,8 @@
 import { TeaMenuEditor, type MenuRow } from "@/components/admin/TeaMenuEditor";
 import { AdminShell } from "@/components/admin/AdminShell";
-import { ADMIN_BASE_PATH } from "@/lib/admin-constants";
-import { hasAdminSession } from "@/lib/admin-session";
 import { prisma } from "@/lib/prisma";
 import { Locale } from "@/generated/prisma/client";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -31,10 +29,6 @@ function parseMenu(value: unknown): MenuRow[] {
 }
 
 export default async function AdminVenueMenuPage({ params }: Props) {
-  if (!(await hasAdminSession())) {
-    redirect(ADMIN_BASE_PATH);
-  }
-
   const { id } = await params;
   const place = await prisma.place.findUnique({
     where: { id },

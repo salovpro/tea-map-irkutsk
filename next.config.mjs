@@ -64,4 +64,24 @@ const nextConfig = {
   },
 };
 
-export default withPWA(withNextIntl(nextConfig));
+const withPlugins = withPWA(withNextIntl(nextConfig));
+
+export default {
+  ...withPlugins,
+  webpack(config, options) {
+    const resolved = withPlugins.webpack
+      ? withPlugins.webpack(config, options)
+      : config;
+    if (!options.isServer) {
+      resolved.resolve.fallback = {
+        ...(resolved.resolve.fallback ?? {}),
+        fs: false,
+        net: false,
+        tls: false,
+        dns: false,
+        "pg-native": false,
+      };
+    }
+    return resolved;
+  },
+};

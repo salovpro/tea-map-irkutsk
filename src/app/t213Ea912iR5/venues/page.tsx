@@ -1,7 +1,6 @@
 import { AdminShell } from "@/components/admin/AdminShell";
 import { VenueSortList } from "@/components/admin/VenueSortList";
 import { ADMIN_BASE_PATH } from "@/lib/admin-constants";
-import { hasAdminSession } from "@/lib/admin-session";
 import {
   CATALOG_ORDER_BY,
   orderPlacesForCatalog,
@@ -10,13 +9,8 @@ import { extractAddress } from "@/lib/places";
 import { prisma } from "@/lib/prisma";
 import { Locale } from "@/generated/prisma/client";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
 export default async function AdminVenuesPage() {
-  if (!(await hasAdminSession())) {
-    redirect(ADMIN_BASE_PATH);
-  }
-
   const places = await prisma.place.findMany({
     include: {
       translations: {

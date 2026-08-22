@@ -1,3 +1,4 @@
+import { DevPerformanceGuard } from "@/components/DevPerformanceGuard";
 import { fontVariables } from "@/lib/fonts";
 import type { ReactNode } from "react";
 import "../globals.css";
@@ -17,6 +18,7 @@ export default function AdminRootLayout({ children }: Props) {
   return (
     <html lang="ru" className={`${fontVariables} h-full antialiased`}>
       <body className="min-h-full bg-slate-100 font-sans text-slate-900">
+        <DevPerformanceGuard />
         {children}
       </body>
     </html>
