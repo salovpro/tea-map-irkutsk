@@ -22,7 +22,14 @@ const withPWA = withPWAInit({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  serverExternalPackages: ["@prisma/client", "@prisma/adapter-pg", "pg"],
+  // Keep node-postgres out of webpack. Edge instrumentation has no `fs`.
+  serverExternalPackages: [
+    "@prisma/client",
+    "@prisma/adapter-pg",
+    "pg",
+    "pg-native",
+    "pg-connection-string",
+  ],
   // next-pwa injects a webpack plugin; empty turbopack config keeps Next.js 16 happy in dev
   turbopack: {},
   /**
@@ -72,7 +79,10 @@ export default {
     const resolved = withPlugins.webpack
       ? withPlugins.webpack(config, options)
       : config;
-    if (!options.isServer) {
+    const { isServer, nextRuntime } = options;
+    // Browser and Edge have no `fs`. pg-connection-string still `require('fs')`
+    // behind a ternary, which webpack always tries to resolve.
+    if (!isServer || nextRuntime === "edge") {
       resolved.resolve.fallback = {
         ...(resolved.resolve.fallback ?? {}),
         fs: false,
@@ -81,6 +91,22 @@ export default {
         dns: false,
         "pg-native": false,
       };
+    }
+    if (nextRuntime === "edge") {
+      const edgeStubs = {
+        pg: false,
+        "pg-native": false,
+        "pg-connection-string": false,
+        "@prisma/adapter-pg": false,
+      };
+      const alias = resolved.resolve.alias;
+      if (Array.isArray(alias)) {
+        for (const [name, value] of Object.entries(edgeStubs)) {
+          alias.push({ name, alias: value });
+        }
+      } else {
+        resolved.resolve.alias = { ...(alias ?? {}), ...edgeStubs };
+      }
     }
     return resolved;
   },
