@@ -1,6 +1,5 @@
 "use client";
 
-import { RshbLogo } from "@/components/RshbLogo";
 import { useTranslations } from "next-intl";
 
 export function PartnersBlock() {
@@ -21,9 +20,11 @@ export function PartnersBlock() {
           alt={t("irkutskAlt")}
           className="h-14 w-auto max-w-[28%] object-contain sm:h-16"
         />
-        <RshbLogo
-          title={t("rshbAlt")}
-          className="h-11 w-auto max-w-[40%] font-sans sm:h-12"
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/logos/rshb.png"
+          alt={t("rshbAlt")}
+          className="h-10 w-auto max-w-[42%] object-contain sm:h-12"
         />
       </div>
     </div>
