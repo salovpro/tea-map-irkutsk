@@ -1,5 +1,5 @@
 const ADDRESS_SUFFIX =
-  /(\n\s*)?(Адрес:\s*[\s\S]*|Address:\s*[\s\S]*|地址[：:][\s\S]*)$/i;
+  /(\n\s*)?(Адрес\s*:\s*[\s\S]*|Address\s*:\s*[\s\S]*|地址\s*[：:]\s*[\s\S]*)$/i;
 
 export function extractDescriptionBody(description: string): string {
   return description.replace(ADDRESS_SUFFIX, "").trim();

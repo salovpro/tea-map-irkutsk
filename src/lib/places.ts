@@ -6,7 +6,12 @@ import {
   publicPlaceWhere,
 } from "@/lib/catalog-order";
 import { syncPlaceCoordinates } from "@/lib/place-coordinates";
+import { syncPlaceDescriptions } from "@/lib/place-descriptions-sync";
 import { prisma } from "@/lib/prisma";
+
+async function syncPublicPlaceData() {
+  await Promise.all([syncPlaceCoordinates(), syncPlaceDescriptions()]);
+}
 
 export type TeaMenuStats = {
   teaItemsCount: number;
@@ -132,9 +137,9 @@ function averageRating(reviews: { rating: number }[]): number | null {
  */
 export function extractAddress(description: string): string {
   const match =
-    description.match(/Адрес:\s*([\s\S]*)$/i) ??
-    description.match(/Address:\s*([\s\S]*)$/i) ??
-    description.match(/地址[：:]\s*([\s\S]*)$/);
+    description.match(/Адрес\s*:\s*([\s\S]*)$/i) ??
+    description.match(/Address\s*:\s*([\s\S]*)$/i) ??
+    description.match(/地址\s*[：:]\s*([\s\S]*)$/);
 
   if (!match?.[1]) return "";
 
@@ -252,7 +257,7 @@ export async function getMapPlaces(localeCode: string): Promise<MapPlace[]> {
   const locale = toLocale(localeCode);
 
   try {
-    await syncPlaceCoordinates();
+    await syncPublicPlaceData();
     const places = await prisma.place.findMany({
       where: publicPlaceWhere,
       include: {
@@ -306,7 +311,7 @@ export async function getCatalogPlaces(
   const locale = toLocale(localeCode);
 
   try {
-    await syncPlaceCoordinates();
+    await syncPublicPlaceData();
     const places = await prisma.place.findMany({
       where: publicPlaceWhere,
       include: {
@@ -401,6 +406,7 @@ export async function getPlaceById(id: string, localeCode: string) {
   const locale = toLocale(localeCode);
 
   try {
+    await syncPublicPlaceData();
     const place = await prisma.place.findUnique({
       where: { id },
       include: {
@@ -431,6 +437,7 @@ export async function getPlaceBySlug(slug: string, localeCode: string) {
   const locale = toLocale(localeCode);
 
   try {
+    await syncPublicPlaceData();
     const place = await prisma.place.findUnique({
       where: { slug },
       include: {
@@ -474,6 +481,7 @@ export async function getRelatedPlaces(
   const locale = toLocale(localeCode);
 
   try {
+    await syncPublicPlaceData();
     const places = await prisma.place.findMany({
       where: { id: { not: excludeId }, ...publicPlaceWhere },
       include: {
