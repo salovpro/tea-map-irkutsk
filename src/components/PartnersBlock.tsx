@@ -1,11 +1,10 @@
 "use client";
 
-import { useLocale, useTranslations } from "next-intl";
+import { RshbLogo } from "@/components/RshbLogo";
+import { useTranslations } from "next-intl";
 
 export function PartnersBlock() {
-  const locale = useLocale();
   const t = useTranslations("Partners");
-  const rshbSrc = locale === "ru" ? "/logos/rshb-ru.png" : "/logos/rshb-en.png";
 
   return (
     <div className="mt-2 border-t border-slate-200/80 pt-8">
@@ -22,11 +21,9 @@ export function PartnersBlock() {
           alt={t("irkutskAlt")}
           className="h-14 w-auto max-w-[28%] object-contain sm:h-16"
         />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={rshbSrc}
-          alt={t("rshbAlt")}
-          className="h-10 w-auto max-w-[28%] object-contain sm:h-12"
+        <RshbLogo
+          title={t("rshbAlt")}
+          className="h-11 w-auto max-w-[40%] font-sans sm:h-12"
         />
       </div>
     </div>
