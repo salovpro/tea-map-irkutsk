@@ -22,7 +22,7 @@ export function PartnersBlock() {
         />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/logos/rshb.png?v=3"
+          src="/logos/rshb.png?v=4"
           alt={t("rshbAlt")}
           className="h-10 w-auto max-w-[42%] object-contain sm:h-12"
         />
