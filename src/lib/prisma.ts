@@ -9,11 +9,50 @@ const globalForPrisma = globalThis as unknown as {
   pgConnectionString: string | undefined;
 };
 
+let sortOrderReady: Promise<void> | null = null;
+
+function shouldSkipSchemaEnsure() {
+  if (process.env.NEXT_PHASE === "phase-production-build") return true;
+  if (!process.env.DATABASE_URL) return true;
+  return false;
+}
+
+/** Idempotent. Amvera may not have run the sort_order migration yet. */
+function ensurePlaceSortOrderColumn(client: PrismaClient) {
+  if (shouldSkipSchemaEnsure()) return Promise.resolve();
+  if (!sortOrderReady) {
+    sortOrderReady = (async () => {
+      await client.$executeRawUnsafe(
+        `ALTER TABLE "places" ADD COLUMN IF NOT EXISTS "sort_order" INTEGER NOT NULL DEFAULT 0`,
+      );
+      await client.$executeRawUnsafe(
+        `CREATE INDEX IF NOT EXISTS "places_sort_order_idx" ON "places"("sort_order")`,
+      );
+    })().catch((error) => {
+      sortOrderReady = null;
+      const message = error instanceof Error ? error.message : "unknown error";
+      console.error(`[prisma] sort_order ensure failed: ${message}`);
+    });
+  }
+  return sortOrderReady;
+}
+
 function createPrismaClient(connectionString: string) {
   const pool = createPgPool(connectionString);
 
   const adapter = new PrismaPg(pool);
-  return { client: new PrismaClient({ adapter }), pool };
+  const base = new PrismaClient({ adapter });
+  const client = base.$extends({
+    query: {
+      place: {
+        async $allOperations({ args, query }) {
+          await ensurePlaceSortOrderColumn(base);
+          return query(args);
+        },
+      },
+    },
+  }) as unknown as PrismaClient;
+  return { client, pool };
 }
 
 function getPrismaClient() {
