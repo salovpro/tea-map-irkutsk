@@ -15,6 +15,26 @@ export function addressSuffixForLocale(
   return `Адрес: ${trimmed}.`;
 }
 
+/** Swap the public about-text and keep an existing Адрес/Address/地址 suffix. */
+export function replaceDescriptionBody(
+  existing: string,
+  newBody: string,
+): string {
+  const suffixMatch = existing.match(ADDRESS_SUFFIX);
+  const suffix = suffixMatch
+    ? suffixMatch[0].replace(/^\n\s*/, "").trim()
+    : "";
+  const body = newBody.trim();
+  if (!suffix) return body;
+  if (
+    body.includes(suffix) ||
+    body.includes(suffix.replace(/[。.]$/, ""))
+  ) {
+    return body;
+  }
+  return `${body}\n\n${suffix}`;
+}
+
 /** Keep the catalog address suffix while storing the public about-text. */
 export function composePlaceDescription(
   body: string,
