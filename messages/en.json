@@ -76,13 +76,15 @@
     "share": "Share",
     "linkCopied": "Link copied",
     "travelTimeMinutes": "Travel time: ~{minutes} min",
+    "travelTimeWithDistance": "Travel time ~{minutes} min • {distance}",
     "distanceShortMeters": "{meters} m",
     "distanceShortKilometers": "{km} km",
     "distanceMeters": "📍 {meters} m away",
     "distanceKilometers": "📍 {km} km away",
     "openIn2gis": "Open in 2GIS",
     "menuStats": "{count, plural, one {# item} other {# items}} • Average check ~{check} ₽",
-    "menuStatsCountOnly": "{count, plural, one {# item} other {# items}}"
+    "menuStatsCountOnly": "{count, plural, one {# item} other {# items}}",
+    "averageCheckTag": "Average check ~{check} ₽"
   },
   "HistoryPage": {
     "eyebrow": "History",

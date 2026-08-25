@@ -81,7 +81,7 @@ export function PlacePreviewSheet({ place, onClose }: Props) {
           */}
           <div
             ref={sheetRef}
-            className="pointer-events-auto rounded-t-2xl rounded-b-none bg-[#ffffff] px-4 pt-4 pb-6 shadow-[0_-12px_32px_rgba(15,23,42,0.14)] sm:px-5 sm:pt-5 sm:pb-8"
+            className="pointer-events-auto overflow-hidden rounded-t-2xl rounded-b-none bg-[#ffffff] pb-6 shadow-[0_-12px_32px_rgba(15,23,42,0.14)] sm:pb-8"
           >
             <PlaceCard
               id={place.id}

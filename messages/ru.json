@@ -76,13 +76,15 @@
     "share": "Поделиться",
     "linkCopied": "Ссылка скопирована",
     "travelTimeMinutes": "Время в пути: ~{minutes} мин",
+    "travelTimeWithDistance": "Время в пути ~{minutes} мин • {distance}",
     "distanceShortMeters": "{meters} м",
     "distanceShortKilometers": "{km} км",
     "distanceMeters": "📍 {meters} м от вас",
     "distanceKilometers": "📍 через {km} км",
     "openIn2gis": "Открыть в 2GIS",
     "menuStats": "{count, plural, one {# позиция} few {# позиции} many {# позиций} other {# позиций}} • Средний чек ~{check} ₽",
-    "menuStatsCountOnly": "{count, plural, one {# позиция} few {# позиции} many {# позиций} other {# позиций}}"
+    "menuStatsCountOnly": "{count, plural, one {# позиция} few {# позиции} many {# позиций} other {# позиций}}",
+    "averageCheckTag": "Средний чек ~{check} ₽"
   },
   "HistoryPage": {
     "eyebrow": "История",

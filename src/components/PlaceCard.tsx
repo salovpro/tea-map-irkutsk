@@ -3,14 +3,13 @@
 import {
   PlaceActions,
   PlaceCardHeaderActions,
-  placeHeaderIconClass,
 } from "@/components/PlaceActions";
 import { useUserLocation } from "@/hooks/useUserLocation";
 import { useRouter } from "@/i18n/navigation";
 import { formatDistance, haversineMeters } from "@/lib/geo";
-import { X } from "lucide-react";
+import { Clock, CupSoda, MapPin, Wallet, X } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useMemo, type KeyboardEvent, type MouseEvent } from "react";
+import { useMemo, type KeyboardEvent, type MouseEvent, type ReactNode } from "react";
 
 export type PlaceCardProps = {
   id: string;
@@ -27,7 +26,7 @@ export type PlaceCardProps = {
   averageCheck?: number | null;
   /** denser shadow for floating surfaces */
   elevated?: boolean;
-  /** Strip card chrome when nested in the map preview sheet. */
+  /** Strip outer list chrome when nested in the map preview sheet. */
   embedded?: boolean;
   titleId?: string;
   /** Close control for map preview sheet header. */
@@ -48,6 +47,23 @@ function hasValidCoordinates(
     coords.length === 2 &&
     Number.isFinite(coords[0]) &&
     Number.isFinite(coords[1])
+  );
+}
+
+function ForestTag({
+  icon,
+  children,
+}: {
+  icon: ReactNode;
+  children: ReactNode;
+}) {
+  return (
+    <span className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-white/80 bg-black/25 px-2.5 py-1 text-[11px] font-medium leading-none text-white backdrop-blur-[2px] sm:gap-2 sm:px-3 sm:py-1.5 sm:text-xs">
+      <span className="flex-none opacity-95" aria-hidden>
+        {icon}
+      </span>
+      <span className="min-w-0 truncate">{children}</span>
+    </span>
   );
 }
 
@@ -84,10 +100,7 @@ export function PlaceCard({
     const meters = haversineMeters(userCoordinates, coordinates);
     if (!Number.isFinite(meters) || meters < 0) return null;
 
-    const travelTimeLabel = t("travelTimeMinutes", {
-      minutes: estimateTravelMinutes(meters),
-    });
-
+    const minutes = estimateTravelMinutes(meters);
     const formatted = formatDistance(meters);
     const distanceHint =
       formatted.unit === "m"
@@ -98,7 +111,14 @@ export function PlaceCard({
               : formatted.value.toFixed(1).replace(/\.0$/, ""),
           });
 
-    return { travelTimeLabel, distanceHint };
+    return {
+      minutes,
+      distanceHint,
+      label: t("travelTimeWithDistance", {
+        minutes,
+        distance: distanceHint,
+      }),
+    };
   }, [coordinates, t, userCoordinates]);
 
   function openPlace() {
@@ -118,6 +138,10 @@ export function PlaceCard({
     onClose?.();
   }
 
+  const showTeaCount = teaItemsCount > 0;
+  const showAverageCheck = averageCheck != null;
+  const hasForestTags = showTeaCount || showAverageCheck || travelMeta;
+
   return (
     <article
       role="button"
@@ -126,68 +150,99 @@ export function PlaceCard({
       onKeyDown={onCardKeyDown}
       className={
         embedded
-          ? "relative flex cursor-pointer flex-col gap-4 bg-transparent p-0"
-          : `relative flex cursor-pointer flex-col gap-4 rounded-2xl bg-white p-4 sm:gap-5 sm:p-5 ${
+          ? "relative flex cursor-pointer flex-col overflow-hidden bg-transparent"
+          : `relative flex cursor-pointer flex-col overflow-hidden rounded-2xl bg-white ${
               elevated ? "shadow-lg" : "shadow-md"
             }`
       }
     >
-      <header className="flex items-start justify-between gap-3">
-        <div className="min-w-0 flex flex-1 flex-col gap-1.5">
-          <h3
-            id={titleId}
-            className="font-serif text-xl font-semibold leading-snug tracking-tight text-slate-900 sm:text-[1.35rem]"
-          >
-            {displayName}
-          </h3>
+      <div
+        className={`relative isolate overflow-hidden bg-[url('/forest-bg.jpg')] bg-cover bg-center ${
+          hasForestTags ? "min-h-[5.5rem] px-3 py-3 sm:min-h-[6.25rem] sm:px-4 sm:py-3.5" : "min-h-[4.5rem] px-3 py-3"
+        }`}
+      >
+        <div
+          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/55 via-black/40 to-black/50"
+          aria-hidden
+        />
 
-          {placeAddress ? (
-            <p className="text-sm leading-snug text-slate-500">{placeAddress}</p>
-          ) : null}
+        <div className="relative flex items-start justify-between gap-2">
+          <div className="flex min-w-0 flex-1 flex-wrap gap-1.5 sm:gap-2">
+            {showTeaCount ? (
+              <ForestTag
+                icon={<CupSoda className="h-3.5 w-3.5" strokeWidth={2} />}
+              >
+                {t("menuStatsCountOnly", { count: teaItemsCount })}
+              </ForestTag>
+            ) : null}
 
-          {teaItemsCount > 0 ? (
-            <p className="text-sm text-gray-500">
-              {averageCheck != null
-                ? t("menuStats", { count: teaItemsCount, check: averageCheck })
-                : t("menuStatsCountOnly", { count: teaItemsCount })}
-            </p>
-          ) : null}
+            {showAverageCheck ? (
+              <ForestTag
+                icon={<Wallet className="h-3.5 w-3.5" strokeWidth={2} />}
+              >
+                {t("averageCheckTag", { check: averageCheck })}
+              </ForestTag>
+            ) : null}
 
-          {travelMeta ? (
-            <p className="text-sm text-slate-600">
-              <span>{travelMeta.travelTimeLabel}</span>
-              {travelMeta.distanceHint ? (
-                <span className="text-slate-400">
-                  {" "}
-                  · {travelMeta.distanceHint}
-                </span>
-              ) : null}
-            </p>
-          ) : null}
-        </div>
+            {travelMeta ? (
+              <ForestTag
+                icon={<Clock className="h-3.5 w-3.5" strokeWidth={2} />}
+              >
+                {travelMeta.label}
+              </ForestTag>
+            ) : null}
+          </div>
 
-        <div className="flex shrink-0 items-center gap-0.5">
-          <PlaceCardHeaderActions placeId={id} name={displayName} />
           {onClose ? (
             <button
               type="button"
               onClick={handleClose}
               aria-label={closeLabel ?? "Close"}
-              className={placeHeaderIconClass}
+              className="flex h-8 w-8 flex-none items-center justify-center rounded-full border border-white/70 bg-black/30 text-white backdrop-blur-[2px] transition-colors hover:bg-black/45 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
-              <X className="h-[1.125rem] w-[1.125rem]" strokeWidth={2} aria-hidden />
+              <X className="h-4 w-4" strokeWidth={2} aria-hidden />
             </button>
           ) : null}
         </div>
-      </header>
+      </div>
 
-      <PlaceActions
-        placeId={id}
-        name={displayName}
-        phone={phone}
-        website={website}
-        coordinates={coordinates}
-      />
+      <div
+        className={`flex flex-col gap-3.5 bg-white sm:gap-4 ${
+          embedded ? "px-4 pb-1 pt-4 sm:px-5 sm:pt-5" : "p-4 sm:p-5"
+        }`}
+      >
+        <header className="flex items-start justify-between gap-3">
+          <div className="min-w-0 flex flex-1 flex-col gap-1.5">
+            <h3
+              id={titleId}
+              className="font-serif text-xl font-semibold leading-snug tracking-tight text-slate-900 sm:text-[1.35rem]"
+            >
+              {displayName}
+            </h3>
+
+            {placeAddress ? (
+              <p className="flex items-start gap-1.5 text-sm leading-snug text-slate-500">
+                <MapPin
+                  className="mt-0.5 h-3.5 w-3.5 flex-none text-slate-400"
+                  strokeWidth={2}
+                  aria-hidden
+                />
+                <span>{placeAddress}</span>
+              </p>
+            ) : null}
+          </div>
+
+          <PlaceCardHeaderActions placeId={id} name={displayName} />
+        </header>
+
+        <PlaceActions
+          placeId={id}
+          name={displayName}
+          phone={phone}
+          website={website}
+          coordinates={coordinates}
+        />
+      </div>
     </article>
   );
 }
