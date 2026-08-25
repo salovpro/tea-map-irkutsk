@@ -158,9 +158,7 @@ export function PlaceCard({
     >
       <div
         className={`relative isolate overflow-hidden bg-[url('/forest-bg.jpg')] bg-cover bg-center ${
-          hasForestTags
-            ? "min-h-[5.5rem] px-3 py-3 sm:min-h-[6.25rem] sm:px-4 sm:py-3.5"
-            : "min-h-[4.5rem] px-3 py-3"
+          hasForestTags ? "px-3 py-3 sm:px-4 sm:py-3.5" : "px-3 py-3 sm:px-4"
         }`}
       >
         <div
@@ -168,7 +166,7 @@ export function PlaceCard({
           aria-hidden
         />
 
-        <div className="relative flex items-start justify-between gap-2">
+        <div className="relative flex items-center justify-between gap-2">
           <div className="flex min-w-0 flex-1 flex-wrap gap-1.5 sm:gap-2">
             {showTeaCount ? (
               <ForestTag
