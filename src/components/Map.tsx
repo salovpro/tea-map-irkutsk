@@ -23,6 +23,7 @@ import MarkerClusterGroup from "react-leaflet-cluster";
 import { MapControls } from "@/components/MapControls";
 import { PlacePreviewSheet } from "@/components/PlacePreviewSheet";
 import { useFavorites } from "@/hooks/useFavorites";
+import { useNearestPlaceId } from "@/hooks/useNearestPlaceId";
 import {
   markUserLocationDenied,
   startUserLocationWatch,
@@ -335,6 +336,7 @@ function PlacesMap({ places }: MapProps) {
 
   const { favoriteIds } = useFavorites();
   const favoriteIdSet = useMemo(() => new Set(favoriteIds), [favoriteIds]);
+  const nearestPlaceId = useNearestPlaceId(places);
   const showLabels = zoom >= LABEL_MIN_ZOOM;
   const userIcon = useMemo(() => createUserLocationIcon(), []);
 
@@ -517,6 +519,9 @@ function PlacesMap({ places }: MapProps) {
 
       <PlacePreviewSheet
         place={selectedPlace ? toSheetSeed(selectedPlace) : null}
+        isNearest={
+          Boolean(selectedPlace && nearestPlaceId === selectedPlace.id)
+        }
         onClose={closeSelectedPlace}
       />
     </div>

@@ -81,7 +81,8 @@
     "openIn2gis": "在 2GIS 中打开",
     "menuStats": "{count} 道茶 • 人均约 {check} ₽",
     "menuStatsCountOnly": "{count} 道茶",
-    "averageCheckTag": "人均约 {check} ₽"
+    "averageCheckTag": "人均约 {check} ₽",
+    "nearestTag": "最近"
   },
   "HistoryPage": {
     "eyebrow": "历史",

@@ -55,5 +55,5 @@ export function FavoritesClient({ places }: FavoritesClientProps) {
     );
   }
 
-  return <PlacesCatalog places={favoritePlaces} />;
+  return <PlacesCatalog places={favoritePlaces} nearestFromPlaces={places} />;
 }

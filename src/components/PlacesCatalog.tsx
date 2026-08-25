@@ -1,17 +1,24 @@
 "use client";
 
 import { PlacesList } from "@/components/PlacesList";
+import { useNearestPlaceId } from "@/hooks/useNearestPlaceId";
 import type { CatalogPlace } from "@/lib/places";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 
 type PlacesCatalogProps = {
   places: CatalogPlace[];
+  /** When set, nearest badge is computed against this full set (e.g. all venues on Favorites). */
+  nearestFromPlaces?: CatalogPlace[];
 };
 
-export function PlacesCatalog({ places }: PlacesCatalogProps) {
+export function PlacesCatalog({
+  places,
+  nearestFromPlaces,
+}: PlacesCatalogProps) {
   const t = useTranslations("PlacesPage");
   const [query, setQuery] = useState("");
+  const nearestPlaceId = useNearestPlaceId(nearestFromPlaces ?? places);
 
   const filteredPlaces = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -41,7 +48,7 @@ export function PlacesCatalog({ places }: PlacesCatalogProps) {
       </label>
 
       {filteredPlaces.length > 0 ? (
-        <PlacesList places={filteredPlaces} />
+        <PlacesList places={filteredPlaces} nearestPlaceId={nearestPlaceId} />
       ) : (
         <p className="py-8 text-center text-sm leading-relaxed text-slate-500">
           {t("empty")}

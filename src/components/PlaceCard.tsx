@@ -28,6 +28,8 @@ export type PlaceCardProps = {
   elevated?: boolean;
   /** Strip outer list chrome when nested in the map preview sheet. */
   embedded?: boolean;
+  /** Closest venue to the user when geolocation is available. */
+  isNearest?: boolean;
   titleId?: string;
   /** Close control for map preview sheet header. */
   onClose?: () => void;
@@ -53,15 +55,29 @@ function hasValidCoordinates(
 function MetaTag({
   icon,
   children,
+  tone = "muted",
 }: {
-  icon: ReactNode;
+  icon?: ReactNode;
   children: ReactNode;
+  tone?: "muted" | "bright";
 }) {
+  const toneClass =
+    tone === "bright"
+      ? "bg-amber-500 text-white"
+      : "bg-slate-100 text-slate-700";
+
   return (
-    <span className="inline-flex max-w-full items-center gap-1.5 rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-medium leading-none text-slate-700 sm:gap-2 sm:px-3 sm:py-1.5 sm:text-xs">
-      <span className="flex-none text-slate-500" aria-hidden>
-        {icon}
-      </span>
+    <span
+      className={`inline-flex max-w-full items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium leading-none sm:gap-2 sm:px-3 sm:py-1.5 sm:text-xs ${toneClass}`}
+    >
+      {icon ? (
+        <span
+          className={`flex-none ${tone === "bright" ? "text-white/90" : "text-slate-500"}`}
+          aria-hidden
+        >
+          {icon}
+        </span>
+      ) : null}
       <span className="min-w-0 truncate">{children}</span>
     </span>
   );
@@ -77,6 +93,7 @@ export function PlaceCard({
   userCoordinates: userCoordinatesProp,
   elevated = false,
   embedded = false,
+  isNearest = false,
   titleId,
   onClose,
   closeLabel,
@@ -140,7 +157,7 @@ export function PlaceCard({
 
   const showTeaCount = teaItemsCount > 0;
   const showAverageCheck = averageCheck != null;
-  const hasMetaTags = showTeaCount || showAverageCheck;
+  const hasMetaTags = isNearest || showTeaCount || showAverageCheck;
 
   return (
     <article
@@ -163,6 +180,10 @@ export function PlaceCard({
       >
         {hasMetaTags ? (
           <div className="flex flex-wrap gap-1.5 sm:gap-2">
+            {isNearest ? (
+              <MetaTag tone="bright">{t("nearestTag")}</MetaTag>
+            ) : null}
+
             {showTeaCount ? (
               <MetaTag
                 icon={<CupSoda className="h-3.5 w-3.5" strokeWidth={2} />}

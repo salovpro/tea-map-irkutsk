@@ -9,10 +9,11 @@ import { createPortal } from "react-dom";
 
 type Props = {
   place: PlaceSheetSeed | null;
+  isNearest?: boolean;
   onClose: () => void;
 };
 
-export function PlacePreviewSheet({ place, onClose }: Props) {
+export function PlacePreviewSheet({ place, isNearest = false, onClose }: Props) {
   const tMap = useTranslations("Map");
   const sheetRef = useRef<HTMLDivElement>(null);
 
@@ -91,6 +92,7 @@ export function PlacePreviewSheet({ place, onClose }: Props) {
               website={place.website}
               coordinates={place.coordinates}
               embedded
+              isNearest={isNearest}
               teaItemsCount={place.teaItemsCount}
               averageCheck={place.averageCheck}
               titleId="place-preview-sheet-title"

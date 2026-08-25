@@ -3,9 +3,10 @@ import type { CatalogPlace } from "@/lib/places";
 
 type PlacesListProps = {
   places: CatalogPlace[];
+  nearestPlaceId?: string | null;
 };
 
-export function PlacesList({ places }: PlacesListProps) {
+export function PlacesList({ places, nearestPlaceId = null }: PlacesListProps) {
   if (places.length === 0) {
     return null;
   }
@@ -24,6 +25,7 @@ export function PlacesList({ places }: PlacesListProps) {
           ratingAvg={place.ratingAvg}
           teaItemsCount={place.teaItemsCount}
           averageCheck={place.averageCheck}
+          isNearest={nearestPlaceId === place.id}
         />
       ))}
     </div>

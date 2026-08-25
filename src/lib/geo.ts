@@ -42,3 +42,39 @@ export function formatDistance(meters: number): FormattedDistance {
   const value = km < 10 ? Math.round(km * 10) / 10 : Math.round(km);
   return { unit: "km", value };
 }
+
+function hasValidCoordinates(
+  coords: [number, number] | null | undefined,
+): coords is [number, number] {
+  return (
+    Array.isArray(coords) &&
+    coords.length === 2 &&
+    Number.isFinite(coords[0]) &&
+    Number.isFinite(coords[1])
+  );
+}
+
+/** Id of the place closest to the user, or null when geo/places are unavailable. */
+export function findNearestPlaceId(
+  places: { id: string; coordinates: [number, number] }[],
+  userCoordinates: [number, number] | null | undefined,
+): string | null {
+  if (!hasValidCoordinates(userCoordinates) || places.length === 0) {
+    return null;
+  }
+
+  let nearestId: string | null = null;
+  let nearestMeters = Number.POSITIVE_INFINITY;
+
+  for (const place of places) {
+    if (!hasValidCoordinates(place.coordinates)) continue;
+    const meters = haversineMeters(userCoordinates, place.coordinates);
+    if (!Number.isFinite(meters) || meters < 0) continue;
+    if (meters < nearestMeters) {
+      nearestMeters = meters;
+      nearestId = place.id;
+    }
+  }
+
+  return nearestId;
+}

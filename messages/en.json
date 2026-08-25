@@ -81,7 +81,8 @@
     "openIn2gis": "Open in 2GIS",
     "menuStats": "{count, plural, one {# item} other {# items}} • Average check ~{check} ₽",
     "menuStatsCountOnly": "{count, plural, one {# item} other {# items}}",
-    "averageCheckTag": "Average check ~{check} ₽"
+    "averageCheckTag": "Average check ~{check} ₽",
+    "nearestTag": "Nearest"
   },
   "HistoryPage": {
     "eyebrow": "History",
