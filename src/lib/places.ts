@@ -7,6 +7,7 @@ import {
 } from "@/lib/catalog-order";
 import { syncPlaceCoordinates } from "@/lib/place-coordinates";
 import { syncPlaceDescriptions } from "@/lib/place-descriptions-sync";
+import { syncPlaceLogos } from "@/lib/place-logos-sync";
 import { syncPlaceTeaMenus } from "@/lib/place-tea-menus-sync";
 import { prisma } from "@/lib/prisma";
 
@@ -15,6 +16,7 @@ async function syncPublicPlaceData() {
     syncPlaceCoordinates(),
     syncPlaceDescriptions(),
     syncPlaceTeaMenus(),
+    syncPlaceLogos(),
   ]);
 }
 
