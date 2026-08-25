@@ -7,7 +7,7 @@ import {
 import { useUserLocation } from "@/hooks/useUserLocation";
 import { useRouter } from "@/i18n/navigation";
 import { formatDistance, haversineMeters } from "@/lib/geo";
-import { Clock, CupSoda, MapPin, Wallet, X } from "lucide-react";
+import { CupSoda, MapPin, Wallet, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMemo, type KeyboardEvent, type MouseEvent, type ReactNode } from "react";
 
@@ -140,7 +140,7 @@ export function PlaceCard({
 
   const showTeaCount = teaItemsCount > 0;
   const showAverageCheck = averageCheck != null;
-  const hasForestTags = showTeaCount || showAverageCheck || travelMeta;
+  const hasForestTags = showTeaCount || showAverageCheck;
 
   return (
     <article
@@ -158,7 +158,9 @@ export function PlaceCard({
     >
       <div
         className={`relative isolate overflow-hidden bg-[url('/forest-bg.jpg')] bg-cover bg-center ${
-          hasForestTags ? "min-h-[5.5rem] px-3 py-3 sm:min-h-[6.25rem] sm:px-4 sm:py-3.5" : "min-h-[4.5rem] px-3 py-3"
+          hasForestTags
+            ? "min-h-[5.5rem] px-3 py-3 sm:min-h-[6.25rem] sm:px-4 sm:py-3.5"
+            : "min-h-[4.5rem] px-3 py-3"
         }`}
       >
         <div
@@ -181,14 +183,6 @@ export function PlaceCard({
                 icon={<Wallet className="h-3.5 w-3.5" strokeWidth={2} />}
               >
                 {t("averageCheckTag", { check: averageCheck })}
-              </ForestTag>
-            ) : null}
-
-            {travelMeta ? (
-              <ForestTag
-                icon={<Clock className="h-3.5 w-3.5" strokeWidth={2} />}
-              >
-                {travelMeta.label}
               </ForestTag>
             ) : null}
           </div>
@@ -228,6 +222,12 @@ export function PlaceCard({
                   aria-hidden
                 />
                 <span>{placeAddress}</span>
+              </p>
+            ) : null}
+
+            {travelMeta ? (
+              <p className="text-sm leading-snug text-slate-600">
+                {travelMeta.label}
               </p>
             ) : null}
           </div>
