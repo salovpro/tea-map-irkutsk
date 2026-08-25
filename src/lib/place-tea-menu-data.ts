@@ -2426,4 +2426,435 @@ export const PLACE_TEA_MENU_UPDATES: PlaceTeaMenuUpdate[] = [
       },
     ],
   },
+  {
+    slug: "pepel",
+    items: [
+      {
+        title: "Макабео",
+        category: "Купажный чай",
+        price: 320,
+        volume: "500 мл",
+        description:
+          "Изысканное сочетание зелёного и белого чая, розовые бутоны и лепестки, цветы мальвы.",
+      },
+      {
+        title: "Поцелуй ангела",
+        category: "Купажный чай",
+        price: 320,
+        volume: "500 мл",
+        description:
+          "Деликатный чайный букет из белого и зелёного чая, кубиков папайи, кубиков ананаса, сублимированной клубники, лепестков розы.",
+      },
+      {
+        title: "Те Гуань Инь",
+        category: "Зелёный чай",
+        price: 340,
+        volume: "500 мл",
+        description:
+          "Известный улун с юга провинции Фуцзянь, он удостоился чести стать императорским сортом. Узнаваем по свежему вкусу и особому цветочному аромату.",
+      },
+      {
+        title: "Да Хун Пао «Большой красный халат»",
+        category: "Красный чай",
+        price: 280,
+        volume: "500 мл",
+        description:
+          "Это утёсный китайский чай, который производят на северо-западе провинции Фуцзянь, в горах Уи. Кто-то чувствует в нём карамельные нотки, кто-то говорит, что чай имеет фруктовые оттенки, в нём можно отыскать вкус ирисок и ванили.",
+      },
+      {
+        title: "Моли Лонг Жу «Жасминовые жемчужины»",
+        category: "Зелёный чай",
+        price: 340,
+        volume: "500 мл",
+        description:
+          "Один из самых почитаемых и дорогих сортов китайского зелёного чая. Чайные листья вручную скручены в небольшие круглые жемчужины, когда чай оставляют просушиться, в него добавляют цветки жасмина, который специально был выращен на плантации неподалёку.",
+      },
+      {
+        title: "Улун женьшень",
+        category: "Зелёный чай",
+        price: 340,
+        volume: "500 мл",
+        description:
+          "Это китайский чай, который сочетает полуферментированный улун и измельчённый корень женьшеня. Он сочетает изысканный вкус и целебные свойства этого растения, которое в китайской культуре символизирует долголетие, энергию и внутреннюю гармонию.",
+      },
+      {
+        title: "Руанда Рукери",
+        category: "Красный чай",
+        price: 320,
+        volume: "500 мл",
+        description:
+          "Восхитительный чай с пряными и медовыми оттенками и нежной терпкостью во вкусе.",
+      },
+      {
+        title: "Даржилинг Монтевиот",
+        category: "Красный чай",
+        price: 280,
+        volume: "500 мл",
+        description:
+          "Чай лёгкий, с многогранным цветочным ароматом и узнаваемой мускатной нотой. Настой получается светлым, что присуще чаям с Индийских плантаций.",
+      },
+      {
+        title: "Дянь Хун",
+        category: "Красный чай",
+        price: 480,
+        volume: "500 мл",
+        description:
+          "Дянь Хун был создан в середине XX века в провинции Юньнань, Китай, в результате сотрудничества китайских и советских чаеводов. Разработан специально на «русский вкус».",
+      },
+      {
+        title: "Иван-чай",
+        category: "Травяной чай",
+        price: 280,
+        volume: "500 мл",
+        description:
+          "В современном китайском языке Иван-чай имеет красивое название: «Лю лань», что в переводе означает «Ивовая орхидея», это название возникло из-за схожести листьев кипрея с листьями ивы. Так называли приезжие купцы из Китая нашу траву, которую собирали с разрешения, сушили и ферментировали и увозили на родину.",
+      },
+      {
+        title: "Прибайкальский чай",
+        category: "Травяной чай",
+        price: 340,
+        volume: "500 мл",
+        description: "Кирпичный чай с байкальскими травами.",
+      },
+      {
+        title: "Травяной чай Перетолчина",
+        category: "Взвары",
+        price: 780,
+        volume: "1000 мл",
+        description:
+          "Черёмуха, красная щётка, инжир, шикша сибирская, кленовый сироп, черника, чай с бергамотом",
+      },
+      {
+        title: "Взвар красных ягод",
+        category: "Взвары",
+        price: 680,
+        volume: "1000 мл",
+        description:
+          "Красная смородина, адонис, барбарис, сироп сибирских ягод, байховый чай, лимон",
+      },
+      {
+        title: "Чай тайги",
+        category: "Взвары",
+        price: 780,
+        volume: "1000 мл",
+        description:
+          "Кедровая шишка, варенье из шишки, вишня, чабрец, сироп кедра, клюква, шикша сибирская",
+      },
+      {
+        title: "Взвар вербены и чёрной смородины",
+        category: "Взвары",
+        price: 680,
+        volume: "1000 мл",
+        description:
+          "Чёрная смородина, лист чёрной смородины, ежевика, вербена, розмарин, чай байховый",
+      },
+      {
+        title: "Бурятский чай",
+        category: "Взвары",
+        price: 580,
+        volume: "1000 мл",
+        description:
+          "Традиционный бурятский чай с молоком, солью, сливочным маслом, кирпичным чаем и берёзовыми почками",
+      },
+      {
+        title: "Любимый чай моей бабушки",
+        category: "Взвары",
+        price: 780,
+        volume: "1000 мл",
+        description:
+          "Клубника, яблоко, апельсин, сироп домашней малины, палочка корицы, чайная фруктовая корзина",
+      },
+      {
+        title: "Взвар долголетия",
+        category: "Взвары",
+        price: 580,
+        volume: "1000 мл",
+        description:
+          "Взвар на травяном сборе: ромашка, корень имбиря, яблоко, мёд, сок апельсина, смесь чайных трав Алтая, василёк",
+      },
+    ],
+    itemsEn: [
+      {
+        title: "Macabeo",
+        category: "Blended tea",
+        price: 320,
+        volume: "500 ml",
+        description:
+          "An exquisite blend of green and white tea with rose buds and petals and mallow flowers.",
+      },
+      {
+        title: "Angel's Kiss",
+        category: "Blended tea",
+        price: 320,
+        volume: "500 ml",
+        description:
+          "A delicate bouquet of white and green tea with papaya cubes, pineapple cubes, freeze-dried strawberry, and rose petals.",
+      },
+      {
+        title: "Tie Guan Yin",
+        category: "Green tea",
+        price: 340,
+        volume: "500 ml",
+        description:
+          "A renowned oolong from southern Fujian that once earned imperial status. Known for its fresh taste and distinctive floral aroma.",
+      },
+      {
+        title: 'Da Hong Pao "Big Red Robe"',
+        category: "Red tea",
+        price: 280,
+        volume: "500 ml",
+        description:
+          "A cliff-grown Chinese tea from the Wuyi Mountains in northwest Fujian. Some taste caramel notes, others fruit, toffee, and vanilla.",
+      },
+      {
+        title: 'Moli Long Zhu "Jasmine Pearls"',
+        category: "Green tea",
+        price: 340,
+        volume: "500 ml",
+        description:
+          "One of the most prized Chinese green teas. Leaves are hand-rolled into small pearls and scented with jasmine flowers grown nearby.",
+      },
+      {
+        title: "Ginseng oolong",
+        category: "Green tea",
+        price: 340,
+        volume: "500 ml",
+        description:
+          "A Chinese tea combining semi-fermented oolong with ground ginseng root — refined flavor with the plant's reputed vitality and harmony.",
+      },
+      {
+        title: "Rwanda Rukeri",
+        category: "Red tea",
+        price: 320,
+        volume: "500 ml",
+        description:
+          "A delightful tea with spicy and honeyed notes and a gentle astringency.",
+      },
+      {
+        title: "Darjeeling Monteviot",
+        category: "Red tea",
+        price: 280,
+        volume: "500 ml",
+        description:
+          "A light tea with a layered floral aroma and a recognizable muscatel note. The liquor is pale, typical of Indian plantation teas.",
+      },
+      {
+        title: "Dian Hong",
+        category: "Red tea",
+        price: 480,
+        volume: "500 ml",
+        description:
+          "Created in mid-20th-century Yunnan through Chinese–Soviet tea collaboration, developed especially for the Russian palate.",
+      },
+      {
+        title: "Ivan tea",
+        category: "Herbal tea",
+        price: 280,
+        volume: "500 ml",
+        description:
+          "In modern Chinese, fireweed tea is called Liu lan — 'willow orchid' — for the resemblance of its leaves to willow. Chinese merchants once gathered, dried, and fermented this herb to take home.",
+      },
+      {
+        title: "Pribaikalsky tea",
+        category: "Herbal tea",
+        price: 340,
+        volume: "500 ml",
+        description: "Brick tea with Baikal herbs.",
+      },
+      {
+        title: "Peretolchin herbal tea",
+        category: "Vzvary",
+        price: 780,
+        volume: "1000 ml",
+        description:
+          "Bird cherry, red brush, fig, Siberian crowberry, maple syrup, blueberry, bergamot tea",
+      },
+      {
+        title: "Red berry vzvar",
+        category: "Vzvary",
+        price: 680,
+        volume: "1000 ml",
+        description:
+          "Red currant, adonis, barberry, Siberian berry syrup, loose-leaf black tea, lemon",
+      },
+      {
+        title: "Taiga tea",
+        category: "Vzvary",
+        price: 780,
+        volume: "1000 ml",
+        description:
+          "Cedar cone, cone jam, cherry, thyme, cedar syrup, cranberry, Siberian crowberry",
+      },
+      {
+        title: "Verbena and black currant vzvar",
+        category: "Vzvary",
+        price: 680,
+        volume: "1000 ml",
+        description:
+          "Black currant, black currant leaf, blackberry, verbena, rosemary, loose-leaf black tea",
+      },
+      {
+        title: "Buryat tea",
+        category: "Vzvary",
+        price: 580,
+        volume: "1000 ml",
+        description:
+          "Traditional Buryat tea with milk, salt, butter, brick tea, and birch buds",
+      },
+      {
+        title: "My grandmother's favorite tea",
+        category: "Vzvary",
+        price: 780,
+        volume: "1000 ml",
+        description:
+          "Strawberry, apple, orange, homemade raspberry syrup, cinnamon stick, fruit tea basket",
+      },
+      {
+        title: "Longevity vzvar",
+        category: "Vzvary",
+        price: 580,
+        volume: "1000 ml",
+        description:
+          "Herbal infusion: chamomile, ginger root, apple, honey, orange juice, Altai tea herbs, cornflower",
+      },
+    ],
+    itemsZh: [
+      {
+        title: "马卡贝奥",
+        category: "拼配茶",
+        price: 320,
+        volume: "500 毫升",
+        description: "绿茶与白茶的精致搭配，配以玫瑰花蕾与花瓣、锦葵花。",
+      },
+      {
+        title: "天使之吻",
+        category: "拼配茶",
+        price: 320,
+        volume: "500 毫升",
+        description:
+          "白茶与绿茶的细腻花束，配以木瓜丁、菠萝丁、冻干草莓与玫瑰花瓣。",
+      },
+      {
+        title: "铁观音",
+        category: "绿茶",
+        price: 340,
+        volume: "500 毫升",
+        description:
+          "福建南部著名乌龙，曾获御用殊荣。以清新口感与独特花香著称。",
+      },
+      {
+        title: "大红袍",
+        category: "红茶",
+        price: 280,
+        volume: "500 毫升",
+        description:
+          "产自福建西北武夷山的岩茶。有人品出焦糖，有人感到果香，还能发现太妃糖与香草的味道。",
+      },
+      {
+        title: "茉莉龙珠",
+        category: "绿茶",
+        price: 340,
+        volume: "500 毫升",
+        description:
+          "最受推崇的中国绿茶之一。茶叶手工卷成小珠，烘干时加入附近种植园特培的茉莉花窨香。",
+      },
+      {
+        title: "人参乌龙",
+        category: "绿茶",
+        price: 340,
+        volume: "500 毫升",
+        description:
+          "半发酵乌龙与人参粉的中国茶，兼具精致风味与人参所象征的长寿、活力与内在和谐。",
+      },
+      {
+        title: "卢旺达鲁凯里",
+        category: "红茶",
+        price: 320,
+        volume: "500 毫升",
+        description: "带有辛香与蜜感、入口轻柔微涩的美妙红茶。",
+      },
+      {
+        title: "大吉岭蒙泰维奥",
+        category: "红茶",
+        price: 280,
+        volume: "500 毫升",
+        description:
+          "口感轻盈，花香层次丰富，带有标志性的麝香葡萄调。汤色浅淡，是印度庄园茶的典型特征。",
+      },
+      {
+        title: "滇红",
+        category: "红茶",
+        price: 480,
+        volume: "500 毫升",
+        description:
+          "二十世纪中叶在云南由中苏茶人合作创制，专为「俄式口味」而研发。",
+      },
+      {
+        title: "柳兰茶",
+        category: "花草茶",
+        price: 280,
+        volume: "500 毫升",
+        description:
+          "现代汉语中伊万茶有雅称「柳兰」，因叶片似柳叶而得名。昔日中国商人获准采摘、干燥发酵后带回故乡。",
+      },
+      {
+        title: "贝加尔沿岸茶",
+        category: "花草茶",
+        price: 340,
+        volume: "500 毫升",
+        description: "配以贝加尔草药的砖茶。",
+      },
+      {
+        title: "佩列托尔钦草本茶",
+        category: "煎煮茶",
+        price: 780,
+        volume: "1000 毫升",
+        description:
+          "稠李、红刷、无花果、西伯利亚岩高兰、枫糖浆、蓝莓、佛手柑茶",
+      },
+      {
+        title: "红果煎煮茶",
+        category: "煎煮茶",
+        price: 680,
+        volume: "1000 毫升",
+        description: "红醋栗、侧金盏、小檗、西伯利亚浆果酱、红茶、柠檬",
+      },
+      {
+        title: "泰加茶",
+        category: "煎煮茶",
+        price: 780,
+        volume: "1000 毫升",
+        description: "雪松果、松果果酱、樱桃、百里香、雪松糖浆、蔓越莓、西伯利亚岩高兰",
+      },
+      {
+        title: "马鞭草与黑醋栗煎煮茶",
+        category: "煎煮茶",
+        price: 680,
+        volume: "1000 毫升",
+        description: "黑醋栗、黑醋栗叶、黑莓、马鞭草、迷迭香、红茶",
+      },
+      {
+        title: "布里亚特茶",
+        category: "煎煮茶",
+        price: 580,
+        volume: "1000 毫升",
+        description: "传统布里亚特茶：牛奶、盐、黄油、砖茶与桦树芽",
+      },
+      {
+        title: "祖母最爱的茶",
+        category: "煎煮茶",
+        price: 780,
+        volume: "1000 毫升",
+        description: "草莓、苹果、橙子、自制覆盆子糖浆、肉桂棒、水果茶篮",
+      },
+      {
+        title: "长寿煎煮茶",
+        category: "煎煮茶",
+        price: 580,
+        volume: "1000 毫升",
+        description:
+          "草本煎煮：洋甘菊、姜根、苹果、蜂蜜、橙汁、阿尔泰茶草、矢车菊",
+      },
+    ],
+  },
 ];
