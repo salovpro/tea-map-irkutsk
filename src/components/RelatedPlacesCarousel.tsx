@@ -1,6 +1,7 @@
 "use client";
 
 import { Link } from "@/i18n/navigation";
+import { logoNeedsDarkBackdrop } from "@/lib/place-logo-data";
 import type { RelatedPlaceCard } from "@/lib/places";
 
 type RelatedPlacesCarouselProps = {
@@ -26,13 +27,23 @@ export function RelatedPlacesCarousel({
             href={`/places/${place.id}`}
             className="flex w-[min(72vw,220px)] shrink-0 snap-start flex-col gap-3 rounded-2xl bg-white p-4 shadow-md transition-opacity hover:opacity-90"
           >
-            <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl bg-slate-100">
+            <div
+              className={`flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl ${
+                logoNeedsDarkBackdrop(place.logoUrl)
+                  ? "bg-stone-900"
+                  : "bg-slate-100"
+              }`}
+            >
               {place.logoUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={place.logoUrl}
                   alt=""
-                  className="h-full w-full object-cover"
+                  className={`h-full w-full ${
+                    logoNeedsDarkBackdrop(place.logoUrl)
+                      ? "object-contain p-1.5"
+                      : "object-cover"
+                  }`}
                 />
               ) : (
                 <span className="font-serif text-2xl text-amber-950/40">茶</span>
