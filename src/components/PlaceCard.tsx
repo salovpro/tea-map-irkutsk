@@ -50,7 +50,7 @@ function hasValidCoordinates(
   );
 }
 
-function ForestTag({
+function MetaTag({
   icon,
   children,
 }: {
@@ -58,8 +58,8 @@ function ForestTag({
   children: ReactNode;
 }) {
   return (
-    <span className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-white/80 bg-black/25 px-2.5 py-1 text-[11px] font-medium leading-none text-white backdrop-blur-[2px] sm:gap-2 sm:px-3 sm:py-1.5 sm:text-xs">
-      <span className="flex-none opacity-95" aria-hidden>
+    <span className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-slate-300 bg-transparent px-2.5 py-1 text-[11px] font-medium leading-none text-slate-700 sm:gap-2 sm:px-3 sm:py-1.5 sm:text-xs">
+      <span className="flex-none text-slate-500" aria-hidden>
         {icon}
       </span>
       <span className="min-w-0 truncate">{children}</span>
@@ -140,7 +140,8 @@ export function PlaceCard({
 
   const showTeaCount = teaItemsCount > 0;
   const showAverageCheck = averageCheck != null;
-  const hasForestTags = showTeaCount || showAverageCheck;
+  const hasMetaTags = showTeaCount || showAverageCheck;
+  const showMetaRow = hasMetaTags || Boolean(onClose);
 
   return (
     <article
@@ -156,32 +157,27 @@ export function PlaceCard({
             }`
       }
     >
-      <div
-        className={`relative isolate overflow-hidden bg-[url('/forest-bg.jpg')] bg-cover bg-center ${
-          hasForestTags ? "px-3 py-3 sm:px-4 sm:py-3.5" : "px-3 py-3 sm:px-4"
-        }`}
-      >
+      {showMetaRow ? (
         <div
-          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/55 via-black/40 to-black/50"
-          aria-hidden
-        />
-
-        <div className="relative flex items-center justify-between gap-2">
+          className={`flex items-center justify-between gap-2 bg-slate-100 ${
+            hasMetaTags ? "px-3 py-3 sm:px-4 sm:py-3.5" : "px-3 py-3 sm:px-4"
+          }`}
+        >
           <div className="flex min-w-0 flex-1 flex-wrap gap-1.5 sm:gap-2">
             {showTeaCount ? (
-              <ForestTag
+              <MetaTag
                 icon={<CupSoda className="h-3.5 w-3.5" strokeWidth={2} />}
               >
                 {t("menuStatsCountOnly", { count: teaItemsCount })}
-              </ForestTag>
+              </MetaTag>
             ) : null}
 
             {showAverageCheck ? (
-              <ForestTag
+              <MetaTag
                 icon={<Wallet className="h-3.5 w-3.5" strokeWidth={2} />}
               >
                 {t("averageCheckTag", { check: averageCheck })}
-              </ForestTag>
+              </MetaTag>
             ) : null}
           </div>
 
@@ -190,13 +186,13 @@ export function PlaceCard({
               type="button"
               onClick={handleClose}
               aria-label={closeLabel ?? "Close"}
-              className="flex h-8 w-8 flex-none items-center justify-center rounded-full border border-white/70 bg-black/30 text-white backdrop-blur-[2px] transition-colors hover:bg-black/45 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              className="flex h-8 w-8 flex-none items-center justify-center rounded-full border border-slate-300 bg-white text-slate-600 transition-colors hover:border-slate-400 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-950"
             >
               <X className="h-4 w-4" strokeWidth={2} aria-hidden />
             </button>
           ) : null}
         </div>
-      </div>
+      ) : null}
 
       <div
         className={`flex flex-col gap-3.5 bg-white sm:gap-4 ${
