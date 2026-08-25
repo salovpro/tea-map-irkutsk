@@ -9,11 +9,7 @@
     "subtitle": "伟大茶叶之路上的茶空间目录",
     "searchLabel": "搜索",
     "searchPlaceholder": "茶馆名称…",
-    "filtersLabel": "筛选",
-    "filterAll": "全部",
-    "filterPremium": "精品",
-    "filterAuthor": "特色茶",
-    "empty": "未找到结果。请更换搜索或筛选条件。"
+    "empty": "未找到结果。请更换搜索条件。"
   },
   "Map": {
     "details": "详情",

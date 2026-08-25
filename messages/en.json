@@ -9,11 +9,7 @@
     "subtitle": "A catalog of tea spaces along the Great Tea Road",
     "searchLabel": "Search",
     "searchPlaceholder": "Venue name…",
-    "filtersLabel": "Filters",
-    "filterAll": "All",
-    "filterPremium": "Premium",
-    "filterAuthor": "Signature teas",
-    "empty": "Nothing found. Try another query or filter."
+    "empty": "Nothing found. Try a different search."
   },
   "Map": {
     "details": "Details",
