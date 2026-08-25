@@ -73,6 +73,7 @@
     "linkCopied": "链接已复制",
     "travelTimeMinutes": "路程约 {minutes} 分钟",
     "travelTimeWithDistance": "路程约 {minutes} 分钟 • {distance}",
+    "travelShort": "约 {minutes} 分钟, {distance}",
     "distanceShortMeters": "{meters} 米",
     "distanceShortKilometers": "{km} 公里",
     "distanceMeters": "📍 距您 {meters} 米",

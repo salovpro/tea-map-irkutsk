@@ -73,6 +73,7 @@
     "linkCopied": "Ссылка скопирована",
     "travelTimeMinutes": "Время в пути: ~{minutes} мин",
     "travelTimeWithDistance": "Время в пути ~{minutes} мин • {distance}",
+    "travelShort": "~{minutes} мин, {distance}",
     "distanceShortMeters": "{meters} м",
     "distanceShortKilometers": "{km} км",
     "distanceMeters": "📍 {meters} м от вас",

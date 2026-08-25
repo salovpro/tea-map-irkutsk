@@ -73,6 +73,7 @@
     "linkCopied": "Link copied",
     "travelTimeMinutes": "Travel time: ~{minutes} min",
     "travelTimeWithDistance": "Travel time ~{minutes} min • {distance}",
+    "travelShort": "~{minutes} min, {distance}",
     "distanceShortMeters": "{meters} m",
     "distanceShortKilometers": "{km} km",
     "distanceMeters": "📍 {meters} m away",

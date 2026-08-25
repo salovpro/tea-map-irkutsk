@@ -114,7 +114,7 @@ export function PlaceCard({
     return {
       minutes,
       distanceHint,
-      label: t("travelTimeWithDistance", {
+      label: t("travelShort", {
         minutes,
         distance: distanceHint,
       }),
@@ -190,20 +190,18 @@ export function PlaceCard({
               {displayName}
             </h3>
 
-            {placeAddress ? (
+            {placeAddress || travelMeta ? (
               <p className="flex items-start gap-1.5 text-sm leading-snug text-slate-500">
                 <MapPin
                   className="mt-0.5 h-3.5 w-3.5 flex-none text-slate-400"
                   strokeWidth={2}
                   aria-hidden
                 />
-                <span>{placeAddress}</span>
-              </p>
-            ) : null}
-
-            {travelMeta ? (
-              <p className="text-sm leading-snug text-slate-600">
-                {travelMeta.label}
+                <span>
+                  {placeAddress}
+                  {placeAddress && travelMeta ? " • " : null}
+                  {travelMeta ? travelMeta.label : null}
+                </span>
               </p>
             ) : null}
           </div>
