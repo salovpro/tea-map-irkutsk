@@ -69,7 +69,9 @@ export function PlaceDetailClient({ place, related }: PlaceDetailClientProps) {
           <section className="flex flex-col gap-5">
             <div
               className={`overflow-hidden rounded-3xl ${
-                logoNeedsDarkBackdrop(place.logoUrl) ? "bg-stone-900" : "bg-slate-100"
+                logoNeedsDarkBackdrop(place.logoUrl)
+                  ? "bg-stone-900"
+                  : "bg-slate-100"
               }`}
             >
               <div className="relative aspect-[16/10] w-full">
@@ -78,11 +80,7 @@ export function PlaceDetailClient({ place, related }: PlaceDetailClientProps) {
                   <img
                     src={place.logoUrl}
                     alt=""
-                    className={`absolute inset-0 h-full w-full ${
-                      logoNeedsDarkBackdrop(place.logoUrl)
-                        ? "object-contain p-6 sm:p-8"
-                        : "object-cover"
-                    }`}
+                    className="absolute inset-0 h-full w-full object-contain object-center p-6 sm:p-8"
                   />
                 ) : (
                   <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-amber-50 to-slate-100">

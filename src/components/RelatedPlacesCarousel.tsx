@@ -28,7 +28,7 @@ export function RelatedPlacesCarousel({
             className="flex w-[min(72vw,220px)] shrink-0 snap-start flex-col gap-3 rounded-2xl bg-white p-4 shadow-md transition-opacity hover:opacity-90"
           >
             <div
-              className={`flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl ${
+              className={`flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl p-2 ${
                 logoNeedsDarkBackdrop(place.logoUrl)
                   ? "bg-stone-900"
                   : "bg-slate-100"
@@ -39,11 +39,7 @@ export function RelatedPlacesCarousel({
                 <img
                   src={place.logoUrl}
                   alt=""
-                  className={`h-full w-full ${
-                    logoNeedsDarkBackdrop(place.logoUrl)
-                      ? "object-contain p-1.5"
-                      : "object-cover"
-                  }`}
+                  className="h-full w-full object-contain object-center"
                 />
               ) : (
                 <span className="font-serif text-2xl text-amber-950/40">茶</span>

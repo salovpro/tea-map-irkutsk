@@ -105,7 +105,7 @@ function logoCircleHtml(safeUrl: string, selected: boolean) {
     ? LOGO_DARK_PLATE
     : LOGO_LIGHT_PLATE;
 
-  return `<div style="width:44px;height:44px;border-radius:999px;background:${plate};overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:${shadow};border:${borderWidth}px solid #ffffff;pointer-events:none;"><img class="tea-map-pin-logo-img" src="${safeUrl}" alt="" draggable="false" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block;" /></div>`;
+  return `<div style="width:44px;height:44px;border-radius:999px;background:${plate};overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:${shadow};border:${borderWidth}px solid #ffffff;pointer-events:none;padding:6px;box-sizing:border-box;"><img class="tea-map-pin-logo-img" src="${safeUrl}" alt="" draggable="false" decoding="async" style="width:100%;height:100%;object-fit:contain;object-position:center;display:block;" /></div>`;
 }
 
 function createPinIcon(options: PinIconOptions) {
