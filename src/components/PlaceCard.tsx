@@ -58,7 +58,7 @@ function MetaTag({
   children: ReactNode;
 }) {
   return (
-    <span className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-slate-300 bg-transparent px-2.5 py-1 text-[11px] font-medium leading-none text-slate-700 sm:gap-2 sm:px-3 sm:py-1.5 sm:text-xs">
+    <span className="inline-flex max-w-full items-center gap-1.5 rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-medium leading-none text-slate-700 sm:gap-2 sm:px-3 sm:py-1.5 sm:text-xs">
       <span className="flex-none text-slate-500" aria-hidden>
         {icon}
       </span>
@@ -141,7 +141,6 @@ export function PlaceCard({
   const showTeaCount = teaItemsCount > 0;
   const showAverageCheck = averageCheck != null;
   const hasMetaTags = showTeaCount || showAverageCheck;
-  const showMetaRow = hasMetaTags || Boolean(onClose);
 
   return (
     <article
@@ -157,13 +156,13 @@ export function PlaceCard({
             }`
       }
     >
-      {showMetaRow ? (
-        <div
-          className={`flex items-center justify-between gap-2 bg-slate-100 ${
-            hasMetaTags ? "px-3 py-3 sm:px-4 sm:py-3.5" : "px-3 py-3 sm:px-4"
-          }`}
-        >
-          <div className="flex min-w-0 flex-1 flex-wrap gap-1.5 sm:gap-2">
+      <div
+        className={`flex flex-col gap-3.5 bg-white sm:gap-4 ${
+          embedded ? "px-4 pb-1 pt-4 sm:px-5 sm:pt-5" : "p-4 sm:p-5"
+        }`}
+      >
+        {hasMetaTags ? (
+          <div className="flex flex-wrap gap-1.5 sm:gap-2">
             {showTeaCount ? (
               <MetaTag
                 icon={<CupSoda className="h-3.5 w-3.5" strokeWidth={2} />}
@@ -180,25 +179,8 @@ export function PlaceCard({
               </MetaTag>
             ) : null}
           </div>
+        ) : null}
 
-          {onClose ? (
-            <button
-              type="button"
-              onClick={handleClose}
-              aria-label={closeLabel ?? "Close"}
-              className="flex h-8 w-8 flex-none items-center justify-center rounded-full border border-slate-300 bg-white text-slate-600 transition-colors hover:border-slate-400 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-950"
-            >
-              <X className="h-4 w-4" strokeWidth={2} aria-hidden />
-            </button>
-          ) : null}
-        </div>
-      ) : null}
-
-      <div
-        className={`flex flex-col gap-3.5 bg-white sm:gap-4 ${
-          embedded ? "px-4 pb-1 pt-4 sm:px-5 sm:pt-5" : "p-4 sm:p-5"
-        }`}
-      >
         <header className="flex items-start justify-between gap-3">
           <div className="min-w-0 flex flex-1 flex-col gap-1.5">
             <h3
@@ -226,7 +208,19 @@ export function PlaceCard({
             ) : null}
           </div>
 
-          <PlaceCardHeaderActions placeId={id} name={displayName} />
+          <div className="flex shrink-0 items-center gap-0.5">
+            <PlaceCardHeaderActions placeId={id} name={displayName} />
+            {onClose ? (
+              <button
+                type="button"
+                onClick={handleClose}
+                aria-label={closeLabel ?? "Close"}
+                className="flex h-9 w-9 flex-none items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-950"
+              >
+                <X className="h-[1.125rem] w-[1.125rem]" strokeWidth={2} aria-hidden />
+              </button>
+            ) : null}
+          </div>
         </header>
 
         <PlaceActions
