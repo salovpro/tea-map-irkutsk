@@ -1,10 +1,8 @@
 import L from "leaflet";
-import { logoNeedsDarkBackdrop } from "@/lib/place-logo-data";
 
 const NAV_BROWN = "#78350f";
 const NAV_BROWN_DARK = "#451a03";
-const LOGO_DARK_PLATE = "#1c1917";
-const LOGO_LIGHT_PLATE = "#ffffff";
+const LOGO_PLATE = "#ffffff";
 
 const TEA_CUP_SVG = `
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 40 40" fill="none" aria-hidden="true">
@@ -101,11 +99,7 @@ function logoCircleHtml(safeUrl: string, selected: boolean) {
   const shadow = selected
     ? "0 0 0 1px rgba(15,23,42,0.28), 0 6px 18px rgba(15,23,42,0.32)"
     : "0 0 0 1px rgba(15,23,42,0.16), 0 2px 10px rgba(15,23,42,0.2)";
-  const plate = logoNeedsDarkBackdrop(safeUrl)
-    ? LOGO_DARK_PLATE
-    : LOGO_LIGHT_PLATE;
-
-  return `<div style="width:44px;height:44px;border-radius:999px;background:${plate};overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:${shadow};border:${borderWidth}px solid #ffffff;pointer-events:none;padding:6px;box-sizing:border-box;"><img class="tea-map-pin-logo-img" src="${safeUrl}" alt="" draggable="false" decoding="async" style="width:100%;height:100%;object-fit:contain;object-position:center;display:block;" /></div>`;
+  return `<div style="width:44px;height:44px;border-radius:999px;background:${LOGO_PLATE};overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:${shadow};border:${borderWidth}px solid #ffffff;pointer-events:none;padding:6px;box-sizing:border-box;"><img class="tea-map-pin-logo-img" src="${safeUrl}" alt="" draggable="false" decoding="async" style="width:100%;height:100%;object-fit:contain;object-position:center;display:block;" /></div>`;
 }
 
 function createPinIcon(options: PinIconOptions) {

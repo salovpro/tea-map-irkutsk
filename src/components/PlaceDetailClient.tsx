@@ -5,7 +5,6 @@ import { RelatedPlacesCarousel } from "@/components/RelatedPlacesCarousel";
 import { TeaMenuShowcase } from "@/components/TeaMenuShowcase";
 import { Link } from "@/i18n/navigation";
 import { extractDescriptionBody } from "@/lib/place-description";
-import { logoNeedsDarkBackdrop } from "@/lib/place-logo-data";
 import type { PlaceSheetDetail, RelatedPlaceCard } from "@/lib/places";
 import { ArrowLeft, Phone } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -67,13 +66,7 @@ export function PlaceDetailClient({ place, related }: PlaceDetailClientProps) {
           </Link>
 
           <section className="flex flex-col gap-5">
-            <div
-              className={`overflow-hidden rounded-3xl ${
-                logoNeedsDarkBackdrop(place.logoUrl)
-                  ? "bg-stone-900"
-                  : "bg-slate-100"
-              }`}
-            >
+            <div className="overflow-hidden rounded-3xl bg-white">
               <div className="relative aspect-[16/10] w-full">
                 {place.logoUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element

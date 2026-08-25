@@ -83,7 +83,7 @@ export function VenueForm({ mode, initialValues }: Props) {
           <img
             src={initialValues.logoUrl}
             alt=""
-            className="mb-2 h-20 w-20 rounded-xl bg-slate-100 object-contain object-center p-2 ring-1 ring-slate-200"
+            className="mb-2 h-20 w-20 rounded-xl bg-white object-contain object-center p-2 ring-1 ring-slate-200"
           />
         ) : null}
         <input

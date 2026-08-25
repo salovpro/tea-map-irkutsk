@@ -1,7 +1,6 @@
 "use client";
 
 import { Link } from "@/i18n/navigation";
-import { logoNeedsDarkBackdrop } from "@/lib/place-logo-data";
 import type { RelatedPlaceCard } from "@/lib/places";
 
 type RelatedPlacesCarouselProps = {
@@ -27,13 +26,7 @@ export function RelatedPlacesCarousel({
             href={`/places/${place.id}`}
             className="flex w-[min(72vw,220px)] shrink-0 snap-start flex-col gap-3 rounded-2xl bg-white p-4 shadow-md transition-opacity hover:opacity-90"
           >
-            <div
-              className={`flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl p-2 ${
-                logoNeedsDarkBackdrop(place.logoUrl)
-                  ? "bg-stone-900"
-                  : "bg-slate-100"
-              }`}
-            >
+            <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl bg-white p-2">
               {place.logoUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
