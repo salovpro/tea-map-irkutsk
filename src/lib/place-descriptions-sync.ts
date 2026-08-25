@@ -1,8 +1,9 @@
 import { Locale } from "@/generated/prisma/client";
 import { PLACE_DESCRIPTION_UPDATES } from "@/lib/place-description-data";
 import {
+  composePlaceDescription,
+  extractAddress,
   extractDescriptionBody,
-  replaceDescriptionBody,
 } from "@/lib/place-description";
 import { prisma } from "@/lib/prisma";
 
@@ -23,31 +24,67 @@ async function runPlaceDescriptionSync() {
     select: {
       slug: true,
       translations: {
-        select: { id: true, locale: true, description: true },
+        select: { id: true, locale: true, name: true, description: true },
       },
     },
   });
   const bySlug = new Map(existing.map((place) => [place.slug, place]));
 
-  const pending: { id: string; description: string }[] = [];
+  const pending: { id: string; name?: string; description: string }[] = [];
 
   for (const item of PLACE_DESCRIPTION_UPDATES) {
     const place = bySlug.get(item.slug);
     if (!place) continue;
 
-    const bodies: Partial<Record<Locale, string>> = {
-      [Locale.ru]: item.ru,
-      [Locale.en]: item.en,
-      [Locale.zh]: item.zh,
-    };
-
     for (const translation of place.translations) {
-      const body = bodies[translation.locale];
+      const body =
+        translation.locale === Locale.ru
+          ? item.ru
+          : translation.locale === Locale.en
+            ? item.en
+            : translation.locale === Locale.zh
+              ? item.zh
+              : undefined;
       if (!body) continue;
-      if (extractDescriptionBody(translation.description) === body) continue;
+
+      const localizedAddress =
+        translation.locale === Locale.en
+          ? item.addressEn
+          : translation.locale === Locale.zh
+            ? item.addressZh
+            : undefined;
+      const address =
+        localizedAddress?.trim() ||
+        extractAddress(translation.description) ||
+        "";
+      const nextDescription = address
+        ? composePlaceDescription(
+            body,
+            address,
+            translation.locale as "ru" | "en" | "zh",
+          )
+        : body.trim();
+
+      const nextName =
+        translation.locale === Locale.en
+          ? item.nameEn
+          : translation.locale === Locale.zh
+            ? item.nameZh
+            : undefined;
+
+      const nameChanged =
+        Boolean(nextName) && nextName !== translation.name;
+      const descriptionChanged =
+        extractDescriptionBody(translation.description) !==
+          extractDescriptionBody(nextDescription) ||
+        extractAddress(translation.description) !== extractAddress(nextDescription);
+
+      if (!nameChanged && !descriptionChanged) continue;
+
       pending.push({
         id: translation.id,
-        description: replaceDescriptionBody(translation.description, body),
+        ...(nextName ? { name: nextName } : {}),
+        description: nextDescription,
       });
     }
   }
@@ -61,7 +98,10 @@ async function runPlaceDescriptionSync() {
     pending.map((row) =>
       prisma.placeTranslation.update({
         where: { id: row.id },
-        data: { description: row.description },
+        data: {
+          description: row.description,
+          ...(row.name ? { name: row.name } : {}),
+        },
       }),
     ),
   );

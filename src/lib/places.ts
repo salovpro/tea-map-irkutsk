@@ -6,10 +6,13 @@ import {
   publicPlaceWhere,
 } from "@/lib/catalog-order";
 import { syncPlaceCoordinates } from "@/lib/place-coordinates";
+import { extractAddress } from "@/lib/place-description";
 import { syncPlaceDescriptions } from "@/lib/place-descriptions-sync";
 import { syncPlaceLogos } from "@/lib/place-logos-sync";
 import { syncPlaceTeaMenus } from "@/lib/place-tea-menus-sync";
 import { prisma } from "@/lib/prisma";
+
+export { extractAddress };
 
 async function syncPublicPlaceData() {
   await Promise.all([
@@ -135,22 +138,6 @@ function averageRating(reviews: { rating: number }[]): number | null {
   if (reviews.length === 0) return null;
   const sum = reviews.reduce((total, review) => total + review.rating, 0);
   return Math.round((sum / reviews.length) * 10) / 10;
-}
-
-/**
- * Pull the venue address from a localized description.
- * Addresses often start with abbreviations like "г. Иркутск" — never treat
- * those periods as the end of the address value.
- */
-export function extractAddress(description: string): string {
-  const match =
-    description.match(/Адрес\s*:\s*([\s\S]*)$/i) ??
-    description.match(/Address\s*:\s*([\s\S]*)$/i) ??
-    description.match(/地址\s*[：:]\s*([\s\S]*)$/);
-
-  if (!match?.[1]) return "";
-
-  return match[1].replace(/\.\s*$/, "").trim();
 }
 
 function normalizeTeaMenu(value: unknown): { name: string; note?: string }[] {

@@ -5,6 +5,22 @@ export function extractDescriptionBody(description: string): string {
   return description.replace(ADDRESS_SUFFIX, "").trim();
 }
 
+/**
+ * Pull the venue address from a localized description.
+ * Addresses often start with abbreviations like "г. Иркутск" — never treat
+ * those periods as the end of the address value.
+ */
+export function extractAddress(description: string): string {
+  const match =
+    description.match(/Адрес\s*:\s*([\s\S]*)$/i) ??
+    description.match(/Address\s*:\s*([\s\S]*)$/i) ??
+    description.match(/地址\s*[：:]\s*([\s\S]*)$/);
+
+  if (!match?.[1]) return "";
+
+  return match[1].replace(/\.\s*$/, "").replace(/。\s*$/, "").trim();
+}
+
 export function addressSuffixForLocale(
   locale: "ru" | "en" | "zh",
   address: string,

@@ -179,14 +179,14 @@
   },
   "AboutPage": {
     "title": "About the project",
-    "p1": "Чайная карта создана по инициативе организаторов VII Байкальского международного форума партнеров, который проходит в Иркутске 25-27 августа 2026 года и посвящен развитию сотрудничества по маршруту Великого чайного пути.",
-    "p2": "На протяжении почти четырех веков маршрут доставки чая из провинций Китая через Монголию в Россию связывал нашу экономику. А вместе с ней – образование и культуру. Отдавая дань уважения истории наших предков, мы создали Чайную карту.",
-    "p3": "Все заведения, представленные в карте, развивают чайную культуру, имеют отдельную чайную карту, включают в нее авторские рецепты, в том числе с использованием сибирских дикоросов.",
-    "p4": "Каждое заведение пройдет проверку качества чайной продукции: состав, рецептуру, условия поставки, хранения и приготовления и проверят эксперты в сфере пищевой безопасности, независимые специалисты ресторанного бизнеса.",
-    "contactsLead": "По вопросам взаимодействия:",
-    "phoneLabel": "📞 Телефон:",
-    "phoneValue": "8(3952)33-51-00",
-    "emailLabel": "✉️ Адрес эл. почты:",
+    "p1": "The Tea Map was created at the initiative of the organizers of the 7th Baikal International Partners Forum, held in Irkutsk on 25–27 August 2026 and dedicated to developing cooperation along the Great Tea Road.",
+    "p2": "For nearly four centuries, the tea route from China’s provinces through Mongolia to Russia linked our economies — and with them, education and culture. In tribute to the history of our ancestors, we created the Tea Map.",
+    "p3": "Every venue on the map advances tea culture, keeps a dedicated tea menu, and includes signature recipes — including ones with Siberian wild plants.",
+    "p4": "Each venue will undergo a quality review of its tea offering: ingredients, recipes, supply, storage, and preparation — checked by food-safety experts and independent restaurant specialists.",
+    "contactsLead": "For partnership inquiries:",
+    "phoneLabel": "📞 Phone:",
+    "phoneValue": "+7 (3952) 33-51-00",
+    "emailLabel": "✉️ Email:",
     "emailValue": "dcp@tppvs.ru"
   },
   "Partners": {
