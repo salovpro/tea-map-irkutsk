@@ -7,10 +7,15 @@ import {
 } from "@/lib/catalog-order";
 import { syncPlaceCoordinates } from "@/lib/place-coordinates";
 import { syncPlaceDescriptions } from "@/lib/place-descriptions-sync";
+import { syncPlaceTeaMenus } from "@/lib/place-tea-menus-sync";
 import { prisma } from "@/lib/prisma";
 
 async function syncPublicPlaceData() {
-  await Promise.all([syncPlaceCoordinates(), syncPlaceDescriptions()]);
+  await Promise.all([
+    syncPlaceCoordinates(),
+    syncPlaceDescriptions(),
+    syncPlaceTeaMenus(),
+  ]);
 }
 
 export type TeaMenuStats = {
@@ -225,7 +230,10 @@ function parseSheetTeaMenu(value: unknown): PlaceSheetTeaItem[] {
             : row.note != null
               ? String(row.note)
               : undefined,
-        price: typeof row.price === "number" ? row.price : undefined,
+        price:
+          typeof row.price === "number" && row.price > 0
+            ? row.price
+            : undefined,
         volume: row.volume != null ? String(row.volume) : undefined,
         description:
           row.description != null ? String(row.description) : undefined,

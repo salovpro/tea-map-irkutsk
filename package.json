@@ -15,7 +15,8 @@
     "update:coordinates": "tsx scripts/update-place-coordinates.ts",
     "update:sort-order": "tsx scripts/init-place-sort-order.ts",
     "update:descriptions": "tsx scripts/update-place-descriptions.ts",
-    "update:descriptions:i18n": "tsx scripts/update-place-descriptions-i18n.ts"
+    "update:descriptions:i18n": "tsx scripts/update-place-descriptions-i18n.ts",
+    "update:tea-menus": "tsx scripts/update-place-tea-menus.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
