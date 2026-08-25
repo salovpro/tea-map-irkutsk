@@ -28,18 +28,32 @@ async function runPlaceTeaMenuSync() {
   });
   const bySlug = new Map(existing.map((place) => [place.slug, place]));
 
-  const pending: { id: string; teaMenu: (typeof PLACE_TEA_MENU_UPDATES)[number]["items"] }[] =
-    [];
+  const pending: {
+    id: string;
+    teaMenu: (typeof PLACE_TEA_MENU_UPDATES)[number]["items"];
+  }[] = [];
 
   for (const item of PLACE_TEA_MENU_UPDATES) {
     const place = bySlug.get(item.slug);
     if (!place) continue;
 
     for (const translation of place.translations) {
-      if (menuSignature(translation.teaMenu) === menuSignature(item.items)) {
+      const nextMenu =
+        translation.locale === "ru"
+          ? item.items
+          : translation.locale === "en"
+            ? item.itemsEn
+            : translation.locale === "zh"
+              ? item.itemsZh
+              : undefined;
+
+      // Without a locale-specific menu, leave existing EN/ZH untouched.
+      if (!nextMenu) continue;
+
+      if (menuSignature(translation.teaMenu) === menuSignature(nextMenu)) {
         continue;
       }
-      pending.push({ id: translation.id, teaMenu: item.items });
+      pending.push({ id: translation.id, teaMenu: nextMenu });
     }
   }
 

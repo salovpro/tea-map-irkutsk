@@ -9,13 +9,19 @@ export type PlaceTeaMenuItem = {
 
 export type PlaceTeaMenuUpdate = {
   slug: string;
+  /** Russian source-of-truth menu. */
   items: PlaceTeaMenuItem[];
+  /** Optional English menu (same length/order/prices as `items`). */
+  itemsEn?: PlaceTeaMenuItem[];
+  /** Optional Simplified Chinese menu (same length/order/prices as `items`). */
+  itemsZh?: PlaceTeaMenuItem[];
 };
 
 /**
  * Tea-only menus parsed from venue tea cards (PDF/photo).
  * No desserts, coffee, lemonade, alcohol, or soft drinks.
- * Same RU titles are written to all locales (admin saveTeaMenu pattern).
+ * RU (`items`) is the source of truth. Optional `itemsEn` / `itemsZh` are
+ * written only to those locales; other venues keep existing EN/ZH rows.
  */
 export const PLACE_TEA_MENU_UPDATES: PlaceTeaMenuUpdate[] = [
   {
@@ -1913,5 +1919,232 @@ export const PLACE_TEA_MENU_UPDATES: PlaceTeaMenuUpdate[] = [
         description: "Исключительный зелёный чай со сладким ароматом нежных цветков жасмина.",
       },
     ],
-  }
+  },
+  {
+    slug: "kochevnik",
+    items: [
+      {
+        title: "Сибирская душа",
+        category: "Чай авторский",
+        price: 410,
+        volume: "500 мл",
+        description: "Клюква, чёрный чай, апельсиновый фреш, мёд",
+      },
+      {
+        title: "Таёжный",
+        category: "Чай авторский",
+        price: 410,
+        volume: "500 мл",
+        description: "Жимолость, чёрный чай, чабрец, сироп можжевельника, мёд",
+      },
+      {
+        title: "Облепиховый",
+        category: "Чай авторский",
+        price: 410,
+        volume: "500 мл",
+        description: "Облепиха, чёрный чай, апельсиновый фреш",
+      },
+      {
+        title: "Лесные ягоды",
+        category: "Чай авторский",
+        price: 410,
+        volume: "500 мл",
+        description:
+          "Брусника, смородина, ежевика сушёная, чёрный чай, сироп малина, смородина",
+      },
+      {
+        title: "Гречишный",
+        category: "Чай авторский",
+        price: 290,
+        volume: "500 мл",
+        description: "С зелёным яблоком, корицей и мёдом",
+      },
+      {
+        title: "Монгольский",
+        category: "Чай авторский",
+        price: 120,
+        volume: "180 мл",
+        description: "На основе прессованного зелёного чая с молоком",
+      },
+      {
+        title: "Цейлонский",
+        category: "Чай",
+        price: 290,
+        volume: "500 мл",
+      },
+      {
+        title: "Жасминовая жемчужина",
+        category: "Чай",
+        price: 290,
+        volume: "500 мл",
+      },
+      {
+        title: "Те Гуань",
+        category: "Чай",
+        price: 290,
+        volume: "500 мл",
+      },
+      {
+        title: "Молочный Улун",
+        category: "Чай",
+        price: 290,
+        volume: "500 мл",
+      },
+      {
+        title: "Время ежевики",
+        category: "Чай",
+        price: 310,
+        volume: "500 мл",
+      },
+    ],
+    itemsEn: [
+      {
+        title: "Siberian Soul",
+        category: "Signature tea",
+        price: 410,
+        volume: "500 ml",
+        description: "Cranberry, black tea, fresh orange juice, honey",
+      },
+      {
+        title: "Taiga",
+        category: "Signature tea",
+        price: 410,
+        volume: "500 ml",
+        description: "Honeysuckle, black tea, thyme, juniper syrup, honey",
+      },
+      {
+        title: "Sea Buckthorn",
+        category: "Signature tea",
+        price: 410,
+        volume: "500 ml",
+        description: "Sea buckthorn, black tea, fresh orange juice",
+      },
+      {
+        title: "Forest Berries",
+        category: "Signature tea",
+        price: 410,
+        volume: "500 ml",
+        description:
+          "Lingonberry, currant, dried blackberry, black tea, raspberry syrup, currant",
+      },
+      {
+        title: "Buckwheat",
+        category: "Signature tea",
+        price: 290,
+        volume: "500 ml",
+        description: "With green apple, cinnamon, and honey",
+      },
+      {
+        title: "Mongolian",
+        category: "Signature tea",
+        price: 120,
+        volume: "180 ml",
+        description: "Based on pressed green tea with milk",
+      },
+      {
+        title: "Ceylon",
+        category: "Tea",
+        price: 290,
+        volume: "500 ml",
+      },
+      {
+        title: "Jasmine Pearl",
+        category: "Tea",
+        price: 290,
+        volume: "500 ml",
+      },
+      {
+        title: "Tie Guan Yin",
+        category: "Tea",
+        price: 290,
+        volume: "500 ml",
+      },
+      {
+        title: "Milk Oolong",
+        category: "Tea",
+        price: 290,
+        volume: "500 ml",
+      },
+      {
+        title: "Blackberry Time",
+        category: "Tea",
+        price: 310,
+        volume: "500 ml",
+      },
+    ],
+    itemsZh: [
+      {
+        title: "西伯利亚之魂",
+        category: "特调茶",
+        price: 410,
+        volume: "500 毫升",
+        description: "蔓越莓、红茶、鲜榨橙汁、蜂蜜",
+      },
+      {
+        title: "泰加",
+        category: "特调茶",
+        price: 410,
+        volume: "500 毫升",
+        description: "忍冬、红茶、百里香、杜松糖浆、蜂蜜",
+      },
+      {
+        title: "沙棘",
+        category: "特调茶",
+        price: 410,
+        volume: "500 毫升",
+        description: "沙棘、红茶、鲜榨橙汁",
+      },
+      {
+        title: "林间浆果",
+        category: "特调茶",
+        price: 410,
+        volume: "500 毫升",
+        description: "越橘、加仑、干黑莓、红茶、覆盆子糖浆、加仑",
+      },
+      {
+        title: "荞麦",
+        category: "特调茶",
+        price: 290,
+        volume: "500 毫升",
+        description: "配青苹果、肉桂与蜂蜜",
+      },
+      {
+        title: "蒙古",
+        category: "特调茶",
+        price: 120,
+        volume: "180 毫升",
+        description: "以紧压绿茶为底，配牛奶",
+      },
+      {
+        title: "锡兰",
+        category: "茶",
+        price: 290,
+        volume: "500 毫升",
+      },
+      {
+        title: "茉莉龙珠",
+        category: "茶",
+        price: 290,
+        volume: "500 毫升",
+      },
+      {
+        title: "铁观音",
+        category: "茶",
+        price: 290,
+        volume: "500 毫升",
+      },
+      {
+        title: "奶香乌龙",
+        category: "茶",
+        price: 290,
+        volume: "500 毫升",
+      },
+      {
+        title: "黑莓时光",
+        category: "茶",
+        price: 310,
+        volume: "500 毫升",
+      },
+    ],
+  },
 ];

@@ -3,6 +3,8 @@
  *
  *   npm run update:tea-menus -- --dry-run
  *   npm run update:tea-menus -- --apply
+ *
+ * Writes RU from `items`. Writes EN/ZH only when `itemsEn` / `itemsZh` are set.
  */
 import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";
@@ -43,16 +45,31 @@ async function main() {
 
       const ru = place.translations.find((t) => t.locale === "ru");
       const oldCount = Array.isArray(ru?.teaMenu) ? ru!.teaMenu.length : 0;
+      const locales = [
+        "ru",
+        item.itemsEn ? "en" : null,
+        item.itemsZh ? "zh" : null,
+      ].filter(Boolean);
       console.log(
-        `- ${item.slug} / ${ru?.name ?? "?"} : ${oldCount} -> ${item.items.length} teas`,
+        `- ${item.slug} / ${ru?.name ?? "?"} : ${oldCount} -> ${item.items.length} teas [${locales.join(", ")}]`,
       );
 
       if (!apply) continue;
 
       for (const translation of place.translations) {
+        const nextMenu =
+          translation.locale === "ru"
+            ? item.items
+            : translation.locale === "en"
+              ? item.itemsEn
+              : translation.locale === "zh"
+                ? item.itemsZh
+                : undefined;
+        if (!nextMenu) continue;
+
         await prisma.placeTranslation.update({
           where: { id: translation.id },
-          data: { teaMenu: item.items },
+          data: { teaMenu: nextMenu },
         });
         updated += 1;
       }
