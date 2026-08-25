@@ -302,7 +302,10 @@ export function PlaceActions({
   }
 
   return (
-    <div className="flex flex-row flex-wrap items-center justify-start gap-2">
+    <div
+      className="flex flex-nowrap items-center justify-start gap-2 overflow-x-auto overscroll-x-contain pb-0.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      onClick={stopCardNavigation}
+    >
       {isDetail ? (
         <PhoneActionButton phones={phones} appearance="book" />
       ) : null}
