@@ -17,7 +17,6 @@
     "noDescription": "简介即将上线",
     "close": "关闭",
     "backToMap": "返回地图",
-    "buildRoute": "规划路线",
     "premiumDescriptor": "精品茶馆",
     "teaHouseDescriptor": "茶馆",
     "distanceAway": "距您 500 米",
@@ -37,7 +36,6 @@
   "PlaceDetail": {
     "back": "返回",
     "backToList": "返回列表",
-    "buildRoute": "规划路线",
     "aboutTitle": "关于场所",
     "teaMenuTitle": "茶单",
     "teaMenuEmpty": "茶单尚未添加。",
@@ -65,7 +63,6 @@
   "PlaceCard": {
     "teaMapCta": "茶单",
     "viewTeaMenu": "查看茶单",
-    "buildRoute": "路线",
     "call": "电话",
     "bookTable": "预订座位",
     "openWebsite": "网站",
@@ -78,7 +75,6 @@
     "distanceShortKilometers": "{km} 公里",
     "distanceMeters": "📍 距您 {meters} 米",
     "distanceKilometers": "📍 距您 {km} 公里",
-    "openIn2gis": "在 2GIS 中打开",
     "menuStats": "{count} 道茶 • 人均约 {check} ₽",
     "menuStatsCountOnly": "{count} 道茶",
     "averageCheckTag": "人均约 {check} ₽",

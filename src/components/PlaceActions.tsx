@@ -2,7 +2,7 @@
 
 import { FavoriteButton } from "@/components/FavoriteButton";
 import { useRouter } from "@/i18n/navigation";
-import { CupSoda, Globe, Navigation2, Phone, Share2 } from "lucide-react";
+import { CupSoda, Globe, Phone, Share2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import {
   useCallback,
@@ -30,7 +30,6 @@ type PlaceActionsProps = {
   name: string;
   phone?: string | null;
   website?: string | null;
-  coordinates: [number, number];
   showPrimary?: boolean;
   /** Detail page: book CTA first, no tea-map button. */
   variant?: "card" | "detail";
@@ -39,11 +38,6 @@ type PlaceActionsProps = {
 /** Keep card click from firing; do not block default link navigation. */
 function stopCardNavigation(event: MouseEvent) {
   event.stopPropagation();
-}
-
-function buildRouteUrl(coordinates: [number, number]) {
-  const [latitude, longitude] = coordinates;
-  return `https://yandex.ru/maps/?rtext=~${latitude},${longitude}`;
 }
 
 function normalizeWebsiteHref(website: string) {
@@ -280,7 +274,6 @@ export function PlaceActions({
   placeId,
   phone,
   website,
-  coordinates,
   showPrimary = true,
   variant = "card",
 }: PlaceActionsProps) {
@@ -292,7 +285,6 @@ export function PlaceActions({
     [phone],
   );
   const siteHref = website ? normalizeWebsiteHref(website) : null;
-  const routeUrl = buildRouteUrl(coordinates);
   const isDetail = variant === "detail";
 
   function openTeaMap(event: MouseEvent) {
@@ -316,18 +308,6 @@ export function PlaceActions({
           <span className="truncate">{t("teaMapCta")}</span>
         </button>
       ) : null}
-
-      <a
-        href={routeUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={stopCardNavigation}
-        aria-label={t("buildRoute")}
-        title={t("buildRoute")}
-        className={placeActionIconClass}
-      >
-        <Navigation2 className="h-5 w-5" strokeWidth={2} aria-hidden />
-      </a>
 
       {!isDetail ? <PhoneActionButton phones={phones} appearance="icon" /> : null}
 

@@ -17,7 +17,6 @@
     "noDescription": "Description coming soon",
     "close": "Close",
     "backToMap": "Back to map",
-    "buildRoute": "Get directions",
     "premiumDescriptor": "Premium tea house",
     "teaHouseDescriptor": "Tea house",
     "distanceAway": "500 m away",
@@ -37,7 +36,6 @@
   "PlaceDetail": {
     "back": "Back",
     "backToList": "Back to list",
-    "buildRoute": "Get directions",
     "aboutTitle": "About the venue",
     "teaMenuTitle": "Tea menu",
     "teaMenuEmpty": "The menu has not been added yet.",
@@ -65,7 +63,6 @@
   "PlaceCard": {
     "teaMapCta": "Tea map",
     "viewTeaMenu": "Explore the tea menu",
-    "buildRoute": "Route",
     "call": "Call",
     "bookTable": "Book a table",
     "openWebsite": "Website",
@@ -78,7 +75,6 @@
     "distanceShortKilometers": "{km} km",
     "distanceMeters": "📍 {meters} m away",
     "distanceKilometers": "📍 {km} km away",
-    "openIn2gis": "Open in 2GIS",
     "menuStats": "{count, plural, one {# item} other {# items}} • Average check ~{check} ₽",
     "menuStatsCountOnly": "{count, plural, one {# item} other {# items}}",
     "averageCheckTag": "Average check ~{check} ₽",

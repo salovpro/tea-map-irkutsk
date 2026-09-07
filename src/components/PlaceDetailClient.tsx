@@ -119,7 +119,6 @@ export function PlaceDetailClient({ place, related }: PlaceDetailClientProps) {
                 name={place.name}
                 phone={place.phone}
                 website={place.website}
-                coordinates={place.coordinates}
                 variant="detail"
                 showPrimary={false}
               />

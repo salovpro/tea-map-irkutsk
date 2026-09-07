@@ -17,7 +17,6 @@
     "noDescription": "Описание скоро появится",
     "close": "Закрыть",
     "backToMap": "К карте",
-    "buildRoute": "Построить маршрут",
     "premiumDescriptor": "Премиальная чайная",
     "teaHouseDescriptor": "Чайная",
     "distanceAway": "500 м от вас",
@@ -37,7 +36,6 @@
   "PlaceDetail": {
     "back": "Назад",
     "backToList": "Назад к списку",
-    "buildRoute": "Построить маршрут",
     "aboutTitle": "О заведении",
     "teaMenuTitle": "Чайная карта",
     "teaMenuEmpty": "Меню пока не добавлено.",
@@ -65,7 +63,6 @@
   "PlaceCard": {
     "teaMapCta": "Чайная карта",
     "viewTeaMenu": "Ознакомиться с чайной картой",
-    "buildRoute": "Маршрут",
     "call": "Позвонить",
     "bookTable": "Забронировать столик",
     "openWebsite": "Сайт",
@@ -78,7 +75,6 @@
     "distanceShortKilometers": "{km} км",
     "distanceMeters": "📍 {meters} м от вас",
     "distanceKilometers": "📍 через {km} км",
-    "openIn2gis": "Открыть в 2GIS",
     "menuStats": "{count, plural, one {# позиция} few {# позиции} many {# позиций} other {# позиций}} • Средний чек ~{check} ₽",
     "menuStatsCountOnly": "{count, plural, one {# позиция} few {# позиции} many {# позиций} other {# позиций}}",
     "averageCheckTag": "Средний чек ~{check} ₽",

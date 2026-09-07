@@ -247,7 +247,6 @@ export function PlaceCard({
           name={displayName}
           phone={phone}
           website={website}
-          coordinates={coordinates}
         />
       </div>
     </article>
