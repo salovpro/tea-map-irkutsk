@@ -31,7 +31,10 @@
     "locationUnavailable": "Could not determine your location",
     "mapLoadErrorTitle": "Map temporarily unavailable",
     "mapLoadErrorDescription": "Could not load the map. Open the venues list instead.",
-    "openPlacesList": "Open venues list"
+    "openPlacesList": "Open venues list",
+    "yandexLogoAria": "Yandex Maps",
+    "yandexTerms": "Terms of use",
+    "yandexTilesMissingKey": "Yandex Tiles API key is not configured"
   },
   "PlaceDetail": {
     "back": "Back",

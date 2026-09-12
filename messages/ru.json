@@ -31,7 +31,10 @@
     "locationUnavailable": "Не удалось определить местоположение",
     "mapLoadErrorTitle": "Карта временно недоступна",
     "mapLoadErrorDescription": "Не удалось загрузить карту. Откройте список заведений.",
-    "openPlacesList": "Открыть список заведений"
+    "openPlacesList": "Открыть список заведений",
+    "yandexLogoAria": "Яндекс Карты",
+    "yandexTerms": "Условия использования",
+    "yandexTilesMissingKey": "Не задан ключ Яндекс Tiles API"
   },
   "PlaceDetail": {
     "back": "Назад",

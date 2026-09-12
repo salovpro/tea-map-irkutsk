@@ -31,7 +31,10 @@
     "locationUnavailable": "无法确定您的位置",
     "mapLoadErrorTitle": "地图暂时不可用",
     "mapLoadErrorDescription": "无法加载地图。请打开场所列表。",
-    "openPlacesList": "打开场所列表"
+    "openPlacesList": "打开场所列表",
+    "yandexLogoAria": "Yandex 地图",
+    "yandexTerms": "使用条款",
+    "yandexTilesMissingKey": "未配置 Yandex Tiles API 密钥"
   },
   "PlaceDetail": {
     "back": "返回",

@@ -2,7 +2,7 @@
 
 import L from "leaflet";
 import { List } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import {
   useCallback,
   useEffect,
@@ -22,6 +22,7 @@ import {
 import MarkerClusterGroup from "react-leaflet-cluster";
 import { MapControls } from "@/components/MapControls";
 import { PlacePreviewSheet } from "@/components/PlacePreviewSheet";
+import { YandexMapBranding } from "@/components/YandexMapBranding";
 import { useFavorites } from "@/hooks/useFavorites";
 import { useNearestPlaceId } from "@/hooks/useNearestPlaceId";
 import {
@@ -44,7 +45,7 @@ const IRKUTSK_CENTER: [number, number] = [52.286974, 104.305018];
 const IRKUTSK_ZOOM = 13;
 const USER_FOCUS_ZOOM = 15;
 const LABEL_MIN_ZOOM = 15;
-/** CARTO Positron (`light_all`) documents OSM zooms 0–20; leaflet-providers uses maxZoom 20. */
+/** Yandex Tiles API + Leaflet Web Mercator typically cover OSM zooms 0–20. */
 const MAP_MAX_ZOOM = 20;
 const MAP_MIN_ZOOM = 10;
 const PIN_FOCUS_Y_RATIO = 0.28;
@@ -55,10 +56,20 @@ const PIN_DIAMETER_PX = 44;
 
 const NAV_BROWN = "#78350f";
 
-const CARTO_URL =
-  "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
-const CARTO_ATTRIBUTION =
-  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>';
+const YANDEX_TILE_ATTRIBUTION =
+  '<a href="https://yandex.ru/maps/" target="_blank" rel="noopener noreferrer">Яндекс Карты</a>';
+
+function yandexTilesLang(locale: string): string {
+  if (locale === "en") return "en_US";
+  // Tiles API has no zh_* lang; Russian labels are closest for Irkutsk.
+  return "ru_RU";
+}
+
+function buildYandexTileUrl(locale: string, apiKey: string): string {
+  const lang = yandexTilesLang(locale);
+  // Official Tiles API (Leaflet = web_mercator / spherical Mercator).
+  return `https://tiles.api-maps.yandex.ru/v1/tiles/?x={x}&y={y}&z={z}&lang=${lang}&l=map&projection=web_mercator&apikey=${encodeURIComponent(apiKey)}`;
+}
 
 type MapCameraView = {
   center: [number, number];
@@ -319,6 +330,9 @@ function PlaceMarkers({
 
 function PlacesMap({ places }: MapProps) {
   const t = useTranslations("Map");
+  const locale = useLocale();
+  const yandexApiKey = process.env.NEXT_PUBLIC_YANDEX_TILES_API_KEY?.trim() ?? "";
+  const tileUrl = yandexApiKey ? buildYandexTileUrl(locale, yandexApiKey) : null;
   const mapRef = useRef<L.Map | null>(null);
   const previousViewRef = useRef<MapCameraView | null>(null);
   const [selectedPlace, setSelectedPlace] = useState<MapPlace | null>(null);
@@ -466,13 +480,16 @@ function PlacesMap({ places }: MapProps) {
           style={{ height: "100%", width: "100%" }}
         >
           <AttributionControl prefix={false} position="bottomright" />
-          <TileLayer
-            url={CARTO_URL}
-            attribution={CARTO_ATTRIBUTION}
-            maxZoom={MAP_MAX_ZOOM}
-            maxNativeZoom={MAP_MAX_ZOOM}
-            minZoom={MAP_MIN_ZOOM}
-          />
+          {tileUrl ? (
+            <TileLayer
+              url={tileUrl}
+              attribution={YANDEX_TILE_ATTRIBUTION}
+              maxZoom={MAP_MAX_ZOOM}
+              maxNativeZoom={MAP_MAX_ZOOM}
+              minZoom={MAP_MIN_ZOOM}
+              tileSize={256}
+            />
+          ) : null}
           <MapRefBridge mapRef={mapRef} />
           <MapInteractionLayer
             onClearSelection={closeSelectedPlace}
@@ -501,6 +518,14 @@ function PlacesMap({ places }: MapProps) {
             onLocate={locateUser}
           />
         </MapContainer>
+        <YandexMapBranding />
+        {!tileUrl ? (
+          <div className="pointer-events-none absolute inset-x-4 top-20 z-[470] flex justify-center">
+            <p className="rounded-2xl bg-white/95 px-4 py-2 text-center text-xs text-slate-600 shadow ring-1 ring-slate-200/80">
+              {t("yandexTilesMissingKey")}
+            </p>
+          </div>
+        ) : null}
       </div>
 
       <div
